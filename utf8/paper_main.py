@@ -62,3 +62,19 @@ def create_measure_tables():
     print(col)
     for i, et, sh, si, ms, ss, p in zip(range(1, 5), elapsed_times, shapes, sizes, matrix_sizes, sparse_sizes, paths):
         print(row.format(i, et, sh, si, ms, ss, p))
+
+
+SEGMENTS = [1, 2, 3, 4]
+NCODES = [128, 1984, 59328, 1107904]
+
+
+def overfit_tests():
+    pass
+
+
+def sparse_code_NK():
+    pass
+
+
+def multihot_primes():
+    pass
