@@ -1,14 +1,20 @@
+from itertools import combinations
 import os
 import pickle
 import numpy as np
 import scipy as sp
 import scipy.sparse
 import time
+
 try:
     from .utf8_encoder import *
 except:
     # to solve issue with ipython executing this import
     from utf8_encoder import *
+
+SEGMENTS = [1, 2, 3, 4]
+NCODES = [128, 1984, 59328, 1107904]
+PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101]
 
 
 def create_measure_tables():
@@ -43,7 +49,7 @@ def create_measure_tables():
         spcodes = sp.sparse.coo_matrix(t[0])
         np.save(smname, spcodes)
         # Measure size in disk in MB
-        mb = os.path.getsize(name) / (1024**2)
+        mb = os.path.getsize(name) / (1024 ** 2)
         sizes.append(mb)
         # Dense Matrix
         mmb = os.path.getsize(mname) / (1024 ** 2)
@@ -64,17 +70,52 @@ def create_measure_tables():
         print(row.format(i, et, sh, si, ms, ss, p))
 
 
-SEGMENTS = [1, 2, 3, 4]
-NCODES = [128, 1984, 59328, 1107904]
-
-
 def overfit_tests():
     pass
 
 
-def sparse_code_NK():
-    pass
+def sparse_Nk_dimension_analysis():
+    # find the minimum N and k for which the condition is filled for the different codes
+    results = []
+    for code_points in NCODES:
+        for N in range(32, 128):
+            for k in [3, 4, 5, 6]:
+                v = np.prod(list(range(N, N - k, -1))) / np.prod(list(range(1, k + 1)))
+                if v > code_points:
+                    # print("code_size={}; N={},k={}".format(v, N, k))
+                    results.append((code_points, v, N, k))
+    return results
+
+
+def sparse_code_Nk(code_size, N, k):
+    ret = combinations(list(range(N)), k)  # iterator
+    ret = np.array(list(ret))[:code_size]
+    return ret
 
 
 def multihot_primes():
-    pass
+    codes_1seg = []
+    codes_2seg = []
+    codes_3seg = []
+    codes_4seg = []
+    codes = []
+    for i in range(2, 7):
+        arr = np.array(list(combinations(PRIMES, i)))
+        ncodes = np.prod(arr, axis=1).reshape(-1, 1)
+        vsizes = np.sum(arr, axis=1).reshape((-1, 1))
+        # print(arr.shape, ncodes.shape)
+        arr = np.hstack([arr, vsizes, ncodes])
+        arr = arr[arr[:, 2].argsort()]
+        codes.append(arr)
+        # Now filter the alternatives that can handle the space needed for each code
+        # NCODES
+        arr_1s = arr[arr[:, -2] > NCODES[0]]
+        arr_2s = arr[arr[:, -2] > NCODES[1]]
+        arr_3s = arr[arr[:, -2] > NCODES[2]]
+        arr_4s = arr[arr[:, -2] > NCODES[3]]
+        codes_1seg.append(arr_1s)
+        codes_2seg.append(arr_2s)
+        codes_3seg.append(arr_3s)
+        codes_4seg.append(arr_4s)
+    return codes, codes_1seg, codes_2seg, codes_3seg, codes_4seg
+#     return np.array(codes)
