@@ -94,28 +94,18 @@ def sparse_code_Nk(code_size, N, k):
 
 
 def multihot_primes():
-    codes_1seg = []
-    codes_2seg = []
-    codes_3seg = []
-    codes_4seg = []
-    codes = []
-    for i in range(2, 7):
-        arr = np.array(list(combinations(PRIMES, i)))
-        ncodes = np.prod(arr, axis=1).reshape(-1, 1)
-        vsizes = np.sum(arr, axis=1).reshape((-1, 1))
-        # print(arr.shape, ncodes.shape)
-        arr = np.hstack([arr, vsizes, ncodes])
-        arr = arr[arr[:, 2].argsort()]
-        codes.append(arr)
-        # Now filter the alternatives that can handle the space needed for each code
-        # NCODES
-        arr_1s = arr[arr[:, -2] > NCODES[0]]
-        arr_2s = arr[arr[:, -2] > NCODES[1]]
-        arr_3s = arr[arr[:, -2] > NCODES[2]]
-        arr_4s = arr[arr[:, -2] > NCODES[3]]
-        codes_1seg.append(arr_1s)
-        codes_2seg.append(arr_2s)
-        codes_3seg.append(arr_3s)
-        codes_4seg.append(arr_4s)
-    return codes, codes_1seg, codes_2seg, codes_3seg, codes_4seg
-#     return np.array(codes)
+    all_codes = []
+    for i in range(2, 5):
+        arr = list(combinations(PRIMES, i))
+        for a in arr:
+            ll = len(a)
+            ncodes = np.prod(a)
+            vsize = np.sum(a)
+            sparsity = round(i/vsize, 3)
+            all_codes.append((a, ll, sparsity, vsize, ncodes))
+    all_codes = sorted(all_codes, key=lambda x: x[-2])
+    codes_1seg = [i for i in all_codes if i[-1] > NCODES[0] and i[-1] < NCODES[3] * 2]
+    codes_2seg = [i for i in all_codes if i[-1] > NCODES[1] and i[-1] < NCODES[3] * 2]
+    codes_3seg = [i for i in all_codes if i[-1] > NCODES[2] and i[-1] < NCODES[3] * 2]
+    codes_4seg = [i for i in all_codes if i[-1] > NCODES[3] and i[-1] < NCODES[3] * 2]
+    return all_codes, codes_1seg, codes_2seg, codes_3seg, codes_4seg
