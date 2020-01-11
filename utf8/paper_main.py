@@ -78,19 +78,37 @@ def sparse_Nk_dimension_analysis():
     # find the minimum N and k for which the condition is filled for the different codes
     results = []
     for code_points in NCODES:
-        for N in range(32, 128):
-            for k in [3, 4, 5, 6]:
-                v = np.prod(list(range(N, N - k, -1))) / np.prod(list(range(1, k + 1)))
+        for k in range(2, 7):
+            for N in range(10, 256):
+                v = int(np.prod(list(range(N, N - k, -1))) / np.prod(list(range(1, k + 1))))
                 if v > code_points:
                     # print("code_size={}; N={},k={}".format(v, N, k))
-                    results.append((code_points, v, N, k))
+                    results.append((code_points, v, N, k, '{:.3f}'.format(k/N)))
+                    break
     return results
 
 
 def sparse_code_Nk(code_size, N, k):
-    ret = combinations(list(range(N)), k)  # iterator
-    ret = np.array(list(ret))[:code_size]
-    return ret
+    # get the indices for the ones
+    comb = combinations(list(range(N)), k)  # iterator
+    # limit to code size
+    comb = np.array(list(comb))[:code_size]
+    # compute referential as flat index to be able to use for
+    comb = comb + np.array(range(128)).reshape([code_size, 1]) * N
+    # convert indices to dense binary matrix
+    sc = np.zeros([code_size, N])
+    np.put(sc, comb)
+    return sc
+
+
+def create_sparse_codes():
+    sc1seg = sparse_code_Nk(NCODES[0], 17, 2)
+    sc2seg = sparse_code_Nk(NCODES[1], 24, 3)
+    sc3seg = sparse_code_Nk(NCODES[2], 37, 4)
+    sc4seg = sparse_code_Nk(NCODES[3], 45, 5)
+    # save codes TODO
+    
+    return sc1seg, sc2seg, sc3seg, sc4seg
 
 
 def multihot_primes():
@@ -109,3 +127,7 @@ def multihot_primes():
     codes_3seg = [i for i in all_codes if i[-1] > NCODES[2] and i[-1] < NCODES[3] * 2]
     codes_4seg = [i for i in all_codes if i[-1] > NCODES[3] and i[-1] < NCODES[3] * 2]
     return all_codes, codes_1seg, codes_2seg, codes_3seg, codes_4seg
+
+
+def get_multihot_prime_code(ncodes, subcode_list):
+    eyes = [np.eye(c) for c in subcode_list]
