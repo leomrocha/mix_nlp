@@ -112,9 +112,9 @@ def sparse_code_Nk(code_size, N, k):
 
 
 def create_sparse_Nk_codes():
-    col = "| Segments | code size | N | k |exec_time (sec) |  Matrix Size in Disk (MB): \
+    col = "| Segments | code size | Vector Size | N | k |exec_time (sec) |  Matrix Size in Disk (MB): \
                | Sparse Matrix Size in Disk (MB): |code path"
-    row = "| {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    row = "| {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
     base_name = "codes/utf8_sparse_codes-{}_N-{}_k-{}_seg"
     sparse_matrix_name = "codes/utf8_sparse_codes-{}_N-{}_k-{}_seg_sparse-matrix"
     params = [(NCODES[0], 17, 2), (NCODES[1], 24, 3), (NCODES[2], 37, 4), (NCODES[3], 45, 5)]
@@ -137,7 +137,7 @@ def create_sparse_Nk_codes():
         smsize = os.path.getsize(smname + ".npy") / (1024 ** 2)
         t_end = time.time()
         el = t_end - t_init
-        print(row.format(i + 1, nc, N, k, el, msize, smsize, mname))
+        print(row.format(i + 1, nc, scode.shape, N, k, el, msize, smsize, mname))
     return codes
 
 
@@ -169,9 +169,9 @@ def generate_multihot_prime_code(ncodes, subcode_list):
 
 
 def all_multihot_primes():
-    col = "| Segments | code size | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+    col = "| Segments | code size | Vector Size | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
                    | Sparse Matrix Size in Disk (MB): |code path"
-    row = "| {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    row = "| {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
     base_name = "codes/utf8_coprime_codes-{}_primes-{}_{}_seg"
     sparse_matrix_name = "codes/utf8_coprime_codes-{}_primes-{}_{}_seg_sparse-matrix"
     # the codes already were selected by hand from the ones and are:
@@ -198,14 +198,14 @@ def all_multihot_primes():
         t_end = time.time()
         el = t_end - t_init
 
-        print(row.format(i + 1, cc[0], cc[1], el, msize, smsize, mname))
+        print(row.format(i + 1, cc[0], code.shape, cc[1], el, msize, smsize, mname))
     return codes
 
 
 def create_choose_Nk_coprimes_codes():
-    col = "| Segments | code size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+    col = "| Segments | code size | Vector Size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
                        | Sparse Matrix Size in Disk (MB): |code path"
-    row = "| {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    row = "| {} | {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
     base_name = "codes/utf8_N-{}k-{}-coprime_codes-{}_primes-{}_{}_seg"
     sparse_matrix_name = "codes/utf8_N-{}k-{}-coprime_codes-{}_primes-{}_{}_seg_sparse-matrix"
     # N choose k + coprime multihot
@@ -235,15 +235,15 @@ def create_choose_Nk_coprimes_codes():
         t_end = time.time()
         el = t_end - t_init
 
-        print(row.format(i + 1, cs, N, k, coprimes, el, msize, smsize, mname))
+        print(row.format(i + 1, cs, code.shape, N, k, coprimes, el, msize, smsize, mname))
 
     return codes
 
 
 def create_coprimes_choose_Nk_codes():
-    col = "| Segments | code size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+    col = "| Segments | code size | Vector Size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
                        | Sparse Matrix Size in Disk (MB): |code path"
-    row = "| {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    row = "| {} | {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
     base_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg"
     sparse_matrix_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg_sparse-matrix"
     # coprime multihot + N choose k
@@ -274,6 +274,45 @@ def create_coprimes_choose_Nk_codes():
         t_end = time.time()
         el = t_end - t_init
 
-        print(row.format(i + 1, cs, N, k, coprimes, el, msize, smsize, mname))
+        print(row.format(i + 1, cs, code.shape, N, k, coprimes, el, msize, smsize, mname))
+
+    return codes
+
+
+def create_specific_redundant_codes():
+    col = "| Segments | code size | Vector Size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+                       | Sparse Matrix Size in Disk (MB): |code path"
+    row = "| {} | {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    base_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg"
+    sparse_matrix_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg_sparse-matrix"
+    # coprime multihot + N choose k
+    # code dim, primes, (N, k)
+    config = [(NCODES[0], (3, 5, 11), (13, 3)),
+              (NCODES[1], (3, 5, 11, 13), (32, 3)),
+              (NCODES[2], (11, 13, 19, 23), (30, 4)),
+              (NCODES[3], (23, 31, 37, 43), (58, 5))]
+    codes = []
+    print(col)
+    for i, (cs, coprimes, (N, k)) in enumerate(config):
+        t_init = time.time()
+        nk = sparse_code_Nk(cs, N, k)
+        nk = np.tile(nk, ((cs // nk.shape[0]) + 1, 1))[:cs]
+        cp = generate_multihot_prime_code(cs, coprimes)
+        code = np.hstack([cp, nk])
+        codes.append(code)
+        # Save matrix alone
+        mname = base_name.format(cs, str(coprimes), N, k, i + 1)
+        np.save(mname, code)
+        # Save Sparse matrix alone
+        smname = sparse_matrix_name.format(cs, str(coprimes), N, k, i + 1)
+        spcodes = sp.sparse.coo_matrix(code)
+        np.save(smname, spcodes)
+        msize = os.path.getsize(mname + ".npy") / (1024 ** 2)
+        # Sparse Matrix
+        smsize = os.path.getsize(smname + ".npy") / (1024 ** 2)
+        t_end = time.time()
+        el = t_end - t_init
+
+        print(row.format(i + 1, cs, code.shape, N, k, coprimes, el, msize, smsize, mname))
 
     return codes
