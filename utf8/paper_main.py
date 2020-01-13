@@ -1,3 +1,13 @@
+"""
+This file contains the functions that execute every aspect of the paper,
+each function contains the chosen configuration values and is done like that mostly for reproducibility WITHOUT the need
+of an external configuration file, so it is purposely written with hardcoded values instead of depending on an external
+file.
+Many things might (and will be) done in a non-optimal code or production-level code in this file for the sake of clarity
+and/or idea separation.
+Code is single threaded single process, this is to measure build and run times and compare results (also parallel code
+can be slightly or much more complex to run and debug)
+"""
 from itertools import combinations
 import os
 import pickle
@@ -94,7 +104,7 @@ def sparse_code_Nk(code_size, N, k):
     # limit to code size
     comb = np.array(list(comb))[:code_size]
     # compute referential as flat index to be able to use for
-    comb = comb + np.array(range(code_size)).reshape([code_size, 1]) * N
+    comb = comb + np.array(range(code_size))[:comb.shape[0]].reshape([-1, 1]) * N
     # convert indices to dense binary matrix
     sc = np.zeros([code_size, N])
     np.put(sc, comb, 1)
@@ -131,7 +141,7 @@ def create_sparse_Nk_codes():
     return codes
 
 
-def multihot_primes():
+def multihot_primes_conf():
     all_codes = []
     for i in range(2, 5):
         arr = list(combinations(PRIMES, i))
@@ -191,17 +201,79 @@ def all_multihot_primes():
         print(row.format(i + 1, cc[0], cc[1], el, msize, smsize, mname))
     return codes
 
-#
-# # N choose k + coprime multihot
-# # code dim, N,k,target dim, prime dim, primes
-# Nk_coprimes = [(NCODES[0], 17, 2, 32, 15, (3, 5, 7)),
-#                (NCODES[1], 24, 3, 48, 24, (5, 8, 11)),
-#                (NCODES[2], 37, 4, 64, 27, (3, 5, 8, 11)),
-#                (NCODES[3], 45, 5, 96, 51, (3, 7, 11, 13, 17))]
-#
-# # coprime multihot + N choose k
-# # code dim, primes, (N, k)
-# code_config = [(NCODES[0], (3, 5, 11), (13, 3)),
-#                (NCODES[1], (3, 5, 11, 13), (32, 3)),
-#                (NCODES[2], (11, 13, 19, 23), (30, 4)),
-#                (NCODES[3], (23, 31, 37, 43), (58, 5))]
+
+def create_choose_Nk_coprimes_codes():
+    col = "| Segments | code size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+                       | Sparse Matrix Size in Disk (MB): |code path"
+    row = "| {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    base_name = "codes/utf8_N-{}k-{}-coprime_codes-{}_primes-{}_{}_seg"
+    sparse_matrix_name = "codes/utf8_N-{}k-{}-coprime_codes-{}_primes-{}_{}_seg_sparse-matrix"
+    # N choose k + coprime multihot
+    # code dim, N,k,target dim, prime dim, primes
+    config = [(NCODES[0], 17, 2, 32, 15, (3, 5, 7)),
+              (NCODES[1], 24, 3, 48, 24, (5, 8, 11)),
+              (NCODES[2], 37, 4, 64, 27, (3, 5, 8, 11)),
+              (NCODES[3], 45, 5, 96, 51, (3, 7, 11, 13, 17))]
+    codes = []
+    print(col)
+    for i, (cs, N, k, tgts, ms, coprimes) in enumerate(config):
+        t_init = time.time()
+        nk = sparse_code_Nk(cs, N, k)
+        cp = generate_multihot_prime_code(cs, coprimes)
+        code = np.hstack([nk, cp])
+        codes.append(code)
+        # Save matrix alone
+        mname = base_name.format(N, k, cs, str(coprimes), i + 1)
+        np.save(mname, code)
+        # Save Sparse matrix alone
+        smname = sparse_matrix_name.format(N, k, cs, str(coprimes), i + 1)
+        spcodes = sp.sparse.coo_matrix(code)
+        np.save(smname, spcodes)
+        msize = os.path.getsize(mname + ".npy") / (1024 ** 2)
+        # Sparse Matrix
+        smsize = os.path.getsize(smname + ".npy") / (1024 ** 2)
+        t_end = time.time()
+        el = t_end - t_init
+
+        print(row.format(i + 1, cs, N, k, coprimes, el, msize, smsize, mname))
+
+    return codes
+
+
+def create_coprimes_choose_Nk_codes():
+    col = "| Segments | code size | N | k | primes |exec_time (sec) |  Matrix Size in Disk (MB): \
+                       | Sparse Matrix Size in Disk (MB): |code path"
+    row = "| {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    base_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg"
+    sparse_matrix_name = "codes/utf8_coprime_codes-{}_primes-{}_N-{}k-{}_{}-seg_sparse-matrix"
+    # coprime multihot + N choose k
+    # code dim, primes, (N, k)
+    config = [(NCODES[0], (3, 5, 11), (13, 3)),
+              (NCODES[1], (3, 5, 11, 13), (32, 3)),
+              (NCODES[2], (11, 13, 19, 23), (30, 4)),
+              (NCODES[3], (23, 31, 37, 43), (58, 5))]
+    codes = []
+    print(col)
+    for i, (cs, coprimes, (N, k)) in enumerate(config):
+        t_init = time.time()
+        nk = sparse_code_Nk(cs, N, k)
+        nk = np.tile(nk, ((cs // nk.shape[0]) + 1, 1))[:cs]
+        cp = generate_multihot_prime_code(cs, coprimes)
+        code = np.hstack([cp, nk])
+        codes.append(code)
+        # Save matrix alone
+        mname = base_name.format(cs, str(coprimes), N, k, i + 1)
+        np.save(mname, code)
+        # Save Sparse matrix alone
+        smname = sparse_matrix_name.format(cs, str(coprimes), N, k, i + 1)
+        spcodes = sp.sparse.coo_matrix(code)
+        np.save(smname, spcodes)
+        msize = os.path.getsize(mname + ".npy") / (1024 ** 2)
+        # Sparse Matrix
+        smsize = os.path.getsize(smname + ".npy") / (1024 ** 2)
+        t_end = time.time()
+        el = t_end - t_init
+
+        print(row.format(i + 1, cs, N, k, coprimes, el, msize, smsize, mname))
+
+    return codes
