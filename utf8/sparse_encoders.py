@@ -141,7 +141,7 @@ def create_sparse_Nk_codes():
     return codes
 
 
-def multihot_primes_conf():
+def multihot_primes_conf_finder():
     all_codes = []
     for i in range(2, 5):
         arr = list(combinations(PRIMES, i))
