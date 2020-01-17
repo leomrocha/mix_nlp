@@ -106,7 +106,7 @@ def sparse_code_Nk(code_size, N, k):
     # compute referential as flat index to be able to use for
     comb = comb + np.array(range(code_size))[:comb.shape[0]].reshape([-1, 1]) * N
     # convert indices to dense binary matrix
-    sc = np.zeros([code_size, N])
+    sc = np.zeros([code_size, N], dtype=bool)
     np.put(sc, comb, 1)
     return sc
 
@@ -160,7 +160,7 @@ def multihot_primes_conf_finder():
 
 
 def generate_multihot_prime_code(ncodes, subcode_list):
-    eyes = [np.eye(c) for c in subcode_list]
+    eyes = [np.eye(c).astype(bool) for c in subcode_list]
     # TODO
     # stack each and cut to the ncodes size
     cols = [np.tile(e, ((ncodes // e.shape[0]) + 1, 1))[:ncodes] for e in eyes]
@@ -314,5 +314,71 @@ def create_specific_redundant_codes():
         el = t_end - t_init
 
         print(row.format(i + 1, cs, code.shape, N, k, coprimes, el, msize, smsize, mname))
+
+    return codes
+
+
+def create_single_cycle_code(code_size, sizes):
+    """
+    :param code_size: number of elements in the code
+    :param sizes: iterable of vector sizes to include in the code
+    :return: a multi-hot (or one-hot) vector of shape=(code_size, sum(sizes)) with the codes
+    """
+    codes = []
+    for s in sizes:
+        # compute index of the value '1'
+        idx = np.arange(1, code_size + 1)
+        idx = idx // s
+        # convert indices to dense binary matrix
+        sc = np.zeros([code_size, s], dtype=bool)
+        np.put(sc, idx, 1)
+        codes.append(sc)
+    ret = np.hstack(codes)
+    return ret
+
+
+def create_prelim_testing_codes():
+    """
+    The codes are N choose k + coprime + filling with single cycle method giving redundancy and 2
+    complete representations
+    There are only done for 2 and 3 segments, the cycles are arbitrarilly chosen to fill the gaps to the next interesting
+    dimension (64/128
+
+    :return:
+    """
+    col = "| Segments | code size | Vector Size | N | k | primes | cycles | exec_time (sec) |  Matrix Size in Disk (MB): \
+                           | Sparse Matrix Size in Disk (MB): |code path"
+    row = "| {} | {} | {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
+    base_name = "codes/utf8_{}-seg_{}-codepoints_{}-dim_N-{}-k{}_coprimes-{}_cycles-{}_dense"
+    sparse_matrix_name = "codes/utf8_{}-seg_{}-codepoints_{}-dim_N-{}-k{}_coprimes-{}_cycles-{}_sparse"
+    config = [
+        # segment, number of code-points, (n,k), (coprimes), (cycles), dimension, sparcity
+        (2, NCODES[1], (24, 3), (3, 5, 11, 13), (6, 2), 64, 9/64),
+        (3, NCODES[2], (37, 4), (11, 13, 19, 23), (11, 7, 4, 3), 128, 12/128),
+    ]
+    codes = []
+    print(col)
+    for seg, codepoints, (N, k), coprimes, cycles, dim, sparcity in config:
+        t_init = time.time()
+        nk = sparse_code_Nk(codepoints, N, k)
+        nk = np.tile(nk, ((codepoints // nk.shape[0]) + 1, 1))[:codepoints]
+        cp = generate_multihot_prime_code(codepoints, coprimes)
+        cc = create_single_cycle_code(codepoints, cycles)
+        code = np.hstack([cp, nk, cc])
+        codes.append(code)
+        # Save matrix alone
+        mname = base_name.format(seg, codepoints, dim, N, k, str(coprimes), str(cycles))
+        np.save(mname, code)
+        # Save Sparse matrix alone
+        smname = sparse_matrix_name.format(seg, codepoints, dim, N, k, str(coprimes), str(cycles))
+        spcodes = sp.sparse.coo_matrix(code)
+        np.save(smname, spcodes)
+        msize = os.path.getsize(mname + ".npy") / (1024 ** 2)
+        # Sparse Matrix
+        smsize = os.path.getsize(smname + ".npy") / (1024 ** 2)
+        t_end = time.time()
+        el = t_end - t_init
+
+        print(row.format(seg, codepoints, code.shape, N, k, coprimes, cycles, el, msize, smsize, mname))
 
     return codes
