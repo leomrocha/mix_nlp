@@ -20,7 +20,7 @@ class UTF8SparseDecoderModule(nn.Module):
     # def __init__(self, input_size=192, segments=3, N=37, k=13, coprimes=(11, 13, 19, 23), cycles=(11, 7, 4, 3),
     #              use_transformer=True):
     def __init__(self, input_size=128, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(6, 2),
-                 use_transformer=True, transformer_ff_size=1024):
+                 use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1):
 
         """"""
         super(UTF8SparseDecoderModule, self).__init__()
@@ -35,7 +35,8 @@ class UTF8SparseDecoderModule(nn.Module):
         )
         if use_transformer:
             nheads = k + len(coprimes) + len(cycles)
-            self.transformer = TransformerEncoderLayer(self._code_dim, nheads, dim_feedforward=transformer_ff_size)
+            self.transformer = TransformerEncoderLayer(self._code_dim, nheads, dim_feedforward=transformer_ff_size,
+                                                       activation=transformer_activation, dropout=dropout)
 
     def forward(self, x):
         # input x must be of shape:
@@ -68,7 +69,8 @@ class UTF8SegmentMultihotDecoderModule(nn.Module):
         }
         return size_dict[segments]
 
-    def __init__(self, input_size, hidd_size=1024, segments=2, use_transformer=False, dropout=0.1):
+    def __init__(self, input_size, hidd_size=1024, segments=2, use_transformer=False, dropout=0.1,
+                 transformer_activation='gelu'):
         """
         :param input_size: vector size (dimensions) of the input
         :param segments: segments used in the code -> defines the size of the output
@@ -87,7 +89,8 @@ class UTF8SegmentMultihotDecoderModule(nn.Module):
         if use_transformer:
             # number of heads in the transformer is the segments plus the segment coding part
             nheads = segments + 1
-            self.transformer = TransformerEncoderLayer(lin_size, nheads, dim_feedforward=lin_size*4, dropout=dropout)
+            self.transformer = TransformerEncoderLayer(lin_size, nheads, dim_feedforward=lin_size*4,
+                                                       activation=transformer_activation, dropout=dropout)
         self.lin_segment = weight_norm(nn.Linear(lin_size, 4))
         self.lin_segment_1 = weight_norm(nn.Linear(lin_size, 256))
         if segments > 1:
