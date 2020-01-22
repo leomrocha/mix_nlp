@@ -1,3 +1,4 @@
+import itertools
 import numpy as np
 import torch
 import torchtext
@@ -12,51 +13,18 @@ BASEPATH = "/home/leo/projects/Datasets/text"
 # GLUE
 GLUE_BASEPATH = os.path.join(BASEPATH, "GLUE")
 
-COLA_BASEPATH = os.path.join(GLUE_BASEPATH, "CoLA")
+
 ###
 # CoLA
-
-def cola_txt2txt(fpath, saveto):
-    """
-    CoLA text definition:
-    Each line in the .tsv files consists of 4 tab-separated columns.
-    Column 1:	the code representing the source of the sentence.
-    Column 2:	the acceptability judgment label (0=unacceptable, 1=acceptable).
-    Column 3:	the acceptability judgment as originally notated by the author.
-    Column 4:	the sentence.
-    :param fpath: input path of the text file to process
-    :return: a json description of the task, per each line in the input:
-    { 'input': ....
-      'target': [unacceptable|acceptable]
-    }
-    """
-    lines = []
-    with open(fpath) as f:
-        # print("opening {}".format(fpath))
-        for l in f.readlines():
-            e = l.split('\t')
-            try:
-                tgt = "acceptable" if int(e[1]) == 1 else "unacceptable"
-                input = "CoLA acceptability of: {}".format(e[3].replace('\n', ''))
-                d = {'input': input, 'target': tgt}
-                lines.append(d)
-            except Exception as e:
-                # TODO handle error here
-                pass
-    jsn = json.dumps(lines)
-    with open(saveto, 'wb') as f:
-        # print("saving to {}".format(saveto))
-        f.write(jsn)
-        f.flush()
-    # return jsn
+COLA_BASEPATH = os.path.join(GLUE_BASEPATH, "CoLA")
 
 
-def cola_process(base_path=COLA_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.tsv')]
-    outfiles = [f.replace('.tsv', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
-        res = pool.starmap(cola_txt2txt, params)
+def cola_parser(l):
+    e = l.split('\t')
+    tgt = "acceptable" if int(e[1]) == 1 else "unacceptable"
+    src = "CoLA acceptability of: {}".format(e[3].replace('\n', ''))
+    d = {'input': src, 'target': tgt}
+    return d
 
 
 ###
@@ -64,51 +32,19 @@ def cola_process(base_path=COLA_BASEPATH):
 MNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "MNLI/original")
 
 
-def mnli_txt2txt(fpath, saveto):
-    """
-    MNLI text definition:
-    Each line in the .jsonl files consists of the following fields:
-
-    :param fpath: input path of the text file to process
-    :return: a json description of the task, per each line in the input:
-    { 'input': ....
-      'target': []
+def mnli_parser(l):
+    e = json.loads(l)
+    sentence_1 = e['sentence1']
+    sentence_2 = e['sentence2']
+    d = {
+        'input': "task: MNLI | Sentence 1: {} | Sentence 2: {}".format(sentence_1, sentence_2),
+        'target': e['gold_label'],
+        'input_1': "task: MNLI parse tree of: {}".format(sentence_1),
+        'input_2': "task: MNLI parse tree of: {}".format(sentence_2),
+        'target_1': e['sentence1_parse'],
+        'target_2': e['sentence2_parse'],
     }
-    """
-    lines = []
-    with open(fpath) as f:
-        # print("opening {}".format(fpath))
-        for l in f.readlines():
-            e = json.loads(l)
-            try:
-                sentence_1 = e['sentence1']
-                sentence_2 = e['sentence2']
-                d = {
-                    'input': "task: MNLI | Sentence 1: {} | Sentence 2: {}".format(sentence_1, sentence_2),
-                    'target': e['gold_label'],
-                    'input_sentence_1': "task: MNLI parse tree of: {}".format(sentence_1),
-                    'input_sentence_2': "task: MNLI parse tree of: {}".format(sentence_2),
-                    'parse_target_1': e['sentence1_parse'],
-                    'parse_target_2': e['sentence2_parse'],
-                }
-                lines.append(d)
-            except Exception as e:
-                # TODO handle error here
-                pass
-    jsn = json.dumps(lines)
-    with open(saveto, 'wb') as f:
-        # print("saving to {}".format(saveto))
-        f.write(jsn)
-        f.flush()
-
-
-def mnli_process(base_path=MNLI_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.jsonl')]
-    outfiles = [f.replace('.jsonl', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
-        res = pool.starmap(mnli_txt2txt, params)
-
+    return d
 
 
 ###
@@ -116,45 +52,12 @@ def mnli_process(base_path=MNLI_BASEPATH):
 MRPC_BASEPATH = os.path.join(GLUE_BASEPATH, "MRPC")
 
 
-def mrpc_txt2txt(fpath, saveto):
-    """
-    :param fpath: input path of the text file to process
-    :return: a json description of the task, per each line in the input:
-    { 'input': ....
-      'target': []
-    }
-    """
-    lines = []
-    with open(fpath) as f:
-        # print("opening {}".format(fpath))
-        i = 0
-        for l in f.readlines():
-            if i ==0:
-                # ignore first line
-                continue
-            i+=1
-            try:
-                label, _, _, sentence_1, sentence_2 = l.split('\t')
-                d = { 'input': "Are sentences: {} and: {} equivalent?".format(sentence_1, sentence_2),
-                      'target': "Yes, Semantically equivalent" if int(label) == 1 else "No, Not equivalent"
-                    }
-                lines.append(d)
-            except Exception as e:
-                # TODO handle error here
-                pass
-    jsn = json.dumps(lines)
-    with open(saveto, 'wb') as f:
-        # print("saving to {}".format(saveto))
-        f.write(jsn)
-        f.flush()
-
-
-def mrpc_process(base_path=MRPC_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.tsv')]
-    outfiles = [f.replace('.tsv', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
-        res = pool.starmap(mnli_txt2txt, params)
+def mrpc_parser(l):
+    label, _, _, sentence_1, sentence_2 = l.split('\t')
+    d = {'input': "Are sentences: {} and: {} equivalent?".format(sentence_1, sentence_2),
+         'target': "Yes, Semantically equivalent" if int(label) == 1 else "No, Not equivalent"
+        }
+    return d
 
 
 ###
@@ -162,42 +65,13 @@ def mrpc_process(base_path=MRPC_BASEPATH):
 QNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "QNLI")
 
 
-def qnli_txt2txt(fpath, saveto):
-    """
-    :param fpath: input path of the text file to process
-    :return: a json description of the task, per each line in the input:
-    { 'input': ....
-      'target': []
+def qnli_parser(l):
+    index, question, answer, label = l.split('\t')
+    d = {
+        'input': "Are these sentences entailed? Question: {}  Answer: {}".format(question, answer),
+        'target': label.replace("_", " ")
     }
-    """
-    lines = []
-    with open(fpath) as f:
-        # print("opening {}".format(fpath))
-        for l in f.readlines():
-            try:
-                index, question, answer, label = l.split('\t')
-                d = {
-                      'input': "Are these sentences entailed? Question: {}  Answer: {}".format(question, answer),
-                      'target': label.replace("_", " ")
-                }
-                lines.append(d)
-            except Exception as e:
-                # TODO handle error here
-                pass
-    jsn = json.dumps(lines)
-    with open(saveto, 'wb') as f:
-        # print("saving to {}".format(saveto))
-        f.write(jsn)
-        f.flush()
-
-
-def qnli_process(base_path=QNLI_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.tsv')]
-    outfiles = [f.replace('.tsv', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
-        res = pool.starmap(qnli_txt2txt, params)
-
+    return d
 
 
 ###
@@ -205,49 +79,74 @@ def qnli_process(base_path=QNLI_BASEPATH):
 QQP_BASEPATH = os.path.join(GLUE_BASEPATH, "QQP")
 
 
-def qqp_txt2txt(fpath, saveto):
-    """
-    :param fpath: input path of the text file to process
-    :return: a json description of the task, per each line in the input:
-    { 'input': ....
-      'target': []
+def qqp_parser(l):
+    _, _, _, question_1, question_2, is_duplicate = l.split('\t')
+    d = {
+        'input': "Are these questions duplicated? Question: {}  Answer: {}".format(question_1, question_2),
+        'target': "Duplicates" if int(is_duplicate) == 1 else "Not duplicates"
     }
-    """
-    lines = []
-    with open(fpath) as f:
-        # print("opening {}".format(fpath))
-        for l in f.readlines():
-            try:
-                _, _, _, question_1, question_2, is_duplicate = l.split('\t')
-                d = {
-                    'input': "Are these questions duplicated? Question: {}  Answer: {}".format(question_1, question_2),
-                    'target': "Duplicates" if int(is_duplicate) == 1 else "Not duplicates"
-                }
-                lines.append(d)
-            except Exception as e:
-                # TODO handle error here
-                pass
-    jsn = json.dumps(lines)
-    with open(saveto, 'wb') as f:
-        # print("saving to {}".format(saveto))
-        f.write(jsn)
-        f.flush()
+    return d
 
 
-def qqp_process(base_path=QQP_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.tsv')]
-    outfiles = [f.replace('.tsv', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
-        res = pool.starmap(_txt2txt, params)
+###
+# RTE
+RTE_BASEPATH = os.path.join(GLUE_BASEPATH, "RTE")
+
+
+def rte_parser(l):
+    index, sentence_1, sentence_2, label = l.split('\t')
+    d = {
+        'input': "Are these sentences entailed? Sentence 1: {}  Sentence 2: {}".format(sentence_1, sentence_2),
+        'target': label.replace("_", " ")
+    }
+    return d
+
+
+###
+# SNLI
+SNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "SNLI/original")
+snli_parser = mnli_parser
 
 
 ###
 #
-_BASEPATH = os.path.join(GLUE_BASEPATH, "")
+SST2_BASEPATH = os.path.join(GLUE_BASEPATH, "SST-2")
 
 
-def _txt2txt(fpath, saveto):
+def sst2_parser(l):
+
+    d = {
+        'input': ,
+        'target':
+    }
+    return d
+
+###
+#
+STSB_BASEPATH = os.path.join(GLUE_BASEPATH, "STS-B")
+
+def stsb_parser(l):
+    d = {
+        'input': ,
+        'target':
+    }
+    return d
+
+###
+#
+WNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "WNLI")
+
+def wnli_parser(l):
+    d = {
+        'input': ,
+        'target':
+    }
+    return d
+
+
+###
+#
+def _txt2txt(parser, fpath, saveto):
     """
     :param fpath: input path of the text file to process
     :return: a json description of the task, per each line in the input:
@@ -260,9 +159,7 @@ def _txt2txt(fpath, saveto):
         # print("opening {}".format(fpath))
         for l in f.readlines():
             try:
-                d = {
-
-                }
+                d = parser(l)
                 lines.append(d)
             except Exception as e:
                 # TODO handle error here
@@ -274,9 +171,33 @@ def _txt2txt(fpath, saveto):
         f.flush()
 
 
-def _process(base_path=_BASEPATH):
-    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith('.jsonl')]
-    outfiles = [f.replace('.jsonl', '-txt2txt.json') for f in files]
-    params = zip(files, outfiles)
-    with Pool() as pool:
+def _get_params(function, base_path, extension):
+    files = [os.path.join(base_path, f) for f in os.listdir(base_path) if f.endswith(extension)]
+    outfiles = [f.replace(extension, '-txt2txt.json') for f in files]
+    params = zip([function]*len(files), files, outfiles)
+    return params
+
+
+def _process(params):
+    with Pool(processes=cpu_count()) as pool:
         res = pool.starmap(_txt2txt, params)
+
+
+def process_glue():
+    setup_list = [
+        (cola_parser, COLA_BASEPATH, '.tsv'),  # CoLA
+        (mnli_parser, MNLI_BASEPATH, '.jsonl'),  # MNLI
+        (mrpc_parser, MRPC_BASEPATH, '.tsv'),  # MRPC
+        (qnli_parser, QNLI_BASEPATH, '.tsv'),  # QNLI
+        (qqp_parser, QQP_BASEPATH, '.tsv'),  # QQP
+        (rte_parser, RTE_BASEPATH, '.tsv'),  # RTE
+        (snli_parser, SNLI_BASEPATH, '.tsv'),  # SNLI
+        (sst2_parser, SST2_BASEPATH, '.tsv'),  # SST-2
+        (stsb_parser, STSB_BASEPATH, '.tsv'),  # STS-B
+        (wnli_parser, WNLI_BASEPATH, '.tsv'),  # WNLI
+        ]
+
+    params = []
+    for lst in setup_list:
+        params.extend(_get_params(*lst))
+    _process(params)
