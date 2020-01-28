@@ -1,12 +1,6 @@
-import itertools
-import numpy as np
-import torch
-import torchtext
-import torchtext.datasets as ttdatasets
 import orjson as json
 from multiprocessing import Pool, cpu_count
 import os
-import sys
 
 BASEPATH = "/home/leo/projects/Datasets/text"
 
