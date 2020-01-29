@@ -17,35 +17,47 @@ class UTF8SparseDecoderModule(nn.Module):
     Decoder Module for UTF8 coding where the code is generate by a redundant code with
     """
 
-    # def __init__(self, input_size=192, segments=3, N=37, k=13, coprimes=(11, 13, 19, 23), cycles=(11, 7, 4, 3),
-    #              use_transformer=True):
-    def __init__(self, input_size=128, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(6, 2),
-                 use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1):
+    # codes/utf8_2-seg_1984-codepoints_64-dim_N-24-k3_coprimes-(3, 5, 11, 13)_cycles-(6, 2)_dense
+    # def __init__(self, input_size=128, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(6, 2),
+    #              use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1):
+
+    # codes/utf8_3-seg_59328-codepoints_128-dim_N-37-k4_coprimes-(11, 13, 19, 23)_cycles-(11, 7, 4, 3)_dense
+    def __init__(self, input_size=192, segments=3, N=37, k=13, coprimes=(11, 13, 19, 23), cycles=(11, 7, 4, 3),
+                 use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1,
+                 nheads=16):
 
         """"""
         super(UTF8SparseDecoderModule, self).__init__()
         self.segments = segments
         self.use_transformer = use_transformer
         # input passes through linear to get to the final dimension
-        self._code_dim = N + np.sum(coprimes) + np.sum(cycles)
+        self._code_dim = N + np.sum(coprimes) + np.sum(cycles)  # 128 for 3-segments
         hidd_size = max(input_size * 4, self._code_dim * 4)
         self.linear = nn.Sequential(
             weight_norm(nn.Linear(input_size, hidd_size)),
             weight_norm(nn.Linear(hidd_size, self._code_dim))
         )
         if use_transformer:
-            nheads = k + len(coprimes) + len(cycles)
+            # nheads = k + len(coprimes) + len(cycles)
+            # print(self._code_dim, nheads)
+            # # WARNING -> AssertionError: embed_dim must be divisible by num_heads
+            # # so recomputing nheads to bi divisible by the embedding dimension
+            # nheads = self._code_dim // (self._code_dim // nheads)
+            # print(nheads)
+            # # nheads = 12
+
             self.transformer = TransformerEncoderLayer(self._code_dim, nheads, dim_feedforward=transformer_ff_size,
                                                        activation=transformer_activation, dropout=dropout)
 
     def forward(self, x):
         # input x must be of shape:
-        # [batch size, sequence length, embedding] ???? TODO fix this
-        y = self.linear(x)
+        # [batch size, sequence length, embedding]
+        x = self.linear(x)
+        x = F.layer_norm(x)
         if self.use_transformer:
-            y = self.transformer(y)
-        y = F.sigmoid(y)
-        return y
+            x = self.transformer(x)
+        x = F.sigmoid(x)
+        return x
 
 
 class UTF8SegmentMultihotDecoderModule(nn.Module):
@@ -102,7 +114,7 @@ class UTF8SegmentMultihotDecoderModule(nn.Module):
 
     def forward(self, x):
         # input x must be of shape:
-        # [batch size, sequence length, embedding] ???? TODO fix this
+        # [batch size, sequence length, embedding]
         y = self.linear(x)
         if self.use_transformer:
             y = self.transformer(y)
