@@ -37,6 +37,7 @@ class UTF8SparseDecoderModule(nn.Module):
             weight_norm(nn.Linear(input_size, hidd_size)),
             weight_norm(nn.Linear(hidd_size, self._code_dim))
         )
+        self.lin_norm = nn.LayerNorm(self._code_dim)
         if use_transformer:
             # nheads = k + len(coprimes) + len(cycles)
             # print(self._code_dim, nheads)
@@ -53,7 +54,7 @@ class UTF8SparseDecoderModule(nn.Module):
         # input x must be of shape:
         # [batch size, sequence length, embedding]
         x = self.linear(x)
-        x = F.layer_norm(x)
+        x = self.lin_norm(x)
         if self.use_transformer:
             x = self.transformer(x)
         x = F.sigmoid(x)

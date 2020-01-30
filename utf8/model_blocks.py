@@ -122,15 +122,15 @@ class MixtureEncoderBlock(nn.Module):
     to keep computation and number of channels
     """
     def __init__(self, in_dim=2048, out_dim=1024,  # sequence (temporal) dimension
-                 lin_in=192, lin_hidd=1024, lin_out=192,  # linear layers
-                 c_in=192, c_out=1024, conv_nlayers=5, conv_groups=8, conv_dropout=0.2,  # convolutional block
+                 lin_in=192, lin_hidd=1024, lin_out=256,  # linear layers
+                 c_in=256, c_out=1024, conv_nlayers=5, conv_groups=8, conv_dropout=0.2,  # convolutional block
                  conv_kern_size=3, conv_activation="gelu",
                  downsample_stride=2, chann_downsample_stride=2,
                  transf_dim=128, transf_nheads=8, transf_dim_feedforward=1024,  # Transformer channel-wise
                  transf_dropout=0.1, transf_activation="gelu",  # Transformer
                  # o_lin_in=512,
                  o_lin_hidd=1024,
-                 # o_lin_out=192  # output projection for final dimensionality reduction
+                 o_lin_out=192  # output projection for final dimensionality reduction
                  ):
         """"""
         super(MixtureEncoderBlock, self).__init__()
@@ -161,21 +161,22 @@ class MixtureEncoderBlock(nn.Module):
         assert in_dim % downsample_stride == 0
         self.transf_norm1 = nn.LayerNorm(in_dim // downsample_stride)
         # channel-wise max-pool for dimensionality reduction
+        # TODO is it better to do a max_pool or 1x1 conv or another convolution block or a linear layer??
         self.max_pool_chann = nn.MaxPool1d(stride=chann_downsample_stride, kernel_size=chann_downsample_stride)
         # Final downsampling projection
         assert c_out % chann_downsample_stride == 0
         o_lin_in = c_out // chann_downsample_stride
-        o_lin_out = lin_in
+        # o_lin_out = lin_in
         self.linear_out = nn.Sequential(
             weight_norm(nn.Linear(o_lin_in, o_lin_hidd)),
             weight_norm(nn.Linear(o_lin_hidd, o_lin_out)),
         )
         self.lin_norm2 = nn.LayerNorm(o_lin_out)
-        # time-wise transformer "convolution" TODO
+        # time-wise transformer "convolution" TODO ...
         self.out_norm = nn.LayerNorm(o_lin_out)
 
     def forward(self, x):
-        ##
+        # #dimensions are shown in an example case
         # compute the projections for "skip" connection (makes it easier for gradient to flow)
         # [batch, sequence, embed] -> [batch, 2048, 192]
         # y = self.res_projection_embed()
@@ -219,3 +220,15 @@ class MixtureEncoderBlock(nn.Module):
         # [batch, sequence, embed] -> [batch, 1024, 192]
         # x = self.out_norm(x + y)
         return x
+
+
+class MixtureEncoder(nn.Module):
+    pass
+
+
+class MixtureDecoderBlock(nn.Module):
+    pass
+
+
+class MixtureDecoder(nn.Module):
+    pass
