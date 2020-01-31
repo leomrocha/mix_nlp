@@ -9,33 +9,14 @@ import numpy as np
 from datetime import datetime
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
+# from torch.utils.checkpoint import *
+# for gradient checkpointing (doesn't seems so straightforward) check:
+# https://github.com/prigoyal/pytorch_memonger/blob/master/tutorial/Checkpointing_for_PyTorch_models.ipynb
+# https://github.com/pytorch/pytorch/pull/4594
 from torch.utils.tensorboard import SummaryWriter
 
 from apex import amp, optimizers
-# from apex.parallel import DistributedDataParallel as DDP
-from apex.fp16_utils import *
-from apex.multi_tensor_apply import multi_tensor_applier
-amp.initialize()
-# APEX examples
-# import torch
-# import amp
-# model = ...
-# optimizer = ...
-# model, optimizer = amp.initialize(model, optimizer,
-#                                       opt_level=args.opt_level,
-#                                       keep_batchnorm_fp32=args.keep_batchnorm_fp32,
-#                                       loss_scale=args.loss_scale
-#                                       )
-# model, optimizer = amp.initialize(model, optimizer, opt_level="O1")  # [O0, O1, O2, O3 ]
-# for data, label in data_iter:
-#     out = model(data)
-#     loss = criterion(out, label)
-#     optimizer.zero_grad()
-#     with amp.scaled_loss(loss, optimizer) as scaled_loss:
-#         scaled_loss.backward()
-# optimizer.step()
 
 # Gradient checkpointing .... TODO when/if necessary
 
@@ -70,13 +51,13 @@ def loss_txt2txt_multi(prediction, target,
     :param tgt_dest_lang:
     :param pred_task_lang:
     :param tgt_task_lang:
-    :param pred_task:
-    :param tgt_task:
+    :param pred_task_desc:
+    :param tgt_task_desc:
     :param scale_loss:
     :param scale_orig_lang_loss:
     :param scale_dest_lang_loss:
     :param scale_task_lang_loss:
-    :param scale_task_loss:
+    :param scale_task_desc_loss:
     :param fn_loss: 
     :return:
     """
@@ -89,49 +70,23 @@ def loss_txt2txt_multi(prediction, target,
     return loss, (pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss)
 
 
-def loss_txt2txt_single(prediction, target,
-                        fn_loss=F.nll_loss,  # fn_loss=F.kl_div
-                        ):
-    """
-    Simple Text-to-Text loss between an input and an output
-    
-    :param prediction:
-    :param target: the target to measure a long, having indices (as pre-embedding ones)
-    :param fn_loss: loss function, use nll_loss or kl_div for this to work correctly
-    :return:
-    """
-    loss = fn_loss(prediction, target)
-    return loss
-
-
-# writer = SummaryWriter()
-
-
-# model = ...
-# optimizer = ...
-# model, optimizer = amp.initialize(model, optimizer,
-#                                       opt_level=args.opt_level,
-#                                       keep_batchnorm_fp32=True,
-#                                       loss_scale="dynamic"
-#                                       )
-# model, optimizer = amp.initialize(model, optimizer, opt_level="O2")  # [O0, O1, O2, O3 ]
-# for data, label in data_iter:
-#     out = model(data)
-#     loss = criterion(out, label)
-#     optimizer.zero_grad()
-#     with amp.scaled_loss(loss, optimizer) as scaled_loss:
-#         scaled_loss.backward()
-#     optimizer.step()
-
-def train_main(model, optimizer, criterion, data_loader,
+def train_main(model, optimizer, data_loader, criterion=loss_txt2txt_multi,
                opt_level="O2", keep_batchnorm_fp32=True, loss_scale="dynamic"
                ):
 
     model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
                                       keep_batchnorm_fp32=keep_batchnorm_fp32,
                                       loss_scale=loss_scale)
-
-
+    writer = SummaryWriter()
+    batch_count = 0
+    epoch_count = 0
+    # get epoch iterator from data loader
+    for epoch_iter in data_loader.load():
+        # get data iterator for the epoch from the data loader
+        for train_data_iter, test_data_iter in epoch_iter:
+            batch_count = train_epoch(model, optimizer, criterion, train_data_iter, epoch_count, writer, batch_count)
+            test_epoch(model, criterion, test_data_iter, epoch_count, writer, batch_count)
+        epoch_count += 1
     pass
 
 
@@ -148,17 +103,26 @@ def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_write
     :return:
     """
     torch.cuda.empty_cache()
+    model.train()
     train_loss = 0
     batch_idx = 1
     names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
     indiv_losses_acc = np.array([0.]*5)
     for metadata, data, label in data_iterator:
-        orig_lang, dest_lang, task_lang, task = metadata
+        orig_lang, dest_lang, task_lang, task_desc = metadata
+
+        optimizer.zero_grad()
         out = model(data)
-        loss, ind_losses = criterion(out, label)
+        pred, pred_olang, pred_dlang, pred_tlang, pred_tdesc = out
+        loss, ind_losses = criterion(pred, label,
+                                     pred_olang, orig_lang,
+                                     pred_dlang, dest_lang,
+                                     pred_tlang, task_lang,
+                                     pred_tdesc, task_desc,
+                                     )
         # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
         # Write summaries and details on TensorBoard for the task
-        summary_writer.add_scalar("Loss/train", loss.data.item(), global_step= total_batch_count + batch_idx)
+        summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=total_batch_count + batch_idx)
         acc = []
         for n, l in zip(names, ind_losses):
             ldata = l.data.item()
@@ -167,7 +131,6 @@ def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_write
         acc = np.array(acc)  # keep track of each individual part of the loss to log later
 
         indiv_losses_acc = indiv_losses_acc + acc
-        optimizer.zero_grad()
         with amp.scaled_loss(loss, optimizer) as scaled_loss:
             scaled_loss.backward()
         optimizer.step()
@@ -181,3 +144,43 @@ def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_write
     return batch_idx + total_batch_count
 
 
+def test_epoch(model, criterion, data_iterator, epoch, summary_writer, total_batch_count=0):
+    """
+
+    :param model:
+    :param criterion:
+    :param data_iterator:
+    :param epoch:
+    :param summary_writer:
+    :param total_batch_count:
+    :return:
+    """
+    torch.cuda.empty_cache()
+    model.eval()
+    test_loss = 0
+    batch_idx = 1
+    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
+    indiv_losses_acc = np.array([0.]*5)
+    for metadata, data, label in data_iterator:
+        orig_lang, dest_lang, task_lang, task = metadata
+        out = model(data)
+        loss, ind_losses = criterion(out, label)
+        # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
+        # Write summaries and details on TensorBoard for the task
+        summary_writer.add_scalar("Loss/test", loss.data.item(), global_step=total_batch_count + batch_idx)
+        acc = []
+        for n, l in zip(names, ind_losses):
+            ldata = l.data.item()
+            acc.append(ldata)
+            summary_writer.add_scalar("Loss/test-{}".format(n), ldata)
+        acc = np.array(acc)  # keep track of each individual part of the loss to log later
+
+        indiv_losses_acc = indiv_losses_acc + acc
+        batch_idx += 1
+        torch.cuda.empty_cache()
+
+    summary_writer.add_scalar("EpochLoss/test", test_loss / batch_idx, epoch)
+    for n, l in zip(names, indiv_losses_acc):
+        summary_writer.add_scalar("EpochLoss/test-{}".format(n), l)
+    print('====> Timestamp {} Epoch: {} Test Set loss: {:.8f}'.format(datetime.now(), epoch, test_loss / batch_idx))
+    return batch_idx + total_batch_count
