@@ -4,6 +4,7 @@ File that prepares a train, test, dev dataset separation per different max strin
 The outputs will be
 """
 from collections import OrderedDict
+import gzip
 import itertools
 from multiprocessing import Pool, cpu_count
 import numpy as np
@@ -52,10 +53,14 @@ def separate_by_strlen(fname, max_lens=MAX_LENS):
     :return: will write a list of files separating by max(input|output) length of the task in place,
 
     """
-    with json.loads(open(fname, 'rb').read()) as f:
+    fopen = open
+    if fname.endswith(".gz"):
+        fopen = gzip.open
+    with fopen(fname, 'rb') as f:
+        jf = json.loads(f.read())
         groups = {}
         uniquekeys = set([])
-        for k, g in itertools.groupby(f, _group_foo):
+        for k, g in itertools.groupby(jf, _group_foo):
             if k in groups:
                 groups[k].extend(list(g))
             else:
@@ -65,7 +70,7 @@ def separate_by_strlen(fname, max_lens=MAX_LENS):
         # now save the files
         for k, v in groups.items():
             oname = fname.replace(".json", "max-{}.json".format(k))
-            with open(oname, "wb") as of:
+            with fopen(oname, "wb") as of:
                 txt = json.dumps(v)
                 of.write(txt)
                 of.flush()
