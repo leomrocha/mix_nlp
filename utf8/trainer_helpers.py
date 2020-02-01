@@ -18,6 +18,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from apex import amp, optimizers
 
+
 # Gradient checkpointing .... TODO when/if necessary
 
 
@@ -70,10 +71,28 @@ def loss_txt2txt_multi(prediction, target,
     return loss, (pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss)
 
 
-def train_main(model, optimizer, data_loader, criterion=loss_txt2txt_multi,
-               opt_level="O2", keep_batchnorm_fp32=True, loss_scale="dynamic"
-               ):
+def main(model, optimizer='FusedAdam', lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
+         amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
 
+    if optimizer == 'FusedLAMB':  # designed for BERT to augment the batch sizes and decrease training time
+        optimizer = optimizers.FusedLAMB(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+                                         amsgrad=False, adam_w_mode=adam_w_mode, max_grad_norm=max_grad_norm)
+    elif optimizer == 'FusedNovoGrad':  # takes less memory than Adam
+        optimizer = optimizers.FusedNovoGrad(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+                                             amsgrad=amsgrad)
+    else:  # default is FusedADAM
+        optimizer = optimizers.FusedAdam(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+                                         amsgrad=False,  # NOT SUPPORTED in FusedAdam!
+                                         adam_w_mode=adam_w_mode,
+                                         )
+    data_loader = ...  # TODO this one is the tough one
+    criterion = loss_txt2txt_multi
+    train_main(model, optimizer, data_loader, criterion)
+
+
+def train_main(model, optimizer, data_loader, criterion=loss_txt2txt_multi,
+               opt_level="O1", keep_batchnorm_fp32=True, loss_scale="dynamic"  # recommended params: O1, True, dynamic
+               ):
     model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
                                       keep_batchnorm_fp32=keep_batchnorm_fp32,
                                       loss_scale=loss_scale)
@@ -107,7 +126,7 @@ def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_write
     train_loss = 0
     batch_idx = 1
     names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
-    indiv_losses_acc = np.array([0.]*5)
+    indiv_losses_acc = np.array([0.] * 5)
     for metadata, data, label in data_iterator:
         orig_lang, dest_lang, task_lang, task_desc = metadata
 
@@ -160,11 +179,17 @@ def test_epoch(model, criterion, data_iterator, epoch, summary_writer, total_bat
     test_loss = 0
     batch_idx = 1
     names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
-    indiv_losses_acc = np.array([0.]*5)
+    indiv_losses_acc = np.array([0.] * 5)
     for metadata, data, label in data_iterator:
-        orig_lang, dest_lang, task_lang, task = metadata
+        orig_lang, dest_lang, task_lang, task_desc = metadata
         out = model(data)
-        loss, ind_losses = criterion(out, label)
+        pred, pred_olang, pred_dlang, pred_tlang, pred_tdesc = out
+        loss, ind_losses = criterion(pred, label,
+                                     pred_olang, orig_lang,
+                                     pred_dlang, dest_lang,
+                                     pred_tlang, task_lang,
+                                     pred_tdesc, task_desc,
+                                     )
         # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
         # Write summaries and details on TensorBoard for the task
         summary_writer.add_scalar("Loss/test", loss.data.item(), global_step=total_batch_count + batch_idx)
