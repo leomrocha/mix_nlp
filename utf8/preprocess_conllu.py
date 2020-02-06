@@ -20,6 +20,11 @@ LANG_TOKENS_BLACKLIST = [
 BLACKLIST = MAYBE_BLACKLIST + LANG_TOKENS_BLACKLIST
 
 
+def _get_lang_from_filename(fname):
+    olang = dlang = path_leaf(fname).split('_')[0]
+    return olang, dlang
+
+
 def filter_conllu_files(conllufiles, blacklist, extension='.conllu'):
     prefiltered_conllu = []
     for f in conllufiles:
@@ -39,7 +44,10 @@ def conllu_txt2txt(fname):
     :param fname: absolute path to the conllu file
     :return: writes 6 new text-to-text tasks json files from the original conllu one with the same root name
     with contents:
-    {'input': "Task: POS Tagging TASK of: {}".format(sentence.text),
+    {'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang), 
+     'task_lang':'en',
+     'task': '',
+     'input': "Task: POS Tagging TASK of: {}".format(sentence.text),
      'target': TASK DETAILS
      }
     """
@@ -53,30 +61,47 @@ def conllu_txt2txt(fname):
     conll_deprel = []
     # conll_deps = []
     # conll_misc = []
+    src_lang = path_leaf(fname).split('_')[0]
+    tgt_lang = 'en'  # PoS Tagging un Universal Dependencies is English (basically)
     for sen in conll:
         try:
             sen_lemma = ' '.join([t.lemma for t in sen._tokens])
-            conll_lemma.append({'input': "Task: POS Tagging Lemma of: {}".format(sen.text), 'target': sen_lemma})
+            conll_lemma.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                                'task_lang': 'en',
+                                'task': 'Lemmatization',
+                                'input': "Task: POS Tagging Lemma of: {}".format(sen.text), 'target': sen_lemma})
         except:
             pass
         try:
             sen_upos = ' '.join([t.upos for t in sen._tokens])
-            conll_upos.append({'input': "Task: POS Tagging UPOS of: {}".format(sen.text), 'target': sen_upos})
+            conll_upos.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                               'task_lang': 'en',
+                               'task': 'UPOS Tagging',
+                               'input': "Task: POS Tagging UPOS of: {}".format(sen.text), 'target': sen_upos})
         except:
             pass
         try:
             sen_xpos = ' '.join([t.xpos for t in sen._tokens])
-            conll_xpos.append({'input': "Task: POS Tagging XPOS of: {}".format(sen.text), 'target': sen_xpos})
+            conll_xpos.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                               'task_lang': 'en',
+                               'task': 'XPOS Tagging',
+                               'input': "Task: POS Tagging XPOS of: {}".format(sen.text), 'target': sen_xpos})
         except:
             pass
         try:
             sen_head = ' '.join([t.head for t in sen._tokens])
-            conll_feats.append({'input': "Task: POS Tagging FEATS of: {}".format(sen.text), 'target': feats})
+            conll_feats.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                                'task_lang': 'en',
+                                'task': 'FEATS Tagging',
+                                'input': "Task: POS Tagging FEATS of: {}".format(sen.text), 'target': feats})
         except:
             pass
         try:
             sen_deprel = ' '.join([t.deprel for t in sen._tokens])
-            conll_head.append({'input': "Task: POS Tagging HEAD of: {}".format(sen.text), 'target': sen_head})
+            conll_head.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                               'task_lang': 'en',
+                               'task': 'Head Tagging',
+                               'input': "Task: POS Tagging HEAD of: {}".format(sen.text), 'target': sen_head})
         except:
             pass
         try:
@@ -84,7 +109,10 @@ def conllu_txt2txt(fname):
             sen_feats = [t.feats for t in sen._tokens]
             feats = "|".join(e[0] + "=" + str(e[1]) for e in list(zip(sen_form, sen_feats))) \
                 .replace("{", "").replace("}", "")
-            conll_deprel.append({'input': "Task: POS Tagging DEPREL of: {}".format(sen.text), 'target': sen_deprel})
+            conll_deprel.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
+                                 'task_lang': 'en',
+                                 'task': 'DEPREL Tagging',
+                                 'input': "Task: POS Tagging DEPREL of: {}".format(sen.text), 'target': sen_deprel})
         except:
             pass
         # sen_deps = [t.deps for t in sen._tokens]

@@ -32,13 +32,13 @@ def chunks(data, n, dim=0):
 def loss_txt2txt_multi(prediction, target,
                        pred_orig_lang, tgt_orig_lang,
                        pred_dest_lang, tgt_dest_lang,
-                       pred_task_lang, tgt_task_lang,
-                       pred_task_desc, tgt_task_desc,
+                       # pred_task_lang, tgt_task_lang,
+                       # pred_task_desc, tgt_task_desc,
                        scale_loss=1.,
                        scale_orig_lang_loss=1.,
                        scale_dest_lang_loss=1.,
-                       scale_task_lang_loss=1.,
-                       scale_task_desc_loss=1.,
+                       # scale_task_lang_loss=1.,
+                       # scale_task_desc_loss=1.,
                        fn_loss=F.nll_loss,  # fn_loss=F.kl_div
                        ):
     """
@@ -65,10 +65,10 @@ def loss_txt2txt_multi(prediction, target,
     pred_loss = fn_loss(prediction, target) * scale_loss
     orig_lang_loss = fn_loss(pred_orig_lang, tgt_orig_lang) * scale_orig_lang_loss
     dest_lang_loss = fn_loss(pred_dest_lang, tgt_dest_lang) * scale_dest_lang_loss
-    task_lang_loss = fn_loss(pred_task_lang, tgt_task_lang) * scale_task_lang_loss
-    task_desc_loss = fn_loss(pred_task_desc, tgt_task_desc) * scale_task_desc_loss
-    loss = pred_loss + orig_lang_loss + dest_lang_loss + task_lang_loss + task_desc_loss
-    return loss, (pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss)
+    # task_lang_loss = fn_loss(pred_task_lang, tgt_task_lang) * scale_task_lang_loss
+    # task_desc_loss = fn_loss(pred_task_desc, tgt_task_desc) * scale_task_desc_loss
+    loss = pred_loss + orig_lang_loss + dest_lang_loss  # + task_lang_loss + task_desc_loss
+    return loss, (pred_loss, orig_lang_loss, dest_lang_loss)  # , task_lang_loss, task_desc_loss)
 
 
 def main(model, optimizer='FusedAdam', lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
@@ -125,21 +125,22 @@ def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_write
     model.train()
     train_loss = 0
     batch_idx = 1
-    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
+    # names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
+    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss']
     indiv_losses_acc = np.array([0.] * 5)
     for metadata, data, label in data_iterator:
         orig_lang, dest_lang, task_lang, task_desc = metadata
 
         optimizer.zero_grad()
         out = model(data)
-        pred, pred_olang, pred_dlang, pred_tlang, pred_tdesc = out
+        pred, pred_olang, pred_dlang = out
         loss, ind_losses = criterion(pred, label,
                                      pred_olang, orig_lang,
                                      pred_dlang, dest_lang,
-                                     pred_tlang, task_lang,
-                                     pred_tdesc, task_desc,
+                                     # pred_tlang, task_lang,
+                                     # pred_tdesc, task_desc,
                                      )
-        # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
+        # pred_loss, orig_lang_loss, dest_lang_loss = ind_losses
         # Write summaries and details on TensorBoard for the task
         summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=total_batch_count + batch_idx)
         acc = []
@@ -178,17 +179,18 @@ def test_epoch(model, criterion, data_iterator, epoch, summary_writer, total_bat
     model.eval()
     test_loss = 0
     batch_idx = 1
-    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
+    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss']  # , 'task_lang_loss', 'task_desc_loss']
     indiv_losses_acc = np.array([0.] * 5)
     for metadata, data, label in data_iterator:
-        orig_lang, dest_lang, task_lang, task_desc = metadata
+        # orig_lang, dest_lang, task_lang, task_desc = metadata
+        orig_lang, dest_lang = metadata
         out = model(data)
-        pred, pred_olang, pred_dlang, pred_tlang, pred_tdesc = out
+        pred, pred_olang, pred_dlang = out
         loss, ind_losses = criterion(pred, label,
                                      pred_olang, orig_lang,
                                      pred_dlang, dest_lang,
-                                     pred_tlang, task_lang,
-                                     pred_tdesc, task_desc,
+                                     # pred_tlang, task_lang,
+                                     # pred_tdesc, task_desc,
                                      )
         # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
         # Write summaries and details on TensorBoard for the task

@@ -337,7 +337,7 @@ def create_single_cycle_code(code_size, sizes):
     return ret
 
 
-def create_prelim_testing_codes():
+def create_prelim_testing_codes(config=[]):
     """
     The codes are N choose k + coprime + filling with single cycle method giving redundancy and 2
     complete representations
@@ -351,11 +351,13 @@ def create_prelim_testing_codes():
     row = "| {} | {} | {} | {} | {} | {} | {} | {:.3f} | {:.2f} | {:.2f} | {} |"
     base_name = "codes/utf8_{}-seg_{}-codepoints_{}-dim_N-{}-k{}_coprimes-{}_cycles-{}_dense"
     sparse_matrix_name = "codes/utf8_{}-seg_{}-codepoints_{}-dim_N-{}-k{}_coprimes-{}_cycles-{}_sparse"
-    config = [
-        # segment, number of code-points, (n,k), (coprimes), (cycles), dimension, sparcity
-        (2, NCODES[1], (24, 3), (3, 5, 11, 13), (6, 2), 64, 9/64),
-        (3, NCODES[2], (37, 4), (11, 13, 19, 23), (11, 7, 4, 3), 128, 12/128),
-    ]
+    if len(config) <= 0:
+        config = [
+            # segment, number of code-points, (n,k), (coprimes), (cycles), dimension, sparcity
+            (2, NCODES[1], (24, 3), (3, 5, 11, 13), (6, 2), 64, 9/64),
+            # (2, 1916, (24, 3), (3, 5, 11, 13), (6, 2), 64, 9 / 64),
+            (3, NCODES[2], (37, 4), (11, 13, 19, 23), (11, 7, 4, 3), 128, 12/128),
+        ]
     codes = []
     print(col)
     for seg, codepoints, (N, k), coprimes, cycles, dim, sparcity in config:

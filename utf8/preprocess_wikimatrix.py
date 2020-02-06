@@ -25,8 +25,9 @@ def wikimatrix_txt2txt(fname, threshold=1.04):
     lines = []
     # get language origin and target
     o_lang, d_lang = _get_langs_from_fname(fname)
-    d_lang = d_lang.split('-')[0]
+    d_lang = d_lang.split('-')[0].strip()
     dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
+    dest_lang = dest_lang.name
     with gzip.open(fname, 'rb') as f:
         for l in f.readlines():
             mt_score, src, tgt = l.decode('utf-8').split('\t')
@@ -34,7 +35,7 @@ def wikimatrix_txt2txt(fname, threshold=1.04):
             mt_score = float(mt_score)
             if threshold > mt_score:
                 continue
-            d = {'input': "Translate to {}: {}".format(dest_lang, src),
+            d = {'input': src,
                  'target': tgt,
                  'src_lang': o_lang,
                  'tgt_lang': d_lang

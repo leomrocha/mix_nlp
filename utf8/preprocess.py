@@ -1,6 +1,13 @@
 import orjson as json
 from multiprocessing import Pool, cpu_count
 import os
+import ntpath
+
+try:
+    from .utils import *
+except:
+    # hack to solve issue with ipython executing this import
+    from utils import *
 
 BASEPATH = "/home/leo/projects/Datasets/text"
 
@@ -11,7 +18,7 @@ def _txt2txt(parser, fpath, saveto, ignore_header=True):
     """
     :param fpath: input path of the text file to process
     :return: a json description of the task, per each line in the input:
-    { 'input': ....
+    { 'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': '',  'input': ....
       'target': []
     }
     """
@@ -58,9 +65,11 @@ COLA_BASEPATH = os.path.join(GLUE_BASEPATH, "CoLA")
 
 def cola_parser(l):
     e = l.split('\t')
-    src = "CoLA acceptability of: {}".format(e[3].replace('\n', ''))
+    src = "CoLA acceptability of: {}".format(e[3].replace('\t', ''))
     tgt = "acceptable" if int(e[1]) == 1 else "unacceptable"
-    d = {'input': src, 'target': tgt}
+    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Acceptability',
+         'input': src,
+         'target': tgt}
     return d
 
 
@@ -73,7 +82,8 @@ def mnli_parser(l):
     sentence_1 = e['sentence1']
     sentence_2 = e['sentence2']
     d = {
-        'input': "task: MNLI \n Sentence 1: {} \n Sentence 2: {}".format(sentence_1, sentence_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Language Inference',
+        'input': "Task: MNLI \t Sentence 1: {} \t Sentence 2: {}".format(sentence_1, sentence_2),
         'target': e['gold_label'],
         'input_1': "task: MNLI parse tree of: {}".format(sentence_1),
         'input_2': "task: MNLI parse tree of: {}".format(sentence_2),
@@ -89,7 +99,8 @@ MRPC_BASEPATH = os.path.join(GLUE_BASEPATH, "MRPC")
 
 def mrpc_parser(l):
     label, _, _, sentence_1, sentence_2 = l.split('\t')
-    d = {'input': "Are sentences: {} \n and: {} equivalent?".format(sentence_1, sentence_2),
+    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Equivallency',
+         'input': "Are sentences: {} \t and: {} equivalent?".format(sentence_1, sentence_2),
          'target': "Yes, Semantically equivalent" if int(label) == 1 else "No, Not equivalent"
          }
     return d
@@ -102,7 +113,8 @@ QNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "QNLI")
 def qnli_parser(l):
     index, question, answer, label = l.split('\t')
     d = {
-        'input': "Are these sentences entailed?\n Question: {} \n Answer: {}".format(question, answer),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
+        'input': "Are these sentences entailed?\t Question: {} \t Answer: {}".format(question, answer),
         'target': label.replace("_", " ")
     }
     return d
@@ -115,7 +127,8 @@ QQP_BASEPATH = os.path.join(GLUE_BASEPATH, "QQP")
 def qqp_parser(l):
     _, _, _, question_1, question_2, is_duplicate = l.split('\t')
     d = {
-        'input': "Are these questions duplicated?\n Question: {} \n Answer: {}".format(question_1, question_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Duplication Detection',
+        'input': "Are these questions duplicated?\t Question: {} \t Answer: {}".format(question_1, question_2),
         'target': "Duplicates" if int(is_duplicate) == 1 else "Not duplicates"
     }
     return d
@@ -128,6 +141,7 @@ RTE_BASEPATH = os.path.join(GLUE_BASEPATH, "RTE")
 def rte_parser(l):
     _, sentence_1, sentence_2, label = l.split('\t')
     d = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
         'input': "Are these sentences entailed? Sentence 1: {} | Sentence 2: {}".format(sentence_1, sentence_2),
         'target': label.replace("_", " ").capitalize()
     }
@@ -145,6 +159,7 @@ SST2_BASEPATH = os.path.join(GLUE_BASEPATH, "SST-2")
 def sst2_parser(l):
     txt, tgt = l.split('\t')
     d = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Sentiment Analysis',
         'input': "Is the following sentence Positive or Negative? {}".format(txt),
         'target': "Positive" if int(tgt) == 1 else "Negative"
     }
@@ -159,7 +174,8 @@ def stsb_parser(l):
     _, _, _, _, _, _, _, sentence1, sentence2, score = l.split('\t')
 
     d = {
-        'input': "How similar are the following sentences?\n Sentence 1: {} \n Sentence 2: {}".format(sentence1,
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Similarity',
+        'input': "How similar are the following sentences?\t Sentence 1: {} \t Sentence 2: {}".format(sentence1,
                                                                                                       sentence2),
         'target': str(score)
     }
@@ -173,6 +189,7 @@ WNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "WNLI")
 def wnli_parser(l):
     _, sentence_1, sentence_2, label = l.split('\t')
     d = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
         'input': "Are these sentences entailed? Sentence 1: {}  Sentence 2: {}".format(sentence_1, sentence_2),
         'target': "Entailed" if int(label) == 1 else "Not entailed"
     }
@@ -193,6 +210,7 @@ def boolq_parser(l):
     passage = rec['passage']
     answer = "Yes" if rec['label'] else "No"
     d = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Question Answer',
         'input': "Passage {} | Question: {}".format(passage, question),
         'target': answer
     }
@@ -209,6 +227,7 @@ def cb_parser(l):
     hypothesis = e['hypothesis']
     label = e['label']
     d = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Relationship',
         'input': 'What is the relationship between: {} and {}'.format(premise, hypothesis),
         'target': label.capitalize()
     }
@@ -216,7 +235,7 @@ def cb_parser(l):
 
 
 ##
-COPA_BASEPATH = os.path.join(SUPERGLUE_BASEPATH, "")
+COPA_BASEPATH = os.path.join(SUPERGLUE_BASEPATH, "COPA")
 
 
 def copa_parser(l):
@@ -228,7 +247,8 @@ def copa_parser(l):
     label = e["label"]
 
     d = {
-        'input': "Premise: {} \n Choice 1: {} \n Choice 2: {} \n What is the {}? ".format(question, premise, choice1,
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Multiple Choice',
+        'input': "Premise: {} \t Choice 1: {} \t Choice 2: {} \t What is the {}? ".format(question, premise, choice1,
                                                                                           choice2),
         'target': "Choice {}".format(int(label) + 1)
     }
@@ -237,11 +257,12 @@ def copa_parser(l):
 
 ##
 # TODO later, this is a tough one (and text will be long)
-# MULTIRC_BASEPATH = os.path.join(SUPERGLUE_BASEPATH, "MultiRC")
+MULTIRC_BASEPATH = os.path.join(SUPERGLUE_BASEPATH, "MultiRC")
 # def multirc_parser(l):
 #     e = json.loads(l)
 #
 #     d = {
+#         'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Multiple Choice',
 #         'input': ,
 #         'target':
 #     }
@@ -257,7 +278,8 @@ def record_parser(l):
     query = e['qas'][0]['query']
     answer = e['qas'][0]['answers']['text']
     d = {
-        'input': "Replace @placeholder with the right answer. \n Passage: {} \n Query {} ".format(passage, query),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Fill Placeholder',
+        'input': "Replace @placeholder with the right answer. \t Passage: {} \t Query {} ".format(passage, query),
         'target': answer
     }
     return d
@@ -273,7 +295,8 @@ def sg_rte_parser(l):
     hypothesis = e['hypothesis']
     label = e['label']
     d = {
-        'input': "Are these sentences entailed? \n Premise: {} \n Hypothesis: {}".format(premise, hypothesis),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
+        'input': "Are these sentences entailed? \t Premise: {} \t Hypothesis: {}".format(premise, hypothesis),
         'target': label.replace("_", " ").capitalize()
     }
     return d
@@ -290,7 +313,8 @@ def wic_parser(l):
     sentence2 = e['sentence2']
     label = e['label']
     d = {
-        'input': "Is the word {} in both sentences equivalent? \n Sentence 1: {} \n Sentence 2: {}",
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Equivallency',
+        'input': "Is the word {} in both sentences equivalent? \t Sentence 1: {} \t Sentence 2: {}",
         'target': "Yes" if label else "No"
     }
     return d
@@ -307,13 +331,48 @@ def wsc_parser(l):
     tgt2 = e['target']['span2_text']
     label = e['label']
     d = {
-        'input': "In the sentence: {} \n Does {} refer to {}?".format(text, tgt2, tgt1),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Antecedent',
+        'input': "In the sentence: {} \t Does {} refer to {}?".format(text, tgt2, tgt1),
         'target': "Yes" if label else "No"
     }
     return d
 
 
 #########################################################
+
+def rename_files():
+    """
+    Original files have a simple name that collides when mixing datasets
+    """
+    setup_list = [
+        (COLA_BASEPATH, 'cola'),
+        (MNLI_BASEPATH, 'mnli'),
+        (MRPC_BASEPATH, 'mrpc'),
+        (QNLI_BASEPATH, 'qnli'),
+        (QQP_BASEPATH, 'qqp'),
+        (RTE_BASEPATH, 'rte'),
+        (SNLI_BASEPATH, 'snli'),
+        (SST2_BASEPATH, 'sst2'),
+        (STSB_BASEPATH, 'stsb'),
+        (WNLI_BASEPATH, 'wnli'),
+        # SuperGLUE
+        (BOOLQ_BASEPATH, 'sg_boolq'),
+        (CB_BASEPATH, 'sg_cb'),
+        (COPA_BASEPATH, 'sg_copa'),
+        (MULTIRC_BASEPATH, 'sg_multirc'),
+        (RECORD_BASEPATH, 'sg_record'),
+        (SG_RTE_BASEPATH, 'sg_rte'),
+        (WIC_BASEPATH, 'sg_wic'),
+        (WSC_BASEPATH, 'sg_wsc'),
+    ]
+
+    for base_path, prefix in setup_list:
+        all_files = get_all_files_recurse(base_path)
+        for fname in all_files:
+            head, tail = ntpath.split(fname)
+            oname = os.path.join(head, prefix + '_' + tail)
+            print(oname)
+            # os.system("mv {} {}".format(fname, oname))
 
 
 def process_glue():
@@ -345,7 +404,6 @@ def process_superglue():
         (sg_rte_parser, SG_RTE_BASEPATH, '.jsonl', False),  #
         (wic_parser, WIC_BASEPATH, '.jsonl', False),  #
         (wsc_parser, WSC_BASEPATH, '.jsonl', False),  #
-
     ]
     params = []
     for lst in setup_list:
@@ -361,6 +419,7 @@ def process_superglue():
 #     _,video_id,fold_ind,startphrase,sent1,sent2,gold_source,ending0,ending1,ending2,ending3,label = l.split('\t')
 #
 #     d = {
+#         'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': '', 
 #         'input': ,
 #         'target':
 #     }
@@ -371,8 +430,8 @@ def process_superglue():
 #      = l.split('\t')
 #
 #     d = {
+#         'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': '', 
 #         'input': ,
 #         'target':
 #     }
 #     return d
-
