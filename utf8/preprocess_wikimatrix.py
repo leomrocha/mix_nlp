@@ -61,13 +61,6 @@ def _try_process(fname):
 
 
 WIKIMATRIX_BASEPATH = "/media/nfs/Datasets/text/WikiMatrix/v1"
-# list of blacklisted languages from the current research, this is due to resources availability only.
-MAYBE_BLACKLIST_LANGS = ['ceb', ]
-BLACKLIST_LANGS = ['ar', 'as', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa', 'fo', 'gom', 'gu', 'hi', 'hu', 'id', 'ilo',
-                   'ja', 'ka', 'kk', 'ko', 'lmo', 'ml', 'mr', 'mwl', 'ne', 'pa', 'py', 'sh', 'si', 'ta', 'te', 'th',
-                   'tl', 'ur', 'vi',
-                   'wuu', 'yi', 'zb', 'zh'
-                   ] + MAYBE_BLACKLIST_LANGS
 
 
 def wikimatrix_process(rootdir=WIKIMATRIX_BASEPATH):
@@ -77,6 +70,44 @@ def wikimatrix_process(rootdir=WIKIMATRIX_BASEPATH):
     all_files = filter_files(all_files, blacklist)
     with Pool(processes=cpu_count()) as pool:
         res = pool.map(_try_process, all_files)
+
+
+# list of blacklisted languages from the current research, this is due to resources availability only.
+# languages are chosen by: number of needed codepints, or by usage to reduce the number of input languages and files
+# in the training set and is mostrly arbitrary,
+MAYBE_BLACKLIST_LANGS = ['ceb', 'jv', 'ce', 'cv', 'dv', 'ht', 'hy', 'ku', 'mh', 'mi', 'ps', 'su', 'tk', 'ba', 'tg',
+                         'tt', 'ug'
+                         ]
+BLACKLIST_LANGS = ['ar', 'as', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa', 'fo', 'gom', 'gu', 'hi', 'hu', 'id', 'ilo',
+                   'ja', 'ka', 'kk', 'ko', 'lmo', 'ml', 'mr', 'mwl', 'ne', 'pa', 'py', 'sh', 'si', 'ta', 'te', 'th',
+                   'tl', 'ur', 'vi',
+                   'wuu', 'yi', 'zb', 'zh'
+                   ] + MAYBE_BLACKLIST_LANGS
+
+
+def extract_charset(fname):
+    try:
+        charset = set([])
+        with gzip.open(fname, 'rb') as f:
+            lines = f.readlines()
+            for txt in lines:
+                txt = txt.decode('utf-8')
+            charset.update(set(list(txt)))
+        saveto = fname.replace('.tsv.gz', '-charset.txt')
+        with gzip.open(saveto, 'wb') as f:
+            # print("saving to {}".format(saveto))
+            otxt = ''.join(list(charset)).encode('utf-8')
+            f.write(otxt)
+            f.flush()
+        return charset
+    except Exception as e:
+        print("Failed extracting chars from {} with error: \n {}".format(fname, e.with_traceback()))
+
+
+def wikimatrix_charset_process(rootdir=WIKIMATRIX_BASEPATH):
+    all_files = get_all_files_recurse(rootdir)
+    with Pool(processes=cpu_count()) as pool:
+        res = pool.map(extract_charset, all_files)
 
 
 def check_encoding_works(char2int, fname, acceptance_criteria=0.01, nlines=10):
