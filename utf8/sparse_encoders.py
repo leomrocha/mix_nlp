@@ -18,9 +18,11 @@ import time
 
 try:
     from .utf8_encoder import *
+    from .constants import *
 except:
     # to solve issue with ipython executing this import
     from utf8_encoder import *
+    from constants import *
 
 SEGMENTS = [1, 2, 3, 4]
 NCODES = [128, 1984, 59328, 1107904]
@@ -337,7 +339,7 @@ def create_single_cycle_code(code_size, sizes):
     return ret
 
 
-def create_prelim_testing_codes(config=[]):
+def create_codematrix_from_conf(config=[]):
     """
     The codes are N choose k + coprime + filling with single cycle method giving redundancy and 2
     complete representations
@@ -384,3 +386,66 @@ def create_prelim_testing_codes(config=[]):
         print(row.format(seg, codepoints, code.shape, N, k, coprimes, cycles, el, msize, smsize, mname))
 
     return codes
+
+
+# BAD BAD these configurations go together ... need to do an automation system to compute them
+CHARSET_PATH = "codes/all_chars.chars"
+CONFIG = (2, 1916, (24, 3), (3, 5, 11, 13), (6, 2), 64, 9 / 64)
+OFNAME = "codes/adhoc-codebook-1916.pkl"
+
+
+def create_codebook(charset_fpath=CHARSET_PATH, config=CONFIG,
+                    ofname=OFNAME,
+                    special_codes=SPECIAL_CODES,
+                    nul_row_is_zero=True,
+                    reserved_spaces=32
+                    ):
+    """
+    :param charset_fpath: file path where the set of characters is available
+    :param config: list of tuples: (segment, number of code-points, (n,k), (coprimes), (cycles), dimension, sparcity)
+    :param ofname: Where to save the codebook
+    :param special_codes: special codes mapping for the output dictionary
+    :param nul_row_is_zero: if the first row (the NUL one) should be zeros or the given code
+    :param reserved_spaces: the reserved spaces at the beginning of the codebook, 32 is the default as is the number of
+    control codes in utf-8. This later is used for remapping reserved SPECIAL_CODES, IS 32
+    :return:
+    """
+    # TODO this code is ugly but works wiht the right configuration, for the moment
+    # TODO make the configuration selection automatic from some config points and the charset
+    codes = create_codematrix_from_conf([config])[0]
+    if nul_row_is_zero:
+        # assume nul row is the first one
+        codes[0, :] = 0
+    # create dict
+    char2int = OrderedDict()
+    int2char = OrderedDict()
+    # add the number of reserved chars at the beginning
+    for i in range(reserved_spaces):  # Warning, must be <128
+        # use utf-8 codepoints
+        c = str(bytes([i]), 'utf-8')
+        char2int[c] = i
+        # for the reverse mapping, to avoid issues on decoding, leave them unassigned UNASSIGNED='◁???▷'
+        # could use UNK but I'd rather have it be obviously different
+        int2char[i] = UNASSIGNED
+    # overwrite the indices of the reverse mapping for the special codes
+    for c, i in special_codes:
+        # Take into account this will duplicate the char2int mapping having 2 chars going to the same int
+        char2int[c] = i
+        # but the int reverse index will be overwritten
+        int2char[i] = c
+    with open(charset_fpath, 'r') as f:
+        all_chars = f.read()
+        for i, c in enumerate(all_chars):
+            # forward the index
+            i = i + reserved_spaces
+            char2int[c] = i
+            int2char[i] = c
+
+    # pickle all together
+    codebook = (codes, char2int, int2char)
+    with open(ofname, 'wb') as f:
+        print("saving file {} with codes.shape {} | char2int {} | int2char {}".format(
+            ofname, codes.shape, len(char2int), len(int2char)))
+        pickle.dump(codebook, f, pickle.HIGHEST_PROTOCOL)
+
+    return codebook

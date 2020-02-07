@@ -32,7 +32,10 @@ def _txt2txt(parser, fpath, saveto, ignore_header=True):
                 continue
             try:
                 d = parser(l)
-                lines.append(d)
+                if type(d) is dict:
+                    d = [d]  # fixes the issue if there are multiple outputs from the parser, each should be a json line
+                for di in d:
+                    lines.append(di)
             except Exception as e:
                 # TODO handle error here
                 pass
@@ -65,11 +68,13 @@ COLA_BASEPATH = os.path.join(GLUE_BASEPATH, "CoLA")
 
 def cola_parser(l):
     e = l.split('\t')
-    src = "CoLA acceptability of: {}".format(e[3].replace('\t', ''))
+    src = e[3].replace('\t', '')
     tgt = "acceptable" if int(e[1]) == 1 else "unacceptable"
-    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Acceptability',
+    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en',
+         'task': ' CoLA Acceptability',
          'input': src,
-         'target': tgt}
+         'target': tgt
+         }
     return d
 
 
@@ -82,15 +87,21 @@ def mnli_parser(l):
     sentence_1 = e['sentence1']
     sentence_2 = e['sentence2']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Language Inference',
-        'input': "Task: MNLI \t Sentence 1: {} \t Sentence 2: {}".format(sentence_1, sentence_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'MNLI Language Inference',
+        'input': "{}\n{}".format(sentence_1, sentence_2),
         'target': e['gold_label'],
-        'input_1': "task: MNLI parse tree of: {}".format(sentence_1),
-        'input_2': "task: MNLI parse tree of: {}".format(sentence_2),
-        'target_1': e['sentence1_parse'],
-        'target_2': e['sentence2_parse'],
     }
-    return d
+    d1 = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'MNLI Parse Tree',
+        'input': sentence_1,
+        'target': e['sentence1_parse'],
+    }
+    d1 = {
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'MNLI Parse Tree',
+        'input': sentence_2,
+        'target': e['sentence2_parse'],
+    }
+    return d, d1, d2
 
 
 ###
@@ -99,8 +110,8 @@ MRPC_BASEPATH = os.path.join(GLUE_BASEPATH, "MRPC")
 
 def mrpc_parser(l):
     label, _, _, sentence_1, sentence_2 = l.split('\t')
-    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Equivallency',
-         'input': "Are sentences: {} \t and: {} equivalent?".format(sentence_1, sentence_2),
+    d = {'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'MRPC Equivallency',
+         'input': "{}\n{}".format(sentence_1, sentence_2),
          'target': "Yes, Semantically equivalent" if int(label) == 1 else "No, Not equivalent"
          }
     return d
@@ -113,8 +124,8 @@ QNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "QNLI")
 def qnli_parser(l):
     index, question, answer, label = l.split('\t')
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
-        'input': "Are these sentences entailed?\t Question: {} \t Answer: {}".format(question, answer),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'QNLI Entailment',
+        'input': "{}\n{}".format(question, answer),
         'target': label.replace("_", " ")
     }
     return d
@@ -127,8 +138,8 @@ QQP_BASEPATH = os.path.join(GLUE_BASEPATH, "QQP")
 def qqp_parser(l):
     _, _, _, question_1, question_2, is_duplicate = l.split('\t')
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Duplication Detection',
-        'input': "Are these questions duplicated?\t Question: {} \t Answer: {}".format(question_1, question_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'QQP Duplication Detection',
+        'input': "{}\n{}".format(question_1, question_2),
         'target': "Duplicates" if int(is_duplicate) == 1 else "Not duplicates"
     }
     return d
@@ -141,8 +152,8 @@ RTE_BASEPATH = os.path.join(GLUE_BASEPATH, "RTE")
 def rte_parser(l):
     _, sentence_1, sentence_2, label = l.split('\t')
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
-        'input': "Are these sentences entailed? Sentence 1: {} | Sentence 2: {}".format(sentence_1, sentence_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'RTE Entailment',
+        'input': "{}\n{}".format(sentence_1, sentence_2),
         'target': label.replace("_", " ").capitalize()
     }
     return d
@@ -159,8 +170,8 @@ SST2_BASEPATH = os.path.join(GLUE_BASEPATH, "SST-2")
 def sst2_parser(l):
     txt, tgt = l.split('\t')
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Sentiment Analysis',
-        'input': "Is the following sentence Positive or Negative? {}".format(txt),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'SNLI Sentiment Analysis',
+        'input': txt,
         'target': "Positive" if int(tgt) == 1 else "Negative"
     }
     return d
@@ -174,9 +185,8 @@ def stsb_parser(l):
     _, _, _, _, _, _, _, sentence1, sentence2, score = l.split('\t')
 
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Similarity',
-        'input': "How similar are the following sentences?\t Sentence 1: {} \t Sentence 2: {}".format(sentence1,
-                                                                                                      sentence2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'STS-B Similarity',
+        'input': "{}\n{}".format(sentence1, sentence2),
         'target': str(score)
     }
     return d
@@ -189,8 +199,8 @@ WNLI_BASEPATH = os.path.join(GLUE_BASEPATH, "WNLI")
 def wnli_parser(l):
     _, sentence_1, sentence_2, label = l.split('\t')
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
-        'input': "Are these sentences entailed? Sentence 1: {}  Sentence 2: {}".format(sentence_1, sentence_2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'WNLI Entailment',
+        'input': "{}\n{}".format(sentence_1, sentence_2),
         'target': "Entailed" if int(label) == 1 else "Not entailed"
     }
     return d
@@ -210,8 +220,8 @@ def boolq_parser(l):
     passage = rec['passage']
     answer = "Yes" if rec['label'] else "No"
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Question Answer',
-        'input': "Passage {} | Question: {}".format(passage, question),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'BoolQ Question Answer',
+        'input': "{}\n{}".format(passage, question),
         'target': answer
     }
     return d
@@ -227,8 +237,8 @@ def cb_parser(l):
     hypothesis = e['hypothesis']
     label = e['label']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Relationship',
-        'input': 'What is the relationship between: {} and {}'.format(premise, hypothesis),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'CB Relationship',
+        'input': '{} \n {}'.format(premise, hypothesis),
         'target': label.capitalize()
     }
     return d
@@ -247,9 +257,8 @@ def copa_parser(l):
     label = e["label"]
 
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Multiple Choice',
-        'input': "Premise: {} \t Choice 1: {} \t Choice 2: {} \t What is the {}? ".format(question, premise, choice1,
-                                                                                          choice2),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'COPA Multiple Choice',
+        'input': "{}\n{}\n{}\n What is the {}? ".format(question, premise, choice1, choice2),
         'target': "Choice {}".format(int(label) + 1)
     }
     return d
@@ -278,8 +287,8 @@ def record_parser(l):
     query = e['qas'][0]['query']
     answer = e['qas'][0]['answers']['text']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Fill Placeholder',
-        'input': "Replace @placeholder with the right answer. \t Passage: {} \t Query {} ".format(passage, query),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'ReCoRD Fill Placeholder',
+        'input': "{}\n{} ".format(passage, query),
         'target': answer
     }
     return d
@@ -295,8 +304,8 @@ def sg_rte_parser(l):
     hypothesis = e['hypothesis']
     label = e['label']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Entailment',
-        'input': "Are these sentences entailed? \t Premise: {} \t Hypothesis: {}".format(premise, hypothesis),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'SuperGLUE RTE Entailment',
+        'input': "{}\n{}".format(premise, hypothesis),
         'target': label.replace("_", " ").capitalize()
     }
     return d
@@ -313,8 +322,8 @@ def wic_parser(l):
     sentence2 = e['sentence2']
     label = e['label']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Equivallency',
-        'input': "Is the word {} in both sentences equivalent? \t Sentence 1: {} \t Sentence 2: {}",
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'WiC Equivallency',
+        'input': "Is the word {} in both sentences equivalent? \n {} \n {}".format(word, sentence1, sentence2),
         'target': "Yes" if label else "No"
     }
     return d
@@ -331,8 +340,8 @@ def wsc_parser(l):
     tgt2 = e['target']['span2_text']
     label = e['label']
     d = {
-        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'Antecedent',
-        'input': "In the sentence: {} \t Does {} refer to {}?".format(text, tgt2, tgt1),
+        'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'WSC Antecedent',
+        'input': "In the sentence: {} \n Does {} refer to {}?".format(text, tgt2, tgt1),
         'target': "Yes" if label else "No"
     }
     return d

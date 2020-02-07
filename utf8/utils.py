@@ -14,3 +14,12 @@ def get_all_files_recurse(rootdir):
         for filename in filenames:
             allfiles.append(os.path.join(root, filename))
     return allfiles
+
+
+def filter_files(files, blacklist):
+    prefiltered = []
+    for f in files:
+        todel = list(filter(lambda bl: bl in f, blacklist))
+        if len(todel) == 0:
+            prefiltered.append(f)
+    return prefiltered

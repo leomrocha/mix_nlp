@@ -13,10 +13,11 @@ except:
 
 UD_VERSION = "2.5"
 # Maybe blacklist
-MAYBE_BLACKLIST = []
-
-LANG_TOKENS_BLACKLIST = [
-    "myv_jr-ud", "br_keb-ud"]  # last 2 -> processing errors with pyconll
+MAYBE_BLACKLIST = ["Kurmanji", "Urdu", "Indonesian", "Coptic-Scriptorium", "Kazakh",
+                   "Marathi", "Tamil", "Thai", "Warlpiri"]
+LANG_TOKENS_BLACKLIST = ["Hindi", "Chinese", "Korean", "Tagalog", "Vietnamese",
+                         "Telugu", "Uyghur", "Cantonese", "Japanese",
+                         "ar_nyuad-ud", "myv_jr-ud", "br_keb-ud"]  # last 2 -> processing errors with pyconll
 BLACKLIST = MAYBE_BLACKLIST + LANG_TOKENS_BLACKLIST
 
 
@@ -67,41 +68,44 @@ def conllu_txt2txt(fname):
         try:
             sen_lemma = ' '.join([t.lemma for t in sen._tokens])
             conll_lemma.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                                'task_lang': 'en',
                                 'task': 'Lemmatization',
-                                'input': "Task: POS Tagging Lemma of: {}".format(sen.text), 'target': sen_lemma})
+                                'input': sen.text,
+                                'target': sen_lemma
+                                })
         except:
             pass
         try:
             sen_upos = ' '.join([t.upos for t in sen._tokens])
             conll_upos.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                               'task_lang': 'en',
-                               'task': 'UPOS Tagging',
-                               'input': "Task: POS Tagging UPOS of: {}".format(sen.text), 'target': sen_upos})
+                               'task': 'Universal Dependencies UPOS Tagging',
+                               'input': sen.text, 'target': sen_upos
+                               })
         except:
             pass
         try:
             sen_xpos = ' '.join([t.xpos for t in sen._tokens])
             conll_xpos.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                               'task_lang': 'en',
-                               'task': 'XPOS Tagging',
-                               'input': "Task: POS Tagging XPOS of: {}".format(sen.text), 'target': sen_xpos})
+                               'task': 'Universal Dependencies XPOS Tagging',
+                               'input': sen.text, 'target': sen_xpos
+                               })
         except:
             pass
         try:
             sen_head = ' '.join([t.head for t in sen._tokens])
             conll_feats.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                                'task_lang': 'en',
-                                'task': 'FEATS Tagging',
-                                'input': "Task: POS Tagging FEATS of: {}".format(sen.text), 'target': feats})
+                                'task': 'Universal Dependencies FEATS Tagging',
+                                'input': sen.text,
+                                'target': feats
+                                })
         except:
             pass
         try:
             sen_deprel = ' '.join([t.deprel for t in sen._tokens])
             conll_head.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                               'task_lang': 'en',
-                               'task': 'Head Tagging',
-                               'input': "Task: POS Tagging HEAD of: {}".format(sen.text), 'target': sen_head})
+                               'task': 'Universal Dependencies Head Tagging',
+                               'input': sen.text,
+                               'target': sen_head
+                               })
         except:
             pass
         try:
@@ -110,9 +114,10 @@ def conllu_txt2txt(fname):
             feats = "|".join(e[0] + "=" + str(e[1]) for e in list(zip(sen_form, sen_feats))) \
                 .replace("{", "").replace("}", "")
             conll_deprel.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
-                                 'task_lang': 'en',
-                                 'task': 'DEPREL Tagging',
-                                 'input': "Task: POS Tagging DEPREL of: {}".format(sen.text), 'target': sen_deprel})
+                                 'task': 'Universal Dependencies DEPREL Tagging',
+                                 'input': sen.text,
+                                 'target': sen_deprel
+                                 })
         except:
             pass
         # sen_deps = [t.deps for t in sen._tokens]
