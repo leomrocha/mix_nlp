@@ -29,7 +29,7 @@ except:
 
 
 class Txt2TxtDataset(IterableDataset):
-    def __init__(self, root_dir, codedict, separator='█', special_codes=SPECIAL_CODES):
+    def __init__(self, root_dir, codedict, separator=SEPARATOR, special_codes=SPECIAL_CODES):
         self.root_dir = root_dir
         self.separator = separator
         self.codedict = codedict

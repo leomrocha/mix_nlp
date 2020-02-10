@@ -96,7 +96,7 @@ def mnli_parser(l):
         'input': sentence_1,
         'target': e['sentence1_parse'],
     }
-    d1 = {
+    d2 = {
         'src_lang': 'en', 'tgt_lang': 'en', 'task_lang': 'en', 'task': 'MNLI Parse Tree',
         'input': sentence_2,
         'target': e['sentence2_parse'],

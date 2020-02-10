@@ -10,14 +10,17 @@ from multiprocessing import Pool, cpu_count
 import numpy as np
 import os
 import orjson as json
-from random import shuffle
+from pycountry import languages
+# from random import shuffle
 from unicodedata import normalize
 
 try:
     from .utils import *
+    from .constants import *
 except:
     # hack to solve issue with ipython executing this import
     from utils import *
+    from constants import *
 
 
 def get_txt2txtfiles(basepaths=[], filter_txt="txt2txt.json"):
@@ -100,14 +103,15 @@ SUPERGLUE_BASEPATH = os.path.join(BASEPATH, "SuperGLUE")
 WIKIMATRIX_BASEPATH = "/media/nfs/Datasets/text/WikiMatrix/v1"
 
 PATHS = [CONLLU_BASEPATH, GLUE_BASEPATH, SUPERGLUE_BASEPATH, WIKIMATRIX_BASEPATH]
+
+
 # PATHS = [CONLLU_BASEPATH, GLUE_BASEPATH, SUPERGLUE_BASEPATH]
 
 
 def process(paths=PATHS):
-
     all_files = get_txt2txtfiles(paths)
 
-    with Pool(processes=cpu_count()-1) as pool:
+    with Pool(processes=cpu_count() - 1) as pool:
         res = pool.map(_try_process, all_files)
 
 
@@ -127,10 +131,15 @@ def prepare_lm_data_wikimatrix(path=TRAIN_PATH):
             jf = json.loads(f.read())
             lines = []
             for j in jf:
+                # prepare 2 Language Model tasks from each translation task
                 d = {'input': j['target'],
                      'src_lang': j['tgt_lang']
                      }
+                d1 = {'input': j['input'],
+                      'src_lang': j['src_lang']
+                      }
                 lines.append(d)
+                lines.append(d1)
             # now save the files
             oname = fname.replace(".json", "-langmodel.json")
             with gzip.open(oname, "wb") as of:
@@ -159,8 +168,12 @@ def prepare_select_all(paths=PATHS, out_dir=TRAIN_PATH, max_len=512):
     #     res = pool.starmap(_try_prepare, params)
 
 
-SEPARATOR = '█'
 OUTPUT_FNAME = '/home/leo/projects/Datasets/text/train_selected_monofile/monofile.txt'
+
+# SOH = ('◁SOH▷', 0x01)  # SOH control code (Start of Heading) -> for example to indicate a task description or tgt lang
+# STX = ('◁STX▷', 0x02)  # STX control code (Start of Text) -> start of text
+# ETX = ('◁ETX▷', 0x03)  # ETX control code (End of Text) -> end of text
+# EOT
 
 
 def json2lines(paths=[TRAIN_PATH], ofile=OUTPUT_FNAME, separator=SEPARATOR):
@@ -171,21 +184,47 @@ def json2lines(paths=[TRAIN_PATH], ofile=OUTPUT_FNAME, separator=SEPARATOR):
     :return: one file where to save all the lines
     """
     all_files = get_txt2txtfiles(paths, 'txt2txtmax-')
+    # take out language model files as I'll later set every task as lang model too during text loading
     all_files = [f for f in all_files if 'langmodel' not in f]
     for fname in all_files:
         fopen = open
         if fname.endswith(".gz"):
             fopen = gzip.open
         with fopen(fname, 'rb') as f:
+            print("Processing: {}".format(fname))
             jf = json.loads(f.read())
             txt = []
-            for j in jf:
-                t = separator.join([j['src_lang'], j['tgt_lang'], j['input'], j['target']]) + '\n'
-                txt.append(normalize('NFKC', t))
-            with open(ofile, "a+") as of:
-                # print("saving {}".format(oname))
-                of.writelines(txt)
-                of.flush()
+            try:
+                for j in jf:
+                    s_lang = j['src_lang'].strip()  # this is always a task
+                    src_lang = languages.get(alpha_2=s_lang) if len(s_lang) == 2 else languages.get(alpha_3=s_lang)
+                    src_lang = src_lang.name
+                    # this is the task at hand to be coded in the input
+                    if 'task' in j:  # a task is defined in the json definition
+                        task = j['task'].strip()
+                        input_txt = SOH[0] + task + STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
+                        output_txt = j['target'].strip()
+                        text = [input_txt, src_lang, output_txt]
+                    elif 'tgt_lang' in j and j['src_lang'] != j['tgt_lang']:  # is a translation task
+                        d_lang = j['tgt_lang'].strip()
+                        dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
+                        dest_lang = dest_lang.name
+                        task = "Translate to {}".format(dest_lang)
+                        input_txt = SOH[0] + task + STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
+                        output_txt = j['target'].strip()
+                        text = [input_txt, src_lang, output_txt]
+                    else:
+                        # is a Langmodel task, so no task
+                        input_txt = STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
+                        text = [input_txt, src_lang]
+                    t = separator.join(text) + '\n'
+                    txt.append(normalize('NFKC', t))
+                with open(ofile, "a+") as of:
+                    # print("saving {}".format(ofile))
+                    of.writelines(txt)
+                    of.flush()
+            except Exception as e:
+                print("Error processing {} with Error: {}".format(fname, e))
 
 
 if __name__ == "__main__":

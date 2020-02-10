@@ -15,20 +15,22 @@ except:
 def _get_langs_from_fname(fname):
     # names have the form:
     #   WikiMatrix.es-sq.tsv.gz
-    orig, dest = fname.split('-')
-    orig = orig[-2:]
-    dest = dest[:2]
+    orig, dest = path_leaf(fname).replace("WikiMatrix.", "").replace(".tsv.gz", "").split('-')
+    orig = orig.split('_')[0].strip()
+    dest = dest.split('_')[0].strip()
     return orig, dest
 
 
-def wikimatrix_txt2txt(fname, threshold=1.04, max_sentence_len=384):
+def wikimatrix_txt2txt(fname, threshold=1.04, max_sentence_len=512):
     # TODO reject lines that we can't encode correctly ...
     lines = []
     # get language origin and target
     o_lang, d_lang = _get_langs_from_fname(fname)
-    d_lang = d_lang.split('-')[0].strip()
-    dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
-    dest_lang = dest_lang.name
+    # assert len(o_lang)
+    # if 2 > min(len(o_lang), len(d_lang)) or max(len(o_lang), len(d_lang) > 3:
+    #     return
+    # dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
+    # dest_lang = dest_lang.name
     with gzip.open(fname, 'rb') as f:
         for l in f.readlines():
             mt_score, src, tgt = l.decode('utf-8').split('\t')
@@ -67,7 +69,7 @@ def wikimatrix_process(rootdir=WIKIMATRIX_BASEPATH):
     all_files = get_all_files_recurse(rootdir)
     # make sure to just filter by the language part of the filename, and not something else by mistake
     blacklist = [b + '-' for b in BLACKLIST_LANGS] + ['-' + b for b in BLACKLIST_LANGS]
-    all_files = filter_files(all_files, blacklist)
+    all_files = [f for f in filter_files(all_files, blacklist) if f.endswith(".tsv.gz")]
     with Pool(processes=cpu_count()) as pool:
         res = pool.map(_try_process, all_files)
 
@@ -78,9 +80,9 @@ def wikimatrix_process(rootdir=WIKIMATRIX_BASEPATH):
 MAYBE_BLACKLIST_LANGS = ['ceb', 'jv', 'ce', 'cv', 'dv', 'ht', 'hy', 'ku', 'mh', 'mi', 'ps', 'su', 'tk', 'ba', 'tg',
                          'tt', 'ug'
                          ]
-BLACKLIST_LANGS = ['ar', 'as', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa', 'fo', 'gom', 'gu', 'hi', 'hu', 'id', 'ilo',
-                   'ja', 'ka', 'kk', 'ko', 'lmo', 'ml', 'mr', 'mwl', 'ne', 'pa', 'py', 'sh', 'si', 'ta', 'te', 'th',
-                   'tl', 'ur', 'vi',
+BLACKLIST_LANGS = ['ar', 'as', 'arz', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa', 'fo', 'gom', 'gu', 'hi', 'hu', 'id',
+                   'ilo', 'ja', 'ka', 'kk', 'ko', 'lmo', 'ml', 'mr', 'mwl', 'ne', 'pa', 'py', 'sh', 'si', 'ta', 'te',
+                   'th', 'tl', 'ur', 'vi',
                    'wuu', 'yi', 'zb', 'zh'
                    ] + MAYBE_BLACKLIST_LANGS
 
@@ -94,14 +96,14 @@ def extract_charset(fname):
                 txt = txt.decode('utf-8')
             charset.update(set(list(txt)))
         saveto = fname.replace('.tsv.gz', '-charset.txt')
-        with gzip.open(saveto, 'wb') as f:
+        with open(saveto, 'wb') as f:
             # print("saving to {}".format(saveto))
             otxt = ''.join(list(charset)).encode('utf-8')
             f.write(otxt)
             f.flush()
         return charset
     except Exception as e:
-        print("Failed extracting chars from {} with error: \n {}".format(fname, e.with_traceback()))
+        print("Failed extracting chars from {} with error: \n {}".format(fname, e))
 
 
 def wikimatrix_charset_process(rootdir=WIKIMATRIX_BASEPATH):
