@@ -11,6 +11,7 @@ STX = ('◁STX▷', 0x02)  # STX control code (Start of Text) -> start of text
 ETX = ('◁ETX▷', 0x03)  # ETX control code (End of Text) -> end of text
 EOT = ('◁EOT▷', 0x04)  # EOT control code (End of Transmission) -> end of document
 UNK = ('◁UNK▷', 0x15)  # NAK control code (Negative Acknowledge) -> Unknown value
+SUB = ('◁SUB▷', 0x1A)  # SUB control code (Substitute) -> Garbled or Invalid Characters -> to use as mask or corruption
 UNASSIGNED = '◁???▷'
 
-SPECIAL_CODES = (NUL, UNK, SOH, STX, ETX, EOT)
+SPECIAL_CODES = (NUL, UNK, SOH, STX, ETX, EOT, SUB)
