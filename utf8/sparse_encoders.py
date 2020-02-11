@@ -431,9 +431,11 @@ def create_codebook(charset_fpath=CHARSET_PATH, config=CONFIG,
         # could use UNK but I'd rather have it be obviously different
         int2char[i] = UNASSIGNED
     # overwrite the indices of the reverse mapping for the special codes
-    for c, i in special_codes:
-        # Take into account this will duplicate the char2int mapping having 2 chars going to the same int
+    for c, i, c_alt in special_codes:
+        # Take into account this will duplicate the char2int mapping having 2 chars and the alternative code
+        # mapping to the same int
         char2int[c] = i
+        char2int[c_alt] = i
         # but the int reverse index will be overwritten
         int2char[i] = c
     with open(charset_fpath, 'r') as f:

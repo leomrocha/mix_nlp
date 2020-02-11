@@ -164,14 +164,23 @@ def code2str(code, int2char):
 class Txt2TxtDataset(IterableDataset):
     def __init__(self, root_dir, codedict,
                  dup_char_prob=0.01, del_char_prob=0.005, remove_diacritics_prob=0.2, case_noise_ratio=0.15,
-                 masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1, mask_idx=MSK[1],
-                 separator=SEPARATOR, special_codes=SPECIAL_CODES, unk=UNK):
+                 masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
+                 separator=SEPARATOR, special_codes=SPECIAL_CODES,
+                 nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
+                 ):
         self.root_dir = root_dir
         self.separator = separator
         self.codedict = codedict
         self.special_codes = special_codes
         # verify that the special codes are present
         self.unk = unk
+        self.pad = nil
+        self.start_header = soh
+        self.start_text = stx
+        self.end_text = etx
+        self.end_transaction = eot
+        self.mask = msk
+
         for c in special_codes:
             if c[0] not in self.codedict:
                 self.codedict[c[0]] = c[1]
@@ -183,7 +192,7 @@ class Txt2TxtDataset(IterableDataset):
         self.masking_ratio = masking_ratio
         self.masking_prob = masking_prob
         self.random_token_prob = random_token_prob
-        self.mask_idx = mask_idx
+
         # TODO the reserved space is to be given by conf
         self.dictionary_token_range = (32, max(codedict.values()))
 
@@ -196,7 +205,7 @@ class Txt2TxtDataset(IterableDataset):
         num = self.codedict[char]
         return num
 
-    def _form_langmodel_pair(self, sentence, src_lang):
+    def _form_langmodel_pair(self, sentence):
         # noise addition
         noised_sentence, sentence = add_str_noise(sentence, self.dup_char_prob, self.del_char_prob,
                                                   self.remove_diacritics_prob,
@@ -205,23 +214,70 @@ class Txt2TxtDataset(IterableDataset):
         noised_code = self._txt2tensor(noised_sentence)
         sentence_code = self._txt2tensor(sentence)
         # mask addition
-        masked_sentence, sentence = generate_mask(sentence, self.masking_ratio, self.masking_prob,
-                                                  self.random_token_prob, self.mask_idx,
+        masked_sentence, _ = generate_mask(noised_code, self.masking_ratio, self.masking_prob,
+                                                  self.random_token_prob, self.mask[1],
                                                   self.dictionary_token_range)
-        return masked_sentence, src_lang, sentence
+        # WARNING these still need to be padded but not in this function
+        # Now add the start and end of text tags and the end of transaction tag
+        start_tag = self.start_text[1]
+        end_tags = [self.end_text[1], self.end_transaction[1]]
+        masked_ret = np.zeros(masked_sentence.shape[0] + 3)
+        masked_ret[0] = start_tag
+        masked_ret[-2:] = end_tags
+        masked_ret[1:-2] = masked_sentence
+
+        sentence_ret = np.zeros(sentence_code.shape[0] + 3)
+        sentence_ret[0] = start_tag
+        sentence_ret[-2:] = end_tags
+        sentence_ret[1:-2] = sentence_code
+
+        return masked_ret, sentence_ret
+
+    def _form_task_tuple(self, task_txt, src_txt, src_lang, tgt_txt, add_noise=False):
+        """
+        Form the arrays for
+        :param task_txt:
+        :param src_txt:
+        :param src_lang:
+        :param tgt_txt:
+        :param add_noise: if noise should be added instead
+        :return:
+        """
+        # should it be corrupted or not, should it return the original plus the corrupted?
+        start_tag = self.start_header[1]
+        start_txt_tag = self.start_text[1]
+        end_txt_tag = self.end_text[1]
+        end_tx_tag = self.end_transaction[1]
+        # WARNING these still need to be padded later
+
+        lang = ''.join([start_txt_tag, src_lang, end_txt_tag])
+        target_lang = self._txt2tensor(lang)
+        target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]))
+
+        if add_noise:
+            noise_masked, noise_sentence = self._form_langmodel_pair(src_txt)
+            # as both noise and no noise are returned there is another extra training point with the same input
+            return noise_masked, noise_sentence, target_lang, target
+        # else
+        txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag] )
+        source = self._txt2tensor(txt)
+        return source, target_lang, target
 
     def process_line(self, line):
         # Splits the line into text and label and applies preprocessing to the text
-        src_txt, src_lang, tgt_txt = line.split(self.separator)
+        # TODO the parsing here should be of json instead ...
+        # src_txt, src_lang, tgt_txt = line.split(self.separator)
         # corrupt the sentence for lang model:
         # TODO
-        src_txt = self._txt2tensor(src_txt)
-        src_lang = self._txt2tensor(src_lang)
-        tgt_txt = self._txt2tensor(tgt_txt)
+        # src_txt = self._txt2tensor(src_txt)
+        # src_lang = self._txt2tensor(src_lang)
+        # tgt_txt = self._txt2tensor(tgt_txt)
         # TODO pad to dimension!
-        return src_txt, src_lang, tgt_txt
+        pass
+        # return src_txt, src_lang, tgt_txt
 
     def __iter__(self):
+        # TODO this should be better for reading big files ...
         iterator = open(self.root_dir, 'rb')
         ret = map(self.process_line, iterator)
         return ret
