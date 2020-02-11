@@ -3,7 +3,7 @@ Definitions of constant values that will be used through all the project
 
 """
 # use Box Codes for the delimitation to avoid any encoding collition
-SEPARATOR = '█'  # to use as separator instead of CSV or TSV 
+SEPARATOR = '█'  # to use as separator instead of CSV or TSV
 CHAR_MASK = '▒'  # To use as a mask for a character
 # Begining Control Codes used for special purposes
 NUL = ('◁NUL▷', 0x00)  # NUL control code -> for Padding for example
