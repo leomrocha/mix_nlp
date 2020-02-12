@@ -98,6 +98,7 @@ def add_str_noise(sentence, dup_char_prob=0.01, del_char_prob=0.005, remove_diac
     :param del_char_prob:
     :param remove_diacritics_prob:
     :param case_noise_ratio:
+    :param swap_prob:
     :return:
     """
     noise_sentence = sentence
@@ -161,7 +162,7 @@ class Txt2TxtDataset(IterableDataset):
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
-                 add_noise_to_task=True
+                 add_noise_to_task=True, dtype=int,
                  ):
         super(Txt2TxtDataset).__init__()
         self.files = files
@@ -191,6 +192,7 @@ class Txt2TxtDataset(IterableDataset):
         self.random_token_prob = random_token_prob
 
         self.dictionary_token_range = (reserved_code_space, max(char2int_dict.values()))
+        self._dtype = dtype
 
     @staticmethod
     def worker_init_fn(_):
@@ -246,6 +248,7 @@ class Txt2TxtDataset(IterableDataset):
         elif 'tgt_lang' in record and record['src_lang'] != record['tgt_lang']:  # is a translation task
             d_lang = record['tgt_lang'].strip()
             dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
+            # FUTURE TODO, the Translate to {} should be also written in many other languages
             task_txt = "Translate to {}".format(dest_lang.name)
             output_txt = record['target'].strip()
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
@@ -257,7 +260,7 @@ class Txt2TxtDataset(IterableDataset):
             return noised_sentence, sentence, src_lang
 
     def _txt2tensor(self, txt):
-        return np.array(list(map(self._item2int, txt)))
+        return np.array(list(map(self._item2int, txt)), dtype=self._dtype)
 
     def _item2int(self, char):
         if char not in self.char2int_dict:
@@ -281,12 +284,12 @@ class Txt2TxtDataset(IterableDataset):
         # Now add the start and end of text tags and the end of transaction tag
         start_tag = self.start_text[1]
         end_tags = [self.end_text[1], self.end_transaction[1]]
-        masked_ret = np.zeros(masked_sentence.shape[0] + 3)
+        masked_ret = np.zeros(masked_sentence.shape[0] + 3, dtype=self._dtype)
         masked_ret[0] = start_tag
         masked_ret[-2:] = end_tags
         masked_ret[1:-2] = masked_sentence
 
-        sentence_ret = np.zeros(sentence_code.shape[0] + 3)
+        sentence_ret = np.zeros(sentence_code.shape[0] + 3, dtype=self._dtype)
         sentence_ret[0] = start_tag
         sentence_ret[-2:] = end_tags
         sentence_ret[1:-2] = sentence_code

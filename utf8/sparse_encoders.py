@@ -397,7 +397,7 @@ CONFIG = (2, 2112, (24, 3), (3, 5, 11, 13), (4, 6, 8, 10, 12), 96, 13 / 96)
 OFNAME = "codes/adhoc-codebook-2112.pkl"
 
 
-def create_codebook(charset_fpath=CHARSET_PATH, config=CONFIG,
+def create_codebook(charset, config=CONFIG,
                     ofname=OFNAME,
                     special_codes=SPECIAL_CODES,
                     nul_row_is_zero=True,
@@ -428,23 +428,22 @@ def create_codebook(charset_fpath=CHARSET_PATH, config=CONFIG,
         c = str(bytes([i]), 'utf-8')
         char2int[c] = i
         # for the reverse mapping, to avoid issues on decoding, leave them unassigned UNASSIGNED='◁???▷'
-        # could use UNK but I'd rather have it be obviously different
-        int2char[i] = UNASSIGNED
+        # could use UNK but I'd rather have it be obviously different, leaving unassigned is an issue
+        int2char[i] = c   # UNASSIGNED
     # overwrite the indices of the reverse mapping for the special codes
     for c, i, c_alt in special_codes:
         # Take into account this will duplicate the char2int mapping having 2 chars and the alternative code
         # mapping to the same int
         char2int[c] = i
-        char2int[c_alt] = i
+        # char2int[c_alt] = i
         # but the int reverse index will be overwritten
         int2char[i] = c
-    with open(charset_fpath, 'r') as f:
-        all_chars = f.read()
-        for i, c in enumerate(all_chars):
-            # forward the index
-            i = i + reserved_spaces
-            char2int[c] = i
-            int2char[i] = c
+
+    for i, c in enumerate(list(charset)):
+        # forward the index
+        j = i + reserved_spaces
+        char2int[c] = j
+        int2char[j] = c
 
     # pickle all together
     codebook = (codes, char2int, int2char)
