@@ -121,7 +121,7 @@ def add_str_noise(sentence, dup_char_prob=0.01, del_char_prob=0.005, remove_diac
     for i in range(sent_length + 1):
         if i in del_mask and i < sent_length - 1:
             continue
-        else:
+        elif i < sent_length:
             del_sentence.append(noise_sentence[i])
     noise_sentence = del_sentence
 
@@ -162,7 +162,7 @@ class Txt2TxtDataset(IterableDataset):
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
-                 add_noise_to_task=True, dtype=int,
+                 add_noise_to_task=False, dtype=int,
                  ):
         super(Txt2TxtDataset).__init__()
         self.files = files
@@ -219,7 +219,7 @@ class Txt2TxtDataset(IterableDataset):
             for line in f:
                 ret = self._process_line(line.decode('utf-8'))
                 # TODO padding!!
-                return ret
+                yield ret
 
     def _get_stream(self, files):
         for fpath in files:
@@ -277,6 +277,7 @@ class Txt2TxtDataset(IterableDataset):
         noised_code = self._txt2tensor(noised_sentence)
         sentence_code = self._txt2tensor(sentence)
         # mask addition
+        masked_sentence = noised_code
         masked_sentence, _ = generate_mask(noised_code, self.masking_ratio, self.masking_prob,
                                            self.random_token_prob, self.mask[1],
                                            self.dictionary_token_range)
