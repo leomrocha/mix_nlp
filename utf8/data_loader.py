@@ -19,11 +19,14 @@ https://github.com/yaysummeriscoming/DALI_pytorch_demo
 import math
 import numpy as np
 import orjson as json
+from pycountry import languages
+import random
 import string
 import torch
 from torch.utils.data import DataLoader, Dataset, TensorDataset
 from torch.utils.data.dataset import IterableDataset
 import unidecode
+
 
 try:
     from .constants import *
@@ -161,18 +164,23 @@ def code2str(code, int2char):
     return ''.join([int2char[i] for i in code])
 
 
+# much inspiration for parallel data loading from
+# https://medium.com/speechmatics/how-to-build-a-streaming-dataloader-with-pytorch-a66dd891d9dd
+
 class Txt2TxtDataset(IterableDataset):
-    def __init__(self, root_dir, codedict,
+    def __init__(self, files, char2int_dict, reserved_code_space=RESERVED_CODE_SPACE,
                  dup_char_prob=0.01, del_char_prob=0.005, remove_diacritics_prob=0.2, case_noise_ratio=0.15,
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
+                 add_noise_to_task=True
                  ):
-        self.root_dir = root_dir
+        super(Txt2TxtDataset).__init__()
+        self.files = files
         self.separator = separator
-        self.codedict = codedict
+        self.char2int_dict = char2int_dict
         self.special_codes = special_codes
-        # verify that the special codes are present
+
         self.unk = unk
         self.pad = nil
         self.start_header = soh
@@ -180,10 +188,11 @@ class Txt2TxtDataset(IterableDataset):
         self.end_text = etx
         self.end_transaction = eot
         self.mask = msk
-
+        self.add_noise = add_noise_to_task
+        # verify that the special codes are present in the mapping
         for c in special_codes:
-            if c[0] not in self.codedict:
-                self.codedict[c[0]] = c[1]
+            if c[0] not in self.char2int_dict:
+                self.char2int_dict[c[0]] = c[1]
 
         self.dup_char_prob = dup_char_prob
         self.del_char_prob = del_char_prob
@@ -193,16 +202,75 @@ class Txt2TxtDataset(IterableDataset):
         self.masking_prob = masking_prob
         self.random_token_prob = random_token_prob
 
-        # TODO the reserved space is to be given by conf
-        self.dictionary_token_range = (32, max(codedict.values()))
+        self.dictionary_token_range = (reserved_code_space, max(char2int_dict.values()))
+
+    @staticmethod
+    def worker_init_fn(_):
+        worker_info = torch.utils.data.get_worker_info()
+        dataset = worker_info.dataset
+        worker_id = worker_info.id
+        split_size = len(dataset.data) // worker_info.num_workers
+        idx_start = worker_id * split_size
+        idx_end = min((worker_id + 1) * split_size, len(dataset.data))
+        dataset.data = dataset.data[idx_start: idx_end]
+
+    @property
+    def shuffle_file_list(self):
+        return random.sample(self.files, len(self.files))
+
+    def __iter__(self):
+        self._get_stream(self.files)
+
+    def _parse_file(self, fpath):
+        with open(fpath, 'rb') as f:
+            for line in f:
+                yield self._process_line(line.decode('utf-8'))
+
+    def _get_stream(self, files):
+        for fpath in files:
+            yield from self._parse_file(fpath)
+
+    def _process_line(self, line):
+        """
+        Processes an input text line (MUST BE JSON), there are parameters that'll be looked at:
+            TODO params
+        :param line: a json text line to be parsed
+        :return:
+        """
+        record = json.loads(line)
+        # now find out what kind of task is:
+        s_lang = record['src_lang'].strip()  # this is always a task -> detect origin language
+        src_lang = languages.get(alpha_2=s_lang) if len(s_lang) == 2 else languages.get(alpha_3=s_lang)
+        src_lang = src_lang.name
+        input_txt = record['input'].strip()
+        if 'task' in record:  # a task is defined in the json definition
+            # has a given task name
+            task_txt = record['task'].strip()
+            output_txt = record['target'].strip()
+            return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
+                                         tgt_txt=output_txt, add_noise=self.add_noise)
+            # TODO call here
+        elif 'tgt_lang' in record and record['src_lang'] != record['tgt_lang']:  # is a translation task
+            d_lang = record['tgt_lang'].strip()
+            dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
+            task_txt = "Translate to {}".format(dest_lang.name)
+            output_txt = record['target'].strip()
+            # TODO call here
+            return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
+                                         tgt_txt=output_txt, add_noise=self.add_noise)
+        else:
+            # Assume language model
+            input_txt = record['input'].strip()
+            noised_sentence, sentence = self._form_langmodel_pair(input_txt)
+            return noised_sentence, sentence, src_lang
 
     def _txt2tensor(self, txt):
-        return np.array(list(map(self._item2int, txt.decode('utf-8'))))
+        return np.array(list(map(self._item2int, txt)))
 
     def _item2int(self, char):
-        if char not in self.codedict:
+        if char not in self.char2int_dict:
             char = self.unk[1]
-        num = self.codedict[char]
+        num = self.char2int_dict[char]
         return num
 
     def _form_langmodel_pair(self, sentence):
@@ -215,8 +283,8 @@ class Txt2TxtDataset(IterableDataset):
         sentence_code = self._txt2tensor(sentence)
         # mask addition
         masked_sentence, _ = generate_mask(noised_code, self.masking_ratio, self.masking_prob,
-                                                  self.random_token_prob, self.mask[1],
-                                                  self.dictionary_token_range)
+                                           self.random_token_prob, self.mask[1],
+                                           self.dictionary_token_range)
         # WARNING these still need to be padded but not in this function
         # Now add the start and end of text tags and the end of transaction tag
         start_tag = self.start_text[1]
@@ -256,35 +324,13 @@ class Txt2TxtDataset(IterableDataset):
 
         if add_noise:
             noise_masked, noise_sentence = self._form_langmodel_pair(src_txt)
+            # we add the header now (the task), it should NOT have noise (at least just yet)
+            st_txt = self._txt2tensor("".join(start_tag, task_txt))
+            source = np.concatenate((st_txt, noise_sentence))
+            noise_source = np.concatenate((st_txt, noise_masked))
             # as both noise and no noise are returned there is another extra training point with the same input
-            return noise_masked, noise_sentence, target_lang, target
+            return noise_source, source, target_lang, target
         # else
-        txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag] )
+        txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag])
         source = self._txt2tensor(txt)
-        return source, target_lang, target
-
-    def process_line(self, line):
-        # Splits the line into text and label and applies preprocessing to the text
-        # TODO the parsing here should be of json instead ...
-        # src_txt, src_lang, tgt_txt = line.split(self.separator)
-        # corrupt the sentence for lang model:
-        # TODO
-        # src_txt = self._txt2tensor(src_txt)
-        # src_lang = self._txt2tensor(src_lang)
-        # tgt_txt = self._txt2tensor(tgt_txt)
-        # TODO pad to dimension!
-        pass
-        # return src_txt, src_lang, tgt_txt
-
-    def __iter__(self):
-        # TODO this should be better for reading big files ...
-        iterator = open(self.root_dir, 'rb')
-        ret = map(self.process_line, iterator)
-        return ret
-
-    # def __next__(self):
-    #     # .... ???
-    #     if :
-    #         return x
-    #     else:
-    #         raise StopIteration
+        return source, target, target_lang

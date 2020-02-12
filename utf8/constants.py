@@ -9,6 +9,7 @@ CHAR_MASK = '▒'  # To use as a mask for a character
 # ▲△▴▵▶▷▸▹►▻▼▽▾▿◀◁◂◃◄◅
 # ◆◇◈◉◊○◌◍◎●◐◑◒◓
 # Begining Control Codes used for special purposes
+RESERVED_CODE_SPACE = 32
 NUL = ('◌', 0x00, '◁NUL▷')  # NUL control code -> for Padding for example
 SOH = ('◀', 0x01, '◁SOH▷')  # SOH control code (Start of Heading) -> example: to indicate a task description or tgt lang
 STX = ('◂', 0x02, '◁STX▷')  # STX control code (Start of Text) -> start of text
