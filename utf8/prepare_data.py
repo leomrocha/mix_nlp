@@ -180,7 +180,7 @@ def prepare_select_all(paths=PATHS, out_dir=TRAIN_PATH, dev_dir=DEV_PATH, valid_
     #     res = pool.starmap(_try_prepare, params)
 
 
-OUTPUT_FNAME = '/home/leo/projects/Datasets/text/train_selected_monofile/pos_tasks.txt'
+OUTPUT_FNAME = '/home/leo/projects/Datasets/text/selected_monofile/pos_tasks.txt'
 
 # SOH = ('◁SOH▷', 0x01)  # SOH control code (Start of Heading) -> for example to indicate a task description or tgt lang
 # STX = ('◁STX▷', 0x02)  # STX control code (Start of Text) -> start of text
@@ -188,18 +188,17 @@ OUTPUT_FNAME = '/home/leo/projects/Datasets/text/train_selected_monofile/pos_tas
 # EOT
 
 
-def json2lines(paths=[TRAIN_PATH], ofile=OUTPUT_FNAME, separator=SEPARATOR):
+def jsonfile2jsonlines(paths=[TRAIN_PATH], ofile=OUTPUT_FNAME):
     """
-
     :param paths: paths where to find files
-    :param separator: separator to use for the csv/tsv style. by default is a Glyph that is not used
+    :param ofile: Output consolidated file
     :return: one file where to save all the lines
     """
-    all_files = get_txt2txtfiles(paths, 'txt2txt')
+    all_files = get_txt2txtfiles(paths, '.json')
+    # all_files = get_txt2txtfiles(paths, 'txt2txt')
     # take out language model files as I'll later set every task as lang model too during text loading
     # all_files = [f for f in all_files if 'langmodel' not in f]
-
-    all_files = [f for f in all_files if not f.endswith(".gz")]
+    # all_files = [f for f in all_files if not f.endswith(".gz")]
     for fname in all_files:
         fopen = open
         if fname.endswith(".gz"):
@@ -207,38 +206,15 @@ def json2lines(paths=[TRAIN_PATH], ofile=OUTPUT_FNAME, separator=SEPARATOR):
         with fopen(fname, 'rb') as f:
             print("Processing: {}".format(fname))
             jf = json.loads(f.read())
-            txt = []
-            try:
-                for j in jf:
-                    s_lang = j['src_lang'].strip()  # this is always a task -> detect origin language
-                    src_lang = languages.get(alpha_2=s_lang) if len(s_lang) == 2 else languages.get(alpha_3=s_lang)
-                    src_lang = src_lang.name
-                    # this is the task at hand to be coded in the input
-                    if 'task' in j:  # a task is defined in the json definition
-                        task = j['task'].strip()
-                        input_txt = SOH[0] + task + STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
-                        output_txt = j['target'].strip()
-                        text = [input_txt, src_lang, output_txt]
-                    elif 'tgt_lang' in j and j['src_lang'] != j['tgt_lang']:  # is a translation task
-                        d_lang = j['tgt_lang'].strip()
-                        dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
-                        dest_lang = dest_lang.name
-                        task = "Translate to {}".format(dest_lang)
-                        input_txt = SOH[0] + task + STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
-                        output_txt = j['target'].strip()
-                        text = [input_txt, src_lang, output_txt]
-                    else:
-                        # is a Langmodel task, so no task
-                        input_txt = STX[0] + j['input'].strip() + ETX[0]  # this is the main entry text
-                        text = [input_txt, src_lang]
-                    t = separator.join(text) + '\n'
-                    txt.append(normalize('NFKC', t))
-                with open(ofile, "a+") as of:
-                    # print("saving {}".format(ofile))
-                    of.writelines(txt)
-                    of.flush()
-            except Exception as e:
-                print("Error processing {} with Error: {}".format(fname, e))
+            flines = []
+            for jline in jf:
+                flines.append(json.dumps(jline))
+            with open(ofile, "a+") as of:
+                for line in flines:
+                    of.write("{}\n".format(line.decode("utf-8")))
+                # # print("saving {}".format(ofile))
+                # of.writelines(flines)
+                # of.flush()
 
 
 if __name__ == "__main__":

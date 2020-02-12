@@ -16,6 +16,7 @@ https://github.com/yaysummeriscoming/DALI_pytorch_demo
 
 """
 
+import gzip
 import math
 import numpy as np
 import orjson as json
@@ -23,7 +24,8 @@ from pycountry import languages
 import random
 import string
 import torch
-from torch.utils.data import DataLoader, Dataset, TensorDataset
+from torch.utils import data
+# from torch.utils.data import DataLoader, Dataset, TensorDataset
 from torch.utils.data.dataset import IterableDataset
 import unidecode
 
@@ -33,23 +35,6 @@ try:
 except:
     # hack to solve issue with ipython executing this import
     from constants import *
-
-
-# definitions of functions for text alteration at character level
-# swap two (consecutive) characters
-def swap_consecutive(sentence, idx1, idx2):
-    """
-    swaps two elements in a sequence, it copies the original array
-    :param arr: a numpy array
-    :param idx1: The indices to swap
-    :param idx2: The indices to swap
-    :return: the new array with swapped elements
-    """
-    arr = np.copy(sentence)
-    tmp1, tmp2 = arr[idx1], arr[idx2]
-    arr[idx1] = tmp2
-    arr[idx2] = tmp1
-    return arr, sentence
 
 
 # mask a set of characters, better if they are close
@@ -96,7 +81,6 @@ def generate_mask(sentence, masking_ratio=0.15, masking_prob=0.8,
                             dictionary_token_range[0], dictionary_token_range[1]
                         )
                     )
-
     return masked_sent, sentence
 
 
@@ -106,7 +90,7 @@ def generate_mask(sentence, masking_ratio=0.15, masking_prob=0.8,
 # remove diacritics to (a part of the) text
 # randomly swap capitalization of a letter  -> this one might be needed to be high prob
 def add_str_noise(sentence, dup_char_prob=0.01, del_char_prob=0.005, remove_diacritics_prob=0.2,
-                  case_noise_ratio=0.15):
+                  case_noise_ratio=0.15, swap_prob=0.01):
     """
     Generates string noise swapping, adding and deleting characters, changing capitalization and removing diacritics
     :param sentence:
@@ -150,6 +134,10 @@ def add_str_noise(sentence, dup_char_prob=0.01, del_char_prob=0.005, remove_diac
     for i in range(sent_length):
         if i in case_mask:
             noise_sentence[i] = noise_sentence[i].swapcase()
+        # swap characters
+        rand = np.random.random()
+        if rand < swap_prob and i < sent_length-1:
+            noise_sentence[i], noise_sentence[i+1] = noise_sentence[i+1], noise_sentence[i]
 
     return noise_sentence, sentence
 
@@ -206,7 +194,7 @@ class Txt2TxtDataset(IterableDataset):
 
     @staticmethod
     def worker_init_fn(_):
-        worker_info = torch.utils.data.get_worker_info()
+        worker_info = data.get_worker_info()
         dataset = worker_info.dataset
         worker_id = worker_info.id
         split_size = len(dataset.data) // worker_info.num_workers
@@ -219,12 +207,17 @@ class Txt2TxtDataset(IterableDataset):
         return random.sample(self.files, len(self.files))
 
     def __iter__(self):
-        self._get_stream(self.files)
+        return self._get_stream(self.files)
 
     def _parse_file(self, fpath):
-        with open(fpath, 'rb') as f:
+        fopen = open
+        if fpath.endswith(".gz"):
+            fopen = gzip.open
+        with fopen(fpath, 'rb') as f:
             for line in f:
-                yield self._process_line(line.decode('utf-8'))
+                ret = self._process_line(line.decode('utf-8'))
+                # TODO padding!!
+                return ret
 
     def _get_stream(self, files):
         for fpath in files:
@@ -233,7 +226,8 @@ class Txt2TxtDataset(IterableDataset):
     def _process_line(self, line):
         """
         Processes an input text line (MUST BE JSON), there are parameters that'll be looked at:
-            TODO params
+            Mandatory params of json file: 'src_lang', 'input'
+            other params: 'tgt_lang', 'target', 'task'
         :param line: a json text line to be parsed
         :return:
         """
@@ -249,17 +243,15 @@ class Txt2TxtDataset(IterableDataset):
             output_txt = record['target'].strip()
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
                                          tgt_txt=output_txt, add_noise=self.add_noise)
-            # TODO call here
         elif 'tgt_lang' in record and record['src_lang'] != record['tgt_lang']:  # is a translation task
             d_lang = record['tgt_lang'].strip()
             dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
             task_txt = "Translate to {}".format(dest_lang.name)
             output_txt = record['target'].strip()
-            # TODO call here
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
                                          tgt_txt=output_txt, add_noise=self.add_noise)
         else:
-            # Assume language model
+            # Assume language model in every other case
             input_txt = record['input'].strip()
             noised_sentence, sentence = self._form_langmodel_pair(input_txt)
             return noised_sentence, sentence, src_lang
@@ -312,10 +304,10 @@ class Txt2TxtDataset(IterableDataset):
         :return:
         """
         # should it be corrupted or not, should it return the original plus the corrupted?
-        start_tag = self.start_header[1]
-        start_txt_tag = self.start_text[1]
-        end_txt_tag = self.end_text[1]
-        end_tx_tag = self.end_transaction[1]
+        start_tag = self.start_header[0]
+        start_txt_tag = self.start_text[0]
+        end_txt_tag = self.end_text[0]
+        end_tx_tag = self.end_transaction[0]
         # WARNING these still need to be padded later
 
         lang = ''.join([start_txt_tag, src_lang, end_txt_tag])
@@ -325,7 +317,7 @@ class Txt2TxtDataset(IterableDataset):
         if add_noise:
             noise_masked, noise_sentence = self._form_langmodel_pair(src_txt)
             # we add the header now (the task), it should NOT have noise (at least just yet)
-            st_txt = self._txt2tensor("".join(start_tag, task_txt))
+            st_txt = self._txt2tensor("".join([start_tag, task_txt]))
             source = np.concatenate((st_txt, noise_sentence))
             noise_source = np.concatenate((st_txt, noise_masked))
             # as both noise and no noise are returned there is another extra training point with the same input
