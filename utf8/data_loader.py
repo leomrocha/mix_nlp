@@ -264,7 +264,7 @@ class Txt2TxtDataset(IterableDataset):
 
     def _item2int(self, char):
         if char not in self.char2int_dict:
-            char = self.unk[1]
+            char = self.unk[0]
         num = self.char2int_dict[char]
         return num
 
