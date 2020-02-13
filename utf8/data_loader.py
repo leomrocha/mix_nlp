@@ -22,10 +22,7 @@ import numpy as np
 import orjson as json
 from pycountry import languages
 import random
-import string
-import torch
 from torch.utils import data
-# from torch.utils.data import DataLoader, Dataset, TensorDataset
 from torch.utils.data.dataset import IterableDataset
 import unidecode
 
@@ -317,7 +314,6 @@ class Txt2TxtDataset(IterableDataset):
         noised_code = self._txt2tensor(noised_sentence)
         sentence_code = self._txt2tensor(sentence)
         # mask addition
-        masked_sentence = noised_code
         masked_sentence, _ = generate_mask(noised_code, self.masking_ratio, self.masking_prob,
                                            self.random_token_prob, self.mask[1],
                                            self.dictionary_token_range)
@@ -360,19 +356,17 @@ class Txt2TxtDataset(IterableDataset):
         target_lang = self._txt2tensor(lang, self.max_lang_len)
         target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]), self.max_len)
 
-        if add_noise:
-            noise_masked, noise_sentence = self._form_langmodel_pair(src_txt)
-            # we add the header now (the task), it should NOT have noise (at least just yet)
-            st_txt = self._txt2tensor("".join([start_tag, task_txt]))
-            source = np.concatenate((st_txt, noise_sentence))
-            noise_source = np.concatenate((st_txt, noise_masked))
-            # Padding or CUT string at max_len
-            source = self._set_tensor_len(source, self.max_len)
-            noise_source = self._set_tensor_len(noise_source, self.max_len)
-
-            # as both noise and no noise are returned there is another extra training point with the same input
-            return noise_source, source, target, target_lang
-        # else
         txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag])
         source = self._txt2tensor(txt, self.max_len)
+
+        if add_noise:
+            noise_masked, noise_target = self._form_langmodel_pair(src_txt)
+            # Padding or CUT string at max_len
+            noise_target = self._set_tensor_len(noise_target, self.max_len)
+            noise_masked = self._set_tensor_len(noise_masked, self.max_len)
+
+            # as both noise and no noise are returned there is another extra training point with the same input
+            return noise_masked, noise_target, source, target, target_lang
+        # else
+
         return source, target, target_lang
