@@ -155,21 +155,50 @@ def code2str(code, int2char):
 
 # much inspiration for parallel data loading from
 # https://medium.com/speechmatics/how-to-build-a-streaming-dataloader-with-pytorch-a66dd891d9dd
-
 class Txt2TxtDataset(IterableDataset):
-    def __init__(self, files, char2int_dict, reserved_code_space=RESERVED_CODE_SPACE,
-                 dup_char_prob=0.01, del_char_prob=0.005, remove_diacritics_prob=0.2, case_noise_ratio=0.15,
+    def __init__(self, files, char2int_dict,
+                 max_len=512, max_lang_len=60,  # max_len is the maximum length of the vector (input/output)
+                 reserved_code_space=RESERVED_CODE_SPACE,
+                 dup_char_prob=0.005, del_char_prob=0.002, remove_diacritics_prob=0.2, case_noise_ratio=0.15,
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
                  add_noise_to_task=False, dtype=int,
                  ):
+        """
+
+        :param files:
+        :param char2int_dict:
+        :param max_len: maximum length of the input and target vectors
+        :param max_lang_len: maximum length of the language target vector (from analysis is 58 + start&end tags = 60)
+        :param reserved_code_space:
+        :param dup_char_prob:
+        :param del_char_prob:
+        :param remove_diacritics_prob:
+        :param case_noise_ratio:
+        :param masking_ratio:
+        :param masking_prob:
+        :param random_token_prob:
+        :param separator:
+        :param special_codes:
+        :param nil:
+        :param soh:
+        :param stx:
+        :param etx:
+        :param eot:
+        :param unk:
+        :param msk:
+        :param add_noise_to_task:
+        :param dtype:
+        """
         super(Txt2TxtDataset).__init__()
-        self.files = files
+        self.data = files
         self.separator = separator
         self.char2int_dict = char2int_dict
         self.special_codes = special_codes
-
+        self.max_len = max_len
+        self.max_lang_len = max_lang_len
+        # special symbol codes
         self.unk = unk
         self.pad = nil
         self.start_header = soh
@@ -178,11 +207,11 @@ class Txt2TxtDataset(IterableDataset):
         self.end_transaction = eot
         self.mask = msk
         self.add_noise = add_noise_to_task
-        # verify that the special codes are present in the mapping
+        # verify that the special symbol codes are present in the mapping
         for c in special_codes:
             if c[0] not in self.char2int_dict:
                 self.char2int_dict[c[0]] = c[1]
-
+        #
         self.dup_char_prob = dup_char_prob
         self.del_char_prob = del_char_prob
         self.remove_diacritics_prob = remove_diacritics_prob
@@ -206,10 +235,18 @@ class Txt2TxtDataset(IterableDataset):
 
     @property
     def shuffle_file_list(self):
-        return random.sample(self.files, len(self.files))
+        return random.sample(self.data, len(self.data))
 
     def __iter__(self):
-        return self._get_stream(self.files)
+        return self._get_stream(self.data)
+
+    def _set_tensor_len(self, arr, tlen):
+        # verify length here in case we need to compute it here
+        # pad if necessary, cut string at the end if too big -> do it with a np.zeros
+        ret = np.zeros(tlen, dtype=self._dtype)
+        last_idx = min(ret.shape[0], arr.shape[0])
+        ret[:last_idx] = arr[:last_idx]
+        return ret
 
     def _parse_file(self, fpath):
         fopen = open
@@ -248,7 +285,7 @@ class Txt2TxtDataset(IterableDataset):
         elif 'tgt_lang' in record and record['src_lang'] != record['tgt_lang']:  # is a translation task
             d_lang = record['tgt_lang'].strip()
             dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
-            # FUTURE TODO, the Translate to {} should be also written in many other languages
+            # FUTURE the Translate to {} should be also written in many other languages
             task_txt = "Translate to {}".format(dest_lang.name)
             output_txt = record['target'].strip()
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
@@ -259,8 +296,11 @@ class Txt2TxtDataset(IterableDataset):
             noised_sentence, sentence = self._form_langmodel_pair(input_txt)
             return noised_sentence, sentence, src_lang
 
-    def _txt2tensor(self, txt):
-        return np.array(list(map(self._item2int, txt)), dtype=self._dtype)
+    def _txt2tensor(self, txt, max_len=-1):
+        arr = np.array(list(map(self._item2int, txt)), dtype=self._dtype)
+        if max_len > 1:
+            arr = self._set_tensor_len(arr, max_len)
+        return arr
 
     def _item2int(self, char):
         if char not in self.char2int_dict:
@@ -295,6 +335,8 @@ class Txt2TxtDataset(IterableDataset):
         sentence_ret[-2:] = end_tags
         sentence_ret[1:-2] = sentence_code
 
+        masked_ret = self._set_tensor_len(masked_ret, self.max_len)
+        sentence_ret = self._set_tensor_len(sentence_ret, self.max_len)
         return masked_ret, sentence_ret
 
     def _form_task_tuple(self, task_txt, src_txt, src_lang, tgt_txt, add_noise=False):
@@ -315,8 +357,8 @@ class Txt2TxtDataset(IterableDataset):
         # WARNING these still need to be padded later
 
         lang = ''.join([start_txt_tag, src_lang, end_txt_tag])
-        target_lang = self._txt2tensor(lang)
-        target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]))
+        target_lang = self._txt2tensor(lang, self.max_lang_len)
+        target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]), self.max_len)
 
         if add_noise:
             noise_masked, noise_sentence = self._form_langmodel_pair(src_txt)
@@ -324,9 +366,13 @@ class Txt2TxtDataset(IterableDataset):
             st_txt = self._txt2tensor("".join([start_tag, task_txt]))
             source = np.concatenate((st_txt, noise_sentence))
             noise_source = np.concatenate((st_txt, noise_masked))
+            # Padding or CUT string at max_len
+            source = self._set_tensor_len(source, self.max_len)
+            noise_source = self._set_tensor_len(noise_source, self.max_len)
+
             # as both noise and no noise are returned there is another extra training point with the same input
-            return noise_source, source, target_lang, target
+            return noise_source, source, target, target_lang
         # else
         txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag])
-        source = self._txt2tensor(txt)
+        source = self._txt2tensor(txt, self.max_len)
         return source, target, target_lang
