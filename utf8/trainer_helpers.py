@@ -36,13 +36,20 @@ def chunks(data, n, dim=0):
         yield data[i:i + n, :, :]
 
 
-def loss_txt2txt_multi(prediction, target,
-                       pred_dest_lang, tgt_dest_lang,
-                       scale_loss=1.,
-                       scale_dest_lang_loss=1.,
+def loss_txt2txt_multi(prediction, target, pred_dest_lang, tgt_dest_lang,
+                       scale_loss=1., scale_dest_lang_loss=1.,
                        fn_loss=F.nll_loss,  # fn_loss=F.kl_div
                        ):
     """"""
+    # print("loss: ", prediction.shape, target.shape, pred_dest_lang.shape, tgt_dest_lang.shape)
+
+    prediction = prediction.view(-1, prediction.size(-1))
+    target = target.view(-1)
+    pred_dest_lang = pred_dest_lang.view(-1, pred_dest_lang.size(-1))
+    tgt_dest_lang = tgt_dest_lang.view(-1)
+
+    # print("loss: ", prediction.shape, target.shape, pred_dest_lang.shape, tgt_dest_lang.shape)
+
     pred_loss = fn_loss(prediction, target) * scale_loss
     dest_lang_loss = fn_loss(pred_dest_lang, tgt_dest_lang) * scale_dest_lang_loss
     loss = pred_loss + dest_lang_loss
@@ -50,7 +57,7 @@ def loss_txt2txt_multi(prediction, target,
 
 
 def main(model, train_files, test_files, codebook_file,
-         batch_size=10000, num_workers=10, max_seq_len=512, add_noise_to_task=True,
+         batch_size=10, num_workers=10, max_seq_len=512, add_noise_to_task=True,
          optimizer='FusedAdam',
          lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
          amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
@@ -86,30 +93,32 @@ def main(model, train_files, test_files, codebook_file,
 
 
 def train_main(model, optimizer, train_data_loader, test_data_loader,
-               checkpoint_path,  # where to save the checkpoints
                criterion=loss_txt2txt_multi,
                noise_in_task=False, opt_level="O1",
-               test_period=10
+               test_period=20,
+               checkpoint_path="checkpoints",  # where to save the checkpoints
                ):
-    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    # model = model.to(device)
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
     model.train()
     # if device == 'cuda:0':  # for later to make sure things work in cpu too
-    model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
-
-                                          )
+    model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level)
     writer = SummaryWriter()
     batch_count = 1
+    test_count = 1
     epoch_count = 1
-
+    print(train_data_loader)
     for train_batch_data in train_data_loader:
+        print("Batch Id: {} | Timestamp {}".format(batch_count, datetime.now().isoformat()))
         train_batch(model, optimizer, criterion, train_batch_data, batch_count, writer)
         if batch_count % test_period == 0:
             model.eval()
             # test on one batch ...
             try:
-                test_batch_data = test_data_loader.next()
-                test_batch(model, criterion, test_batch_data, epoch_count, writer)
+                print("TEST Batch Id: {} | Timestamp {}".format(epoch_count, datetime.now().isoformat()))
+                for test_batch_data in test_data_loader:
+                    test_batch(model, criterion, test_batch_data, test_count, writer)
+                    test_count += 1
                 # update counters and make model trainable again
             except StopIteration as e:
                 print("No more batches to test ... {}".format(e))
@@ -123,12 +132,19 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
                 'amp': amp.state_dict()
             }
             dtime = datetime.now().isoformat()
-            cp_name = os.path.join("amp-checkpoint_opt-{}_{}.pt".format(opt_level, dtime))
+            cp_name = os.path.join(checkpoint_path, "amp-checkpoint_opt-{}_{}.pt".format(opt_level, dtime))
             torch.save(checkpoint, cp_name)
         batch_count += 1
 
 
 def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_writer):
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    batch = []
+    for d in batch_data:
+        batch.append(d.to(device))
+    batch_data = batch
+
     batch_len = len(batch_data)
     if batch_len == 3:
         source, target, target_lang = batch_data
@@ -136,6 +152,7 @@ def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_wr
         noise_masked, noise_target, source, target, target_lang = batch_data
     else:
         raise NotImplementedError("input batch must have either 3 or 5 elements")
+
     # train in the source, target, target_lang tuple
     optimizer.zero_grad()
     out = model(source)
@@ -148,8 +165,9 @@ def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_wr
     for n, l in zip(names, ind_losses):
         ldata = l.data.item()
         summary_writer.add_scalar("Loss/train-{}".format(n), ldata)
-    with amp.scaled_loss(loss, optimizer) as scaled_loss:
-        scaled_loss.backward()
+    # with amp.scaled_loss(loss, optimizer) as scaled_loss:
+    #     scaled_loss.backward()
+    loss.backward()
     optimizer.step()
 
     if batch_len == 5:
@@ -165,8 +183,9 @@ def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_wr
         for n, l in zip(names, ind_losses):
             ldata = l.data.item()
             summary_writer.add_scalar("Loss/train-{}".format(n), ldata)
-        with amp.scaled_loss(loss, optimizer) as scaled_loss:
-            scaled_loss.backward()
+        # with amp.scaled_loss(loss, optimizer) as scaled_loss:
+        #     scaled_loss.backward()
+        loss.backward()
         optimizer.step()
     torch.cuda.empty_cache()
 

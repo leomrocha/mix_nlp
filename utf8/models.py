@@ -18,7 +18,7 @@ except:
 
 class ConvModel(nn.Module):
     def __init__(self, embed_matrix,
-                 seq_len=512, lang_seq_len=60,
+                 seq_len=512, lang_seq_len=60, vocab_size=1871,
                  in_dim=96, hidd_dim=1024, cnv_dim=192,  # linear layers at the input for embedding projections
                  c_in=(192, 512, 1024, 1024, 512, 192), c_out=(512, 1024, 1024, 512, 192, 192),  # channels for blocks
                  b_layers=(3, 5, 5, 5, 3),  # number of layers for each bloc
@@ -31,11 +31,13 @@ class ConvModel(nn.Module):
         super(ConvModel, self).__init__()
         self.seq_len = seq_len
         self.lang_seq_len = lang_seq_len
+        self.vocab_size = vocab_size
         # needs the Embedding matrix
         # with torch.no_grad():
         self.embeds = nn.Embedding(*embed_matrix.shape)
         self.embeds.weight.data.copy_(torch.from_numpy(embed_matrix))
         self.embeds.requires_grad = False
+        self.embeds = self.embeds
         # Input projection of the embedding
         self.lin = nn.Sequential(
             weight_norm(nn.Linear(in_dim, hidd_dim)),
@@ -60,6 +62,8 @@ class ConvModel(nn.Module):
         # # needs the FAISS decoder -> TODO implement and send to GPU, FIXME faiss failing to load in gpu
         # self.indexl2 = faiss.IndexFlatL2(embed_matrix.shape[1])
         # self.indexl2.add(embed_matrix)
+        self.sfmx_lin = weight_norm(nn.Linear(in_dim, vocab_size))
+        # self.softmax = nn.LogSoftmax(dim=-1)
 
     def forward(self, x_in, decode_faiss=False):
         # [batch, sequence (long)]
@@ -82,14 +86,20 @@ class ConvModel(nn.Module):
         x = torch.cat([x_lm, x_lang], dim=-1)
 
         # Go back to space dimension only (character level) for decoder
-        x = x.transpose(1, 2)
+        x = x.transpose(1, 2).contiguous()
         # [batch, sequence, embed]
         x = self.decoder(x)
-        x_lang = x[:, self.seq_len:, :]
-        x_lm = x[:, :self.seq_len, :]
+        # mapping to dimension for softmax layer
+        x = self.sfmx_lin(x)
+        # decoding (should change for FAISS instead when I make it work correctly
+        # x = self.softmax(x)
+        x = F.log_softmax(x, dim=-1)
+        x_lang = x[:, self.seq_len:, :].contiguous()
+        x_lm = x[:, :self.seq_len, :].contiguous()
         # if decode_faiss:
         #     k = 1
         #     D, I = self.indexl2.search(x.view(-1, x.shape[-1]), k)
         #     return I.view(* x.shape[:-1])
+        # print(self.seq_len, self.lang_seq_len, x.shape, x_lm.shape, x_lang.shape)
         return x_lm, x_lang
 
