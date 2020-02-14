@@ -57,7 +57,7 @@ def loss_txt2txt_multi(prediction, target, pred_dest_lang, tgt_dest_lang,
 
 
 def main(model, train_files, test_files, codebook_file,
-         batch_size=10, num_workers=10, max_seq_len=512, add_noise_to_task=True,
+         batch_size=100, num_workers=10, max_seq_len=512, add_noise_to_task=True,
          optimizer='FusedAdam',
          lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
          amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
@@ -107,7 +107,7 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
     batch_count = 1
     test_count = 1
     epoch_count = 1
-    print(train_data_loader)
+    # print(train_data_loader)
     for train_batch_data in train_data_loader:
         print("Batch Id: {} | Timestamp {}".format(batch_count, datetime.now().isoformat()))
         train_batch(model, optimizer, criterion, train_batch_data, batch_count, writer)
