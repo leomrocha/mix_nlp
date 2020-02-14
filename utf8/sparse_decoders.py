@@ -16,16 +16,10 @@ class UTF8SparseDecoderModule(nn.Module):
     """
     Decoder Module for UTF8 coding where the code is generate by a redundant code with
     """
-
-    # codes/utf8_2-seg_1984-codepoints_64-dim_N-24-k3_coprimes-(3, 5, 11, 13)_cycles-(6, 2)_dense
-    # def __init__(self, input_size=128, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(6, 2),
-    #              use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1):
-
-    # codes/utf8_3-seg_59328-codepoints_128-dim_N-37-k4_coprimes-(11, 13, 19, 23)_cycles-(11, 7, 4, 3)_dense
-    def __init__(self, input_size=192, segments=3, N=37, k=13, coprimes=(11, 13, 19, 23), cycles=(11, 7, 4, 3),
+    # CONFIG = (2, 1871, (24, 3), (3, 5, 11, 13), (4, 6, 8, 10, 12), 96, 13 / 96)
+    def __init__(self, input_size=192, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(4, 6, 8, 10, 12),
                  use_transformer=True, transformer_ff_size=1024, transformer_activation='gelu', dropout=0.1,
-                 nheads=16):
-
+                 nheads=12):
         """"""
         super(UTF8SparseDecoderModule, self).__init__()
         self.segments = segments
@@ -42,10 +36,12 @@ class UTF8SparseDecoderModule(nn.Module):
             # nheads = k + len(coprimes) + len(cycles)
             # print(self._code_dim, nheads)
             # # WARNING -> AssertionError: embed_dim must be divisible by num_heads
-            # # so recomputing nheads to bi divisible by the embedding dimension
-            # nheads = self._code_dim // (self._code_dim // nheads)
+            # # so recomputing nheads to be divisible by the embedding dimension
+            # for i in list(range(nheads,1,-1)):
+            #       if self._code_dim % i == 0:
+            #            nheads = i
+            #            break
             # print(nheads)
-            # # nheads = 12
 
             self.transformer = TransformerEncoderLayer(self._code_dim, nheads, dim_feedforward=transformer_ff_size,
                                                        activation=transformer_activation, dropout=dropout)

@@ -393,8 +393,8 @@ def create_codematrix_from_conf(config=[]):
 # CONFIG = (2, 1916, (24, 3), (3, 5, 11, 13), (6, 2), 64, 9 / 64)
 # OFNAME = "codes/adhoc-codebook-1916.pkl"
 CHARSET_PATH = "codes/all_chars.chars"
-CONFIG = (2, 1870, (24, 3), (3, 5, 11, 13), (4, 6, 8, 10, 12), 96, 13 / 96)
-OFNAME = "codes/adhoc-codebook-1870.pkl"
+CONFIG = (2, 1871, (24, 3), (3, 5, 11, 13), (4, 6, 8, 10, 12), 96, 13 / 96)
+OFNAME = "codes/adhoc-codebook-1871.pkl"
 
 
 def create_codebook(charset, config=CONFIG,

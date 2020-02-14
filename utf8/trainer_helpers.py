@@ -54,6 +54,10 @@ def main(model, train_files, test_files, codebook_file,
          optimizer='FusedAdam',
          lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
          amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
+    # TODO if CUDA not available, ... something should be done
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
+
     if optimizer == 'FusedLAMB':  # designed for BERT to augment the batch sizes and decrease training time
         optimizer = optimizers.FusedLAMB(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
                                          amsgrad=False, adam_w_mode=adam_w_mode, max_grad_norm=max_grad_norm)
@@ -65,9 +69,7 @@ def main(model, train_files, test_files, codebook_file,
                                          amsgrad=False,  # NOT SUPPORTED in FusedAdam!
                                          adam_w_mode=adam_w_mode,
                                          )
-    # TODO if CUDA not available, ... something should be done
-    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    # model = model.to(device)
+
     f = open(codebook_file, 'rb')
     codebook, char2int, int2char = pickle.load(f)
     train_dataset = Txt2TxtDataset(train_files, char2int, max_len=max_seq_len, add_noise_to_task=add_noise_to_task)
@@ -89,8 +91,8 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
                noise_in_task=False, opt_level="O1",
                test_period=10
                ):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
+    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # model = model.to(device)
     model.train()
     # if device == 'cuda:0':  # for later to make sure things work in cpu too
     model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
