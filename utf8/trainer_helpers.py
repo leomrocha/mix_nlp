@@ -7,8 +7,9 @@ import os
 import sys
 import numpy as np
 from datetime import datetime
-
+import pickle
 import torch
+from torch.utils.data import DataLoader
 import torch.nn.functional as F
 # from torch.utils.checkpoint import *
 # for gradient checkpointing (doesn't seems so straightforward) check:
@@ -17,6 +18,12 @@ import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 
 from apex import amp, optimizers
+
+try:
+    from .data_loader import *
+except:
+    # Ugly hack for Jupyter Lab not loading correctly
+    from data_loader import *
 
 
 # Gradient checkpointing .... TODO when/if necessary
@@ -30,50 +37,23 @@ def chunks(data, n, dim=0):
 
 
 def loss_txt2txt_multi(prediction, target,
-                       pred_orig_lang, tgt_orig_lang,
                        pred_dest_lang, tgt_dest_lang,
-                       # pred_task_lang, tgt_task_lang,
-                       # pred_task_desc, tgt_task_desc,
                        scale_loss=1.,
-                       scale_orig_lang_loss=1.,
                        scale_dest_lang_loss=1.,
-                       # scale_task_lang_loss=1.,
-                       # scale_task_desc_loss=1.,
                        fn_loss=F.nll_loss,  # fn_loss=F.kl_div
                        ):
-    """
-    Computes the complete loss for all the target task and meta tasks
-    predictions and targets MUST be LONG format (like pre-embedding) for nll_loss and kl_div
-    :param prediction:
-    :param target:
-    :param pred_orig_lang:
-    :param tgt_orig_lang:
-    :param pred_dest_lang:
-    :param tgt_dest_lang:
-    :param pred_task_lang:
-    :param tgt_task_lang:
-    :param pred_task_desc:
-    :param tgt_task_desc:
-    :param scale_loss:
-    :param scale_orig_lang_loss:
-    :param scale_dest_lang_loss:
-    :param scale_task_lang_loss:
-    :param scale_task_desc_loss:
-    :param fn_loss: 
-    :return:
-    """
+    """"""
     pred_loss = fn_loss(prediction, target) * scale_loss
-    orig_lang_loss = fn_loss(pred_orig_lang, tgt_orig_lang) * scale_orig_lang_loss
     dest_lang_loss = fn_loss(pred_dest_lang, tgt_dest_lang) * scale_dest_lang_loss
-    # task_lang_loss = fn_loss(pred_task_lang, tgt_task_lang) * scale_task_lang_loss
-    # task_desc_loss = fn_loss(pred_task_desc, tgt_task_desc) * scale_task_desc_loss
-    loss = pred_loss + orig_lang_loss + dest_lang_loss  # + task_lang_loss + task_desc_loss
-    return loss, (pred_loss, orig_lang_loss, dest_lang_loss)  # , task_lang_loss, task_desc_loss)
+    loss = pred_loss + dest_lang_loss
+    return loss, (pred_loss, dest_lang_loss)
 
 
-def main(model, optimizer='FusedAdam', lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
+def main(model, train_files, test_files, codebook_file,
+         batch_size=10000, num_workers=10, max_seq_len=512, add_noise_to_task=True,
+         optimizer='FusedAdam',
+         lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
          amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
-
     if optimizer == 'FusedLAMB':  # designed for BERT to augment the batch sizes and decrease training time
         optimizer = optimizers.FusedLAMB(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
                                          amsgrad=False, adam_w_mode=adam_w_mode, max_grad_norm=max_grad_norm)
@@ -85,129 +65,141 @@ def main(model, optimizer='FusedAdam', lr=1e-3, betas=(0.9, 0.999), eps=1e-8, we
                                          amsgrad=False,  # NOT SUPPORTED in FusedAdam!
                                          adam_w_mode=adam_w_mode,
                                          )
-    data_loader = ...  # TODO this one is the tough one
+    # TODO if CUDA not available, ... something should be done
+    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # model = model.to(device)
+    f = open(codebook_file, 'rb')
+    codebook, char2int, int2char = pickle.load(f)
+    train_dataset = Txt2TxtDataset(train_files, char2int, max_len=max_seq_len, add_noise_to_task=add_noise_to_task)
+    train_data_loader = DataLoader(train_dataset, batch_size=batch_size,
+                                   pin_memory=True,
+                                   num_workers=num_workers, worker_init_fn=Txt2TxtDataset.worker_init_fn)
+    test_dataset = Txt2TxtDataset(test_files, char2int, max_len=max_seq_len, add_noise_to_task=add_noise_to_task)
+    test_data_loader = DataLoader(test_dataset, batch_size=batch_size,
+                                  pin_memory=True,
+                                  num_workers=num_workers, worker_init_fn=Txt2TxtDataset.worker_init_fn)
+
     criterion = loss_txt2txt_multi
-    train_main(model, optimizer, data_loader, criterion)
+    train_main(model, optimizer, train_data_loader, test_data_loader, criterion, noise_in_task=add_noise_to_task)
 
 
-def train_main(model, optimizer, data_loader, criterion=loss_txt2txt_multi,
-               opt_level="O1", keep_batchnorm_fp32=True, loss_scale="dynamic"  # recommended params: O1, True, dynamic
+def train_main(model, optimizer, train_data_loader, test_data_loader,
+               checkpoint_path,  # where to save the checkpoints
+               criterion=loss_txt2txt_multi,
+               noise_in_task=False, opt_level="O1",
+               test_period=10
                ):
-    model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
-                                      keep_batchnorm_fp32=keep_batchnorm_fp32,
-                                      loss_scale=loss_scale)
-    writer = SummaryWriter()
-    batch_count = 0
-    epoch_count = 0
-    # get epoch iterator from data loader
-    for epoch_iter in data_loader.load():
-        # get data iterator for the epoch from the data loader
-        for train_data_iter, test_data_iter in epoch_iter:
-            batch_count = train_epoch(model, optimizer, criterion, train_data_iter, epoch_count, writer, batch_count)
-            test_epoch(model, criterion, test_data_iter, epoch_count, writer, batch_count)
-        epoch_count += 1
-    pass
-
-
-def train_epoch(model, optimizer, criterion, data_iterator, epoch, summary_writer, total_batch_count=0):
-    """
-
-    :param model:
-    :param optimizer:
-    :param criterion:
-    :param data_iterator:
-    :param epoch:
-    :param summary_writer:
-    :param total_batch_count:
-    :return:
-    """
-    torch.cuda.empty_cache()
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    model = model.to(device)
     model.train()
-    train_loss = 0
-    batch_idx = 1
-    # names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss', 'task_lang_loss', 'task_desc_loss']
-    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss']
-    indiv_losses_acc = np.array([0.] * 5)
-    for metadata, data, label in data_iterator:
-        orig_lang, dest_lang, task_lang, task_desc = metadata
+    # if device == 'cuda:0':  # for later to make sure things work in cpu too
+    model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level,  # [O0, O1, O2, O3 ]
 
+                                          )
+    writer = SummaryWriter()
+    batch_count = 1
+    epoch_count = 1
+
+    for train_batch_data in train_data_loader:
+        train_batch(model, optimizer, criterion, train_batch_data, batch_count, writer)
+        if batch_count % test_period == 0:
+            model.eval()
+            # test on one batch ...
+            try:
+                test_batch_data = test_data_loader.next()
+                test_batch(model, criterion, test_batch_data, epoch_count, writer)
+                # update counters and make model trainable again
+            except StopIteration as e:
+                print("No more batches to test ... {}".format(e))
+                pass
+            epoch_count += 1
+            model.train()
+            # save checkpoint of the model
+            checkpoint = {
+                'model': model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'amp': amp.state_dict()
+            }
+            dtime = datetime.now().isoformat()
+            cp_name = os.path.join("amp-checkpoint_opt-{}_{}.pt".format(opt_level, dtime))
+            torch.save(checkpoint, cp_name)
+        batch_count += 1
+
+
+def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_writer):
+    batch_len = len(batch_data)
+    if batch_len == 3:
+        source, target, target_lang = batch_data
+    elif batch_len == 5:
+        noise_masked, noise_target, source, target, target_lang = batch_data
+    else:
+        raise NotImplementedError("input batch must have either 3 or 5 elements")
+    # train in the source, target, target_lang tuple
+    optimizer.zero_grad()
+    out = model(source)
+    pred, pred_lang = out
+    loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
+
+    # Write summaries and details on TensorBoard for the task
+    names = ['task_loss', 'lang_det_loss']
+    summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=batch_count)
+    for n, l in zip(names, ind_losses):
+        ldata = l.data.item()
+        summary_writer.add_scalar("Loss/train-{}".format(n), ldata)
+    with amp.scaled_loss(loss, optimizer) as scaled_loss:
+        scaled_loss.backward()
+    optimizer.step()
+
+    if batch_len == 5:
+        # also train in the noise_masked, noise_target, target_lang tuple
         optimizer.zero_grad()
-        out = model(data)
-        pred, pred_olang, pred_dlang = out
-        loss, ind_losses = criterion(pred, label,
-                                     pred_olang, orig_lang,
-                                     pred_dlang, dest_lang,
-                                     # pred_tlang, task_lang,
-                                     # pred_tdesc, task_desc,
-                                     )
-        # pred_loss, orig_lang_loss, dest_lang_loss = ind_losses
+        out = model(noise_masked)
+        pred, pred_lang = out
+        loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
+
         # Write summaries and details on TensorBoard for the task
-        summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=total_batch_count + batch_idx)
-        acc = []
+        names = ['lm_task_loss', 'lm_lang_det_loss']
+        summary_writer.add_scalar("Loss/lm_train", loss.data.item(), global_step=batch_count)
         for n, l in zip(names, ind_losses):
             ldata = l.data.item()
-            acc.append(ldata)
             summary_writer.add_scalar("Loss/train-{}".format(n), ldata)
-        acc = np.array(acc)  # keep track of each individual part of the loss to log later
-
-        indiv_losses_acc = indiv_losses_acc + acc
         with amp.scaled_loss(loss, optimizer) as scaled_loss:
             scaled_loss.backward()
         optimizer.step()
-        batch_idx += 1
-        torch.cuda.empty_cache()
-
-    summary_writer.add_scalar("EpochLoss/train", train_loss / batch_idx, epoch)
-    for n, l in zip(names, indiv_losses_acc):
-        summary_writer.add_scalar("EpochLoss/train-{}".format(n), l)
-    print('====> Timestamp {} Epoch: {} Average loss: {:.8f}'.format(datetime.now(), epoch, train_loss / batch_idx))
-    return batch_idx + total_batch_count
-
-
-def test_epoch(model, criterion, data_iterator, epoch, summary_writer, total_batch_count=0):
-    """
-
-    :param model:
-    :param criterion:
-    :param data_iterator:
-    :param epoch:
-    :param summary_writer:
-    :param total_batch_count:
-    :return:
-    """
     torch.cuda.empty_cache()
-    model.eval()
-    test_loss = 0
-    batch_idx = 1
-    names = ['pred_loss', 'orig_lang_loss', 'dest_lang_loss']  # , 'task_lang_loss', 'task_desc_loss']
-    indiv_losses_acc = np.array([0.] * 5)
-    for metadata, data, label in data_iterator:
-        # orig_lang, dest_lang, task_lang, task_desc = metadata
-        orig_lang, dest_lang = metadata
-        out = model(data)
-        pred, pred_olang, pred_dlang = out
-        loss, ind_losses = criterion(pred, label,
-                                     pred_olang, orig_lang,
-                                     pred_dlang, dest_lang,
-                                     # pred_tlang, task_lang,
-                                     # pred_tdesc, task_desc,
-                                     )
-        # pred_loss, orig_lang_loss, dest_lang_loss, task_lang_loss, task_desc_loss = ind_losses
+
+
+def test_batch(model, criterion, batch_data, batch_count, summary_writer):
+    batch_len = len(batch_data)
+    if batch_len == 3:
+        source, target, target_lang = batch_data
+    elif batch_len == 5:
+        noise_masked, noise_target, source, target, target_lang = batch_data
+    else:
+        raise NotImplementedError("input batch must have either 3 or 5 elements")
+    # train in the source, target, target_lang tuple
+    out = model(source)
+    pred, pred_lang = out
+    loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
+
+    # Write summaries and details on TensorBoard for the task
+    names = ['task_loss', 'lang_det_loss']
+    summary_writer.add_scalar("Loss/test", loss.data.item(), global_step=batch_count)
+    for n, l in zip(names, ind_losses):
+        ldata = l.data.item()
+        summary_writer.add_scalar("Loss/test-{}".format(n), ldata)
+
+    if batch_len == 5:
+        out = model(noise_masked)
+        pred, pred_lang = out
+        loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
+
         # Write summaries and details on TensorBoard for the task
-        summary_writer.add_scalar("Loss/test", loss.data.item(), global_step=total_batch_count + batch_idx)
-        acc = []
+        names = ['lm_task_loss', 'lm_lang_det_loss']
+        summary_writer.add_scalar("Loss/lm_test", loss.data.item(), global_step=batch_count)
         for n, l in zip(names, ind_losses):
             ldata = l.data.item()
-            acc.append(ldata)
             summary_writer.add_scalar("Loss/test-{}".format(n), ldata)
-        acc = np.array(acc)  # keep track of each individual part of the loss to log later
+    torch.cuda.empty_cache()
 
-        indiv_losses_acc = indiv_losses_acc + acc
-        batch_idx += 1
-        torch.cuda.empty_cache()
 
-    summary_writer.add_scalar("EpochLoss/test", test_loss / batch_idx, epoch)
-    for n, l in zip(names, indiv_losses_acc):
-        summary_writer.add_scalar("EpochLoss/test-{}".format(n), l)
-    print('====> Timestamp {} Epoch: {} Test Set loss: {:.8f}'.format(datetime.now(), epoch, test_loss / batch_idx))
-    return batch_idx + total_batch_count
