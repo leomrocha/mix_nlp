@@ -160,7 +160,8 @@ class Txt2TxtDataset(IterableDataset):
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
-                 add_noise_to_task=False, dtype=int,
+                 add_noise_to_task=False, add_str_noise_to_input=True,
+                 dtype=int,
                  ):
         """
 
@@ -204,6 +205,7 @@ class Txt2TxtDataset(IterableDataset):
         self.end_transaction = eot
         self.mask = msk
         self.add_noise = add_noise_to_task
+        self.add_str_noise = add_str_noise_to_input
         # verify that the special symbol codes are present in the mapping
         for c in special_codes:
             if c[0] not in self.char2int_dict:
@@ -278,7 +280,8 @@ class Txt2TxtDataset(IterableDataset):
             task_txt = record['task'].strip()
             output_txt = record['target'].strip()
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
-                                         tgt_txt=output_txt, add_noise=self.add_noise)
+                                         tgt_txt=output_txt, add_input_noise=self.add_str_noise,
+                                         add_mask_noise=self.add_noise)
         elif 'tgt_lang' in record and record['src_lang'] != record['tgt_lang']:  # is a translation task
             d_lang = record['tgt_lang'].strip()
             dest_lang = languages.get(alpha_2=d_lang) if len(d_lang) == 2 else languages.get(alpha_3=d_lang)
@@ -286,7 +289,8 @@ class Txt2TxtDataset(IterableDataset):
             task_txt = "Translate to {}".format(dest_lang.name)
             output_txt = record['target'].strip()
             return self._form_task_tuple(task_txt=task_txt, src_txt=input_txt, src_lang=src_lang,
-                                         tgt_txt=output_txt, add_noise=self.add_noise)
+                                         tgt_txt=output_txt, add_input_noise=self.add_str_noise,
+                                         add_mask_noise=self.add_noise)
         else:
             # Assume language model in every other case
             input_txt = record['input'].strip()
@@ -335,7 +339,7 @@ class Txt2TxtDataset(IterableDataset):
         sentence_ret = self._set_tensor_len(sentence_ret, self.max_len)
         return masked_ret, sentence_ret
 
-    def _form_task_tuple(self, task_txt, src_txt, src_lang, tgt_txt, add_noise=False):
+    def _form_task_tuple(self, task_txt, src_txt, src_lang, tgt_txt, add_input_noise=True, add_mask_noise=False):
         """
         Form the arrays for
         :param task_txt:
@@ -356,10 +360,13 @@ class Txt2TxtDataset(IterableDataset):
         target_lang = self._txt2tensor(lang, self.max_lang_len)
         target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]), self.max_len)
 
+        if add_input_noise:
+            src_txt, _ = add_str_noise(src_txt)
+            src_txt = ''.join(src_txt)
         txt = ''.join([start_tag, task_txt, start_txt_tag, src_txt, end_txt_tag, end_tx_tag])
         source = self._txt2tensor(txt, self.max_len)
 
-        if add_noise:
+        if add_mask_noise:
             noise_masked, noise_target = self._form_langmodel_pair(src_txt)
             # Padding or CUT string at max_len
             noise_target = self._set_tensor_len(noise_target, self.max_len)

@@ -22,7 +22,7 @@ class ConvModel(nn.Module):
                  in_dim=96, hidd_dim=1024, cnv_dim=192,  # linear layers at the input for embedding projections
                  c_in=(192, 512, 1024, 1024, 512, 192), c_out=(512, 1024, 1024, 512, 192, 192),  # channels for blocks
                  b_layers=(3, 5, 5, 5, 3),  # number of layers for each bloc
-                 first_k_size=3, kernel_size=3, cnv_dropout=0.3, groups=4, cnv_activation="gelu",
+                 first_k_size=3, kernel_size=3, cnv_dropout=0.3, groups=4, cnv_activation="relu",
 
                  dec_input_size=192, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(4, 6, 8, 10, 12),
                  dec_use_transformer=True, transformer_ff_size=1024, dec_activation='gelu', dec_dropout=0.1
@@ -51,10 +51,13 @@ class ConvModel(nn.Module):
         # self.lang_transformer = TransformerEncoderLayer(self.lang_seq_len, 4, dim_feedforward=1024,
         #                                                activation='gelu', dropout=dec_dropout)
         self.lang_transformer = TransformerEncoderLayer(self.lang_seq_len, 4, activation='gelu')
+        # lang_transformer = TransformerEncoderLayer(self.lang_seq_len, 4, activation='gelu')
+        # self.lang_transformer = TransformerEncoder(lang_transformer, 3)
 
         self.lm_lin = weight_norm(nn.Linear(seq_len, seq_len))  # this is just a linear transformation
         self.lm_transformer = TransformerEncoderLayer(seq_len, 8, 2048, activation='gelu')
-
+        # lm_transformer = TransformerEncoderLayer(seq_len, 8, 2048, activation='gelu')
+        # self.lm_transformer = TransformerEncoder(lm_transformer, 3)
         # Embedding projection decoding
         # TransformerEncoderLayer(d_model, nhead, dim_feedforward=2048, dropout=0.1, activation="relu")
         self.decoder = UTF8SparseDecoderModule(dec_input_size, segments, N, k, coprimes, cycles, dec_use_transformer,
