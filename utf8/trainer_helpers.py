@@ -57,7 +57,7 @@ def loss_txt2txt_multi(prediction, target, pred_dest_lang, tgt_dest_lang,
 
 
 def main(model, train_files, test_files, codebook_file,
-         batch_size=100, num_workers=10, max_seq_len=512, add_noise_to_task=True,
+         batch_size=175, num_workers=10, max_seq_len=512, add_noise_to_task=True,
          optimizer='FusedAdam',
          lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
          amsgrad=False, adam_w_mode=True, max_grad_norm=1.0):
@@ -94,8 +94,8 @@ def main(model, train_files, test_files, codebook_file,
 
 def train_main(model, optimizer, train_data_loader, test_data_loader,
                criterion=loss_txt2txt_multi,
-               noise_in_task=False, opt_level="O1",
-               test_period=20,
+               noise_in_task=False, opt_level="O2",
+               test_period=20, checkpoint_period=100,
                checkpoint_path="checkpoints",  # where to save the checkpoints
                ):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -125,6 +125,7 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
                 pass
             epoch_count += 1
             model.train()
+        if batch_count % checkpoint_period == 0:
             # save checkpoint of the model
             checkpoint = {
                 'model': model.state_dict(),
