@@ -115,6 +115,7 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
     model.train()
     # if device == 'cuda:0':  # for later to make sure things work in cpu too
     model, optimizer = amp.initialize(model, optimizer, opt_level=opt_level)
+
     writer = SummaryWriter()
     batch_count = 1
     test_count = 1
