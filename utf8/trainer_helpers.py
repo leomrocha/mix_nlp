@@ -58,16 +58,16 @@ def loss_txt2txt_multi(prediction, target, pred_dest_lang, tgt_dest_lang,
     return loss, (pred_loss, dest_lang_loss)
 
 
-def main(model, train_files, test_files, codebook_file,
-         batch_size=175, num_workers=10, max_seq_len=512,
-         add_noise_to_task=False, add_str_noise_to_input=True,
-         optimizer='FusedAdam', opt_level='O2',
-         lr=1e-3, betas=(0.9, 0.998), eps=1e-8, weight_decay=0,
-         amsgrad=False, adam_w_mode=True, max_grad_norm=0.9,
-         test_period=20, checkpoint_period=100,
-         checkpoint_path="checkpoints",
-         max_norm=0.25
-         ):
+def trainer_helper_main(model, train_files, test_files, codebook_file,
+                        batch_size=175, num_workers=10, max_seq_len=512,
+                        add_noise_to_task=False, add_str_noise_to_input=True,
+                        optimizer='FusedAdam', opt_level='O2',
+                        lr=1e-3, betas=(0.9, 0.998), eps=1e-8, weight_decay=0,
+                        amsgrad=False, adam_w_mode=True, max_grad_norm=0.9,
+                        test_period=20, checkpoint_period=100,
+                        checkpoint_path="checkpoints",
+                        max_norm=0.25
+                        ):
     # TODO if CUDA not available, ... something should be done
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = model.to(device)

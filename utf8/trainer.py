@@ -9,13 +9,21 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 import pickle
+import os
+try:
+    from .models import *
+    from .trainer_helpers import *
+    from .data_loader import *
+    from .utils import *
+    from .tools import *
+except:
+    from models import *
+    from trainer_helpers import *
+    from data_loader import *
+    from utils import *
+    from tools import *
 
-from .models import *
-import torch
-from .trainer_helpers import *
-from .data_loader import *
-from .utils import *
-from .tools import *
+
 
 # TODO put this in a config file
 fcodebook = "/home/leo/projects/minibrain/predictors/sequence/text/utf8-codes/utf8_codebook_overfit_matrix_2seg_dim64.npy"
@@ -32,8 +40,6 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 BASE_PATH = '/home/leo/projects/Datasets/text/selected_monofile/partitions'
 codebook_path = '/home/leo/projects/mix_nlp/utf8/codes/adhoc-codebook-1871.pkl'
 
-
-import os
 chkp_path = "/media/nfs/mix_nlp/checkpoints"
 chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.001_2020-02-15T11:12:26.762745.pt")
 
@@ -55,7 +61,7 @@ def preload_model(model, fname, embed_matrix):
     model.embeds.weight.data.copy_(torch.from_numpy(embed_matrix))
     # self.embeds.requires_grad = False
     model.embeds.requires_grad_(False)
-    print("Set model embeds to original binary ones, requires_grad={}".format(model.embeds.requires_grad))
+    print("Set model embeds to original binary ones, requires_grad={}".format(model.embeds.requires_grad_()))
 
 
 def train():
@@ -86,18 +92,25 @@ def train():
     print("Total Params: {} | Trainable params: {} ".format(count_parameters(model), count_trainable_parameters(model)))
     model = model.to(device)
 
-    main(model, train_files, test_files, codebook_path,
-         #      batch_size=10,
-         #      batch_size=175, # with opt_level=O1 this is the max
-         batch_size=185,  # this one works with opt_level=O2
-         #     optimizer='FusedAdam',  # Adam goes down really fast but then starts giving losses as NaN
-         optimizer='FusedLAMB',
-         # Fused lamb decreases slowly but steady and goes to better loss than Adam. NaN after 21730 batches, 13h30m36s
-         #     optimizer='FusedNovoGrad', # is definetly the slowest one at the beginning, stabilizes at the worst value
-         opt_level='O2',
-         add_str_noise_to_input=True,
-         test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
-         #      checkpoint_period=10,
-         checkpoint_period=200,
-         checkpoint_path="/media/nfs/mix_nlp/checkpoints"
-         )
+    trainer_helper_main(model, train_files, test_files, codebook_path,
+                        #      batch_size=10,
+                        #      batch_size=175, # with opt_level=O1 this is the max
+                        batch_size=185,  # this one works with opt_level=O2
+                        #     optimizer='FusedAdam',  # Adam goes down really fast but then starts giving losses as NaN
+                        optimizer='FusedLAMB',
+                        # Fused lamb decreases slowly but steady and goes to better loss than Adam.
+                        # NaN after 21730 batches, 13h30m36s
+                        #     optimizer='FusedNovoGrad', # is definetly the slowest one at the beginning,
+                        #     stabilizes at the worst value
+                        opt_level='O2',
+                        add_str_noise_to_input=True,
+                        test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
+                        #      checkpoint_period=10,
+                        checkpoint_period=200,
+                        checkpoint_path="/media/nfs/mix_nlp/checkpoints"
+                        )
+
+
+if __name__ == "__main__":
+    print("STARTING TRAINING")
+    train()
