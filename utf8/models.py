@@ -47,7 +47,7 @@ class ConvModel(nn.Module):
         # Convolutional Column
         self.conv = ConvColumn(c_in, c_out, b_layers, first_k_size, kernel_size, cnv_dropout, groups, cnv_activation)
         # # decoder layers
-        # Decoding separation in sequence length for language detection AND language model  # TODO pass params instead
+        # Decoding separation in sequence length for language detection AND language model
         self.lang_lin = weight_norm(nn.Linear(seq_len, lang_seq_len))
         # self.lang_transformer = TransformerEncoderLayer(self.lang_seq_len, 4, dim_feedforward=1024,
         #                                                activation='gelu', dropout=dec_dropout)
@@ -63,11 +63,15 @@ class ConvModel(nn.Module):
         # TransformerEncoderLayer(d_model, nhead, dim_feedforward=2048, dropout=0.1, activation="relu")
         self.decoder = UTF8SparseDecoderModule(dec_input_size, segments, N, k, coprimes, cycles, dec_use_transformer,
                                                transformer_ff_size, dec_activation, dec_dropout)
-        # # needs the FAISS decoder -> TODO implement and send to GPU, FIXME faiss failing to load in gpu
+        # # needs the FAISS decoder -> TODO implement and send to GPU
         # self.indexl2 = faiss.IndexFlatL2(embed_matrix.shape[1])
         # self.indexl2.add(embed_matrix)
         self.sfmx_lin = weight_norm(nn.Linear(in_dim, vocab_size))
         # self.softmax = nn.LogSoftmax(dim=-1)
+
+    def train(self):
+        super().train()
+        self.embeds.requires_grad_(False)
 
     def forward(self, x_in, decode_faiss=False):
         # [batch, sequence (long)]

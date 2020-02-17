@@ -42,6 +42,8 @@ codebook_path = '/home/leo/projects/mix_nlp/utf8/codes/adhoc-codebook-1871.pkl'
 
 chkp_path = "/media/nfs/mix_nlp/checkpoints"
 chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.001_2020-02-15T11:12:26.762745.pt")
+# chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.003_2020-02-17T13:12:18.881112.pt")
+# chkp_fname = os.path.join(chkp_path, "")
 
 
 def load_checkpoint(clean_model, fname, optimizer=None, amp=None):
@@ -61,7 +63,7 @@ def preload_model(model, fname, embed_matrix):
     model.embeds.weight.data.copy_(torch.from_numpy(embed_matrix))
     # self.embeds.requires_grad = False
     model.embeds.requires_grad_(False)
-    print("Set model embeds to original binary ones, requires_grad={}".format(model.embeds.requires_grad_()))
+    print("Set model embeds to original binary ones, requires_grad={}".format(model.embeds.weight.requires_grad))
 
 
 def train():
@@ -96,17 +98,18 @@ def train():
                         #      batch_size=10,
                         #      batch_size=175, # with opt_level=O1 this is the max
                         batch_size=185,  # this one works with opt_level=O2
-                        #     optimizer='FusedAdam',  # Adam goes down really fast but then starts giving losses as NaN
+                        # optimizer='FusedAdam',  # Adam goes down really fast but then starts giving losses as NaN
                         optimizer='FusedLAMB',
                         # Fused lamb decreases slowly but steady and goes to better loss than Adam.
                         # NaN after 21730 batches, 13h30m36s
-                        #     optimizer='FusedNovoGrad', # is definetly the slowest one at the beginning,
+                        #     optimizer='FusedNovoGrad', # is definitely the slowest one at the beginning,
                         #     stabilizes at the worst value
                         opt_level='O2',
+                        add_noise_to_task=False,
                         add_str_noise_to_input=True,
                         test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
                         #      checkpoint_period=10,
-                        checkpoint_period=200,
+                        checkpoint_period=50,
                         checkpoint_path="/media/nfs/mix_nlp/checkpoints"
                         )
 
