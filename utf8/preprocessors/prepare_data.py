@@ -15,8 +15,8 @@ from pycountry import languages
 from unicodedata import normalize
 
 try:
-    from .utils import *
-    from .constants import *
+    from utf8.utils import *
+    from utf8.constants import *
 except:
     # hack to solve issue with ipython executing this import
     from utils import *

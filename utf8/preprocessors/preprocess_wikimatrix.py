@@ -6,7 +6,7 @@ import orjson as json
 from pycountry import languages
 
 try:
-    from .utils import *
+    from utf8.utils import *
 except:
     # to solve issue with ipython executing this import
     from utils import *

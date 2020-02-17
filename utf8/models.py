@@ -36,8 +36,9 @@ class ConvModel(nn.Module):
         # with torch.no_grad():
         self.embeds = nn.Embedding(*embed_matrix.shape)
         self.embeds.weight.data.copy_(torch.from_numpy(embed_matrix))
-        self.embeds.requires_grad = False
-        self.embeds = self.embeds
+        # self.embeds.requires_grad = False
+        self.embeds.requires_grad_(False)
+        # self.embeds = self.embeds
         # Input projection of the embedding
         self.lin = nn.Sequential(
             weight_norm(nn.Linear(in_dim, hidd_dim)),

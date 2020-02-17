@@ -62,8 +62,8 @@ def main(model, train_files, test_files, codebook_file,
          batch_size=175, num_workers=10, max_seq_len=512,
          add_noise_to_task=False, add_str_noise_to_input=True,
          optimizer='FusedAdam', opt_level='O2',
-         lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=0,
-         amsgrad=False, adam_w_mode=True, max_grad_norm=1.0,
+         lr=1e-3, betas=(0.9, 0.998), eps=1e-8, weight_decay=0,
+         amsgrad=False, adam_w_mode=True, max_grad_norm=0.9,
          test_period=20, checkpoint_period=100,
          checkpoint_path="checkpoints",
          max_norm=0.25
@@ -72,14 +72,20 @@ def main(model, train_files, test_files, codebook_file,
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
 
+    model_trainable_params = filter(lambda p: p.requires_grad, model.parameters())
+
     if optimizer == 'FusedLAMB':  # designed for BERT to augment the batch sizes and decrease training time
-        optimizer = optimizers.FusedLAMB(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+        optimizer = optimizers.FusedLAMB(model_trainable_params, lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
                                          amsgrad=False, adam_w_mode=adam_w_mode, max_grad_norm=max_grad_norm)
     elif optimizer == 'FusedNovoGrad':  # takes less memory than Adam
-        optimizer = optimizers.FusedNovoGrad(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+        optimizer = optimizers.FusedNovoGrad(model_trainable_params, lr=lr, betas=betas, eps=eps,
+                                             # weight_decay=weight_decay,
+                                             weight_decay=1e-5,
                                              amsgrad=amsgrad)
     else:  # default is FusedADAM
-        optimizer = optimizers.FusedAdam(model.parameters(), lr=lr, betas=betas, eps=eps, weight_decay=weight_decay,
+        optimizer = optimizers.FusedAdam(model_trainable_params, lr=lr, betas=betas, eps=eps,
+                                         # weight_decay=weight_decay,
+                                         weight_decay=1e-5,
                                          amsgrad=False,  # NOT SUPPORTED in FusedAdam!
                                          adam_w_mode=adam_w_mode,
                                          )

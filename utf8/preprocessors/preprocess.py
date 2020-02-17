@@ -4,7 +4,7 @@ import os
 import ntpath
 
 try:
-    from .utils import *
+    from utf8.utils import *
 except:
     # hack to solve issue with ipython executing this import
     from utils import *
