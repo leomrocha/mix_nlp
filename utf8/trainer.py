@@ -41,9 +41,9 @@ BASE_PATH = '/home/leo/projects/Datasets/text/selected_monofile/partitions'
 codebook_path = '/home/leo/projects/mix_nlp/utf8/codes/adhoc-codebook-1871.pkl'
 
 chkp_path = "/media/nfs/mix_nlp/checkpoints"
-chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.001_2020-02-15T11:12:26.762745.pt")
+# chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.001_2020-02-15T11:12:26.762745.pt")
 # chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.003_2020-02-17T13:12:18.881112.pt")
-# chkp_fname = os.path.join(chkp_path, "")
+chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-2.222_2020-02-17T15:39:56.682146.pt")
 
 
 def load_checkpoint(clean_model, fname, optimizer=None, amp=None):
@@ -105,7 +105,8 @@ def train():
                         #     optimizer='FusedNovoGrad', # is definitely the slowest one at the beginning,
                         #     stabilizes at the worst value
                         opt_level='O2',
-                        add_noise_to_task=False,
+                        # add_noise_to_task=False,
+                        add_noise_to_task=True,
                         add_str_noise_to_input=True,
                         test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
                         #      checkpoint_period=10,

@@ -5,6 +5,9 @@ import torch.nn as nn
 from torch.nn import functional as F
 from torch.nn.utils import weight_norm
 
+from fairseq.modules.dynamic_convolution import DynamicConv
+from
+
 try:
     # from .utils import *
     from .model_blocks import *
@@ -111,3 +114,7 @@ class ConvModel(nn.Module):
         # print(self.seq_len, self.lang_seq_len, x.shape, x_lm.shape, x_lang.shape)
         return x_lm, x_lang
 
+
+
+class DynConvColModel(nn.Module):
+    pass
