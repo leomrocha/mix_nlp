@@ -40,10 +40,12 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 BASE_PATH = '/home/leo/projects/Datasets/text/selected_monofile/partitions'
 codebook_path = '/home/leo/projects/mix_nlp/utf8/codes/adhoc-codebook-1871.pkl'
 
-chkp_path = "/media/nfs/mix_nlp/checkpoints"
+CHKP_PATH = "/media/nfs/mix_nlp/checkpoints"
 # chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.001_2020-02-15T11:12:26.762745.pt")
 # chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-0.003_2020-02-17T13:12:18.881112.pt")
-chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-2.222_2020-02-17T15:39:56.682146.pt")
+# chkp_fname = os.path.join(chkp_path, "amp-checkpoint_opt-O2_loss-2.222_2020-02-17T15:39:56.682146.pt")
+# CHKP_FNAME = os.path.join(CHKP_PATH, "amp-checkpoint_opt-O2_loss-0.539_2020-02-18T00:38:03.332333.pt")
+CHKP_FNAME = os.path.join(CHKP_PATH, "amp-checkpoint_opt-O2_batch-1000_loss-0.005_2020-02-18T10:59:32.156309.pt")
 
 
 def load_checkpoint(clean_model, fname, optimizer=None, amp=None):
@@ -66,7 +68,7 @@ def preload_model(model, fname, embed_matrix):
     print("Set model embeds to original binary ones, requires_grad={}".format(model.embeds.weight.requires_grad))
 
 
-def train():
+def train(ModelClass=None, chkp_fname=None):
     fpaths = get_all_files_recurse(BASE_PATH)
 
     train_files = [f for f in fpaths if 'train' in f]
@@ -84,11 +86,15 @@ def train():
 
     f = open(codebook_path, 'rb')
     codebook, char2int, int2char = pickle.load(f)
-    model = ConvModel(codebook)
+    if ModelClass:
+        model = ModelClass(codebook)
+    else:
+        model = ConvModel(codebook)
     # ## WARNING
     # hiatus, this is to start from the pretrained so it's faster for training later
     # but I'll modify again the embeddings to the ones I had set before
-    preload_model(model, chkp_fname, codebook)
+    if chkp_fname:
+        preload_model(model, chkp_fname, codebook)
     # ## END WARNING
 
     print("Total Params: {} | Trainable params: {} ".format(count_parameters(model), count_trainable_parameters(model)))
@@ -109,12 +115,15 @@ def train():
                         add_noise_to_task=True,
                         add_str_noise_to_input=True,
                         test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
-                        #      checkpoint_period=10,
-                        checkpoint_period=50,
+                        #      checkpoint_period=50,
+                        checkpoint_period=100,
                         checkpoint_path="/media/nfs/mix_nlp/checkpoints"
                         )
 
 
 if __name__ == "__main__":
     print("STARTING TRAINING")
-    train()
+    # train(ConvModel, chkp_fname=CHKP_FNAME)
+    #
+    train(ConvModel)
+    # train()

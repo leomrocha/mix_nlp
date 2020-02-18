@@ -6,7 +6,6 @@ from torch.nn import functional as F
 from torch.nn.utils import weight_norm
 
 from fairseq.modules.dynamic_convolution import DynamicConv
-from
 
 try:
     # from .utils import *
@@ -72,8 +71,8 @@ class ConvModel(nn.Module):
         self.sfmx_lin = weight_norm(nn.Linear(in_dim, vocab_size))
         # self.softmax = nn.LogSoftmax(dim=-1)
 
-    def train(self):
-        super().train()
+    def train(self, mode=True):
+        super().train(mode)
         self.embeds.requires_grad_(False)
 
     def forward(self, x_in, decode_faiss=False):

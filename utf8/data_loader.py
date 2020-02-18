@@ -346,7 +346,8 @@ class Txt2TxtDataset(IterableDataset):
         :param src_txt:
         :param src_lang:
         :param tgt_txt:
-        :param add_noise: if noise should be added instead
+        :param add_input_noise: if noise should be added instead
+        :param add_mask_noise: if noised mask should be added as task
         :return:
         """
         # should it be corrupted or not, should it return the original plus the corrupted?
@@ -359,6 +360,8 @@ class Txt2TxtDataset(IterableDataset):
         lang = ''.join([start_txt_tag, src_lang, end_txt_tag])
         target_lang = self._txt2tensor(lang, self.max_lang_len)
         target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]), self.max_len)
+        if add_mask_noise:
+            mask_target = self._txt2tensor(''.join([start_txt_tag, tgt_txt, end_txt_tag, end_tx_tag]), self.max_len)
 
         if add_input_noise:
             src_txt, _ = add_str_noise(src_txt)
@@ -373,7 +376,7 @@ class Txt2TxtDataset(IterableDataset):
             noise_masked = self._set_tensor_len(noise_masked, self.max_len)
 
             # as both noise and no noise are returned there is another extra training point with the same input
-            return noise_masked, noise_target, source, target, target_lang
+            return noise_masked, mask_target, source, target, target_lang
         # else
 
         return source, target, target_lang

@@ -157,7 +157,8 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
             }
             dtime = datetime.now().isoformat()
             cp_name = os.path.join(checkpoint_path,
-                                   "amp-checkpoint_opt-{}_loss-{:.3f}_{}.pt".format(opt_level, loss.item(), dtime))
+                                   "amp-checkpoint_opt-{}_batch-{}_loss-{:.3f}_{}.pt".format(
+                                       opt_level, batch_count, loss.item(), dtime))
             torch.save(checkpoint, cp_name)
         batch_count += 1
 
