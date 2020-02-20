@@ -66,7 +66,7 @@ def trainer_helper_main(model, train_files, test_files, codebook_file,
                         amsgrad=False, adam_w_mode=True, max_grad_norm=1.0,
                         test_period=20, checkpoint_period=100,
                         checkpoint_path="checkpoints",
-                        max_norm=0.25
+                        max_norm=0.25, lm_only=False
                         ):
     # TODO if CUDA not available, ... something should be done
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -107,14 +107,14 @@ def trainer_helper_main(model, train_files, test_files, codebook_file,
     train_main(model, optimizer, train_data_loader, test_data_loader, criterion,
                opt_level=opt_level, test_period=test_period,
                checkpoint_period=checkpoint_period, checkpoint_path=checkpoint_path,
-               max_norm=max_norm)
+               max_norm=max_norm, lm_only=lm_only)
 
 
 def train_main(model, optimizer, train_data_loader, test_data_loader,
                criterion=loss_txt2txt_multi, opt_level="O2",
                test_period=20, checkpoint_period=100,
                checkpoint_path="checkpoints",  # where to save the checkpoints
-               max_norm=0.25
+               max_norm=0.25, lm_only=False
                ):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -129,8 +129,10 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
     # print(train_data_loader)
     for train_batch_data in train_data_loader:
         # print("Start Batch Id: {} | Timestamp {}".format(batch_count, datetime.now().isoformat()))
-        loss = train_batch(model, optimizer, criterion, train_batch_data, batch_count, writer, max_norm)
-        print("END Batch Id: {} | loss: {:.3f}| Timestamp {}".format(batch_count, loss.item(), datetime.now().isoformat()))
+        loss = train_batch(model, optimizer, criterion, train_batch_data, batch_count,
+                           writer, max_norm, lm_only=lm_only)
+        print("END Batch Id: {} | loss: {:.3f}| Timestamp {}".format(
+            batch_count, loss.item(), datetime.now().isoformat()))
         if test_period > 0 and batch_count % test_period == 0:
             model.eval()
             # test on one batch ...
@@ -163,7 +165,7 @@ def train_main(model, optimizer, train_data_loader, test_data_loader,
         batch_count += 1
 
 
-def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_writer, max_norm=0.25):
+def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_writer, max_norm=0.25, lm_only=False):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     batch = []
@@ -179,24 +181,25 @@ def train_batch(model, optimizer, criterion, batch_data, batch_count, summary_wr
     else:
         raise NotImplementedError("input batch must have either 3 or 5 elements")
 
-    # train in the source, target, target_lang tuple
-    optimizer.zero_grad()
-    model.zero_grad()
-    out = model(source)
-    pred, pred_lang = out
-    loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
+    if not lm_only:
+        # train in the source, target, target_lang tuple
+        optimizer.zero_grad()
+        model.zero_grad()
+        out = model(source)
+        pred, pred_lang = out
+        loss, ind_losses = criterion(pred, source, pred_lang, target_lang)
 
-    # Write summaries and details on TensorBoard for the task
-    names = ['task_loss', 'lang_det_loss']
-    summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=batch_count)
-    for n, l in zip(names, ind_losses):
-        ldata = l.data.item()
-        summary_writer.add_scalar("Loss/train-{}".format(n), ldata, global_step=batch_count)
-    with amp.scale_loss(loss, optimizer) as scaled_loss:
-        scaled_loss.backward()
-    clip_grad_norm_(amp.master_params(optimizer), max_norm)
-    # loss.backward()
-    optimizer.step()
+        # Write summaries and details on TensorBoard for the task
+        names = ['task_loss', 'lang_det_loss']
+        summary_writer.add_scalar("Loss/train", loss.data.item(), global_step=batch_count)
+        for n, l in zip(names, ind_losses):
+            ldata = l.data.item()
+            summary_writer.add_scalar("Loss/train-{}".format(n), ldata, global_step=batch_count)
+        with amp.scale_loss(loss, optimizer) as scaled_loss:
+            scaled_loss.backward()
+        clip_grad_norm_(amp.master_params(optimizer), max_norm)
+        # loss.backward()
+        optimizer.step()
 
     if batch_len == 5:
         # also train in the noise_masked, noise_target, target_lang tuple

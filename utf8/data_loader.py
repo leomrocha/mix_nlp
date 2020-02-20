@@ -156,11 +156,11 @@ class Txt2TxtDataset(IterableDataset):
     def __init__(self, files, char2int_dict,
                  max_len=512, max_lang_len=60,  # max_len is the maximum length of the vector (input/output)
                  reserved_code_space=RESERVED_CODE_SPACE,
-                 dup_char_prob=0.005, del_char_prob=0.002, remove_diacritics_prob=0.2, case_noise_ratio=0.15,
+                 dup_char_prob=0.002, del_char_prob=0.001, remove_diacritics_prob=0.2, case_noise_ratio=0.05,
                  masking_ratio=0.15, masking_prob=0.8, random_token_prob=0.1,
                  separator=SEPARATOR, special_codes=SPECIAL_CODES,
                  nil=NUL, soh=SOH, stx=STX, etx=ETX, eot=EOT, unk=UNK, msk=MSK,
-                 add_noise_to_task=False, add_str_noise_to_input=True,
+                 add_noise_to_task=False, add_str_noise_to_input=True, lm_only=False,
                  dtype=int,
                  ):
         """
@@ -206,6 +206,7 @@ class Txt2TxtDataset(IterableDataset):
         self.mask = msk
         self.add_noise = add_noise_to_task
         self.add_str_noise = add_str_noise_to_input
+        self.lm_only = lm_only
         # verify that the special symbol codes are present in the mapping
         for c in special_codes:
             if c[0] not in self.char2int_dict:
@@ -275,7 +276,7 @@ class Txt2TxtDataset(IterableDataset):
         src_lang = languages.get(alpha_2=s_lang) if len(s_lang) == 2 else languages.get(alpha_3=s_lang)
         src_lang = src_lang.name
         input_txt = record['input'].strip()
-        if 'task' in record:  # a task is defined in the json definition
+        if 'task' in record and not self.lm_only:  # a task is defined in the json definition
             # has a given task name
             task_txt = record['task'].strip()
             output_txt = record['target'].strip()

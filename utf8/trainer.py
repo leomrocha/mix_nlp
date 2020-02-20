@@ -78,11 +78,11 @@ def train(ModelClass=None, chkp_fname=None):
     train_glue_files = [f for f in train_files if 'glue-' in f]
     dev_glue_files = [f for f in dev_files if 'glue-' in f]
 
-    train_all_files = [f for f in train_files if 'all' in f]
-    test_all_files = [f for f in dev_files if 'all' in f]
+    train_files = train_all_files = [f for f in train_files if 'all' in f]
+    test_files = test_all_files = [f for f in dev_files if 'all' in f]
 
-    train_files = [f for f in train_files if 'glue' not in f and 'all' not in f]
-    test_files = [f for f in dev_files if 'glue' not in f and 'all' not in f]
+    # train_files = [f for f in train_files if 'glue' not in f and 'all' not in f]
+    # test_files = [f for f in dev_files if 'glue' not in f and 'all' not in f]
 
     f = open(codebook_path, 'rb')
     codebook, char2int, int2char = pickle.load(f)
@@ -103,17 +103,21 @@ def train(ModelClass=None, chkp_fname=None):
     trainer_helper_main(model, train_files, test_files, codebook_path,
                         #      batch_size=10,
                         #      batch_size=175, # with opt_level=O1 this is the max
-                        batch_size=185,  # this one works with opt_level=O2
+                        # batch_size=180,  # this one works with opt_level=O2
+                        batch_size=50,
                         # optimizer='FusedAdam',  # Adam goes down really fast but then starts giving losses as NaN
                         optimizer='FusedLAMB',
                         # Fused lamb decreases slowly but steady and goes to better loss than Adam.
                         # NaN after 21730 batches, 13h30m36s
                         #     optimizer='FusedNovoGrad', # is definitely the slowest one at the beginning,
                         #     stabilizes at the worst value
-                        opt_level='O2',
+                        opt_level='O0',
                         # add_noise_to_task=False,
                         add_noise_to_task=True,
                         add_str_noise_to_input=True,
+                        # add_str_noise_to_input=False,
+                        # lm_only=False,
+                        lm_only=True,
                         test_period=-1,  # No tests, as I don't know why they are not called ... FIXME
                         #      checkpoint_period=50,
                         checkpoint_period=100,
@@ -125,5 +129,12 @@ if __name__ == "__main__":
     print("STARTING TRAINING")
     # train(ConvModel, chkp_fname=CHKP_FNAME)
     #
-    train(ConvModel)
+    # chkp = "amp-checkpoint_opt-O2_batch-9300_loss-0.534_2020-02-19T00:11:20.645807.pt"
+    # chkp = "amp-checkpoint_opt-O2_batch-300_loss-4.513_2020-02-19T11:07:05.171486.pt"
+    # chkp = "amp-checkpoint_opt-O2_batch-400_loss-0.900_2020-02-19T11:19:54.504612.pt"
+    # chkp = "selected/amp-checkpoint_opt-O2_batch-11200_loss-0.544_2020-02-19T18:08:42.975215.pt"
+    chkp = "selected/amp-checkpoint_opt-O2_batch-1400_loss-0.583_2020-02-19T19:46:15.258018.pt"
+    chkp_fname = os.path.join(CHKP_PATH, chkp)
+    train(ConvModel, chkp_fname)
+    # train(ConvModel)
     # train()
