@@ -91,6 +91,7 @@ def conllu_txt2txt(fname):
         except:
             pass
         try:
+            # TODO FIXME here something is wrong says head but appends to feats
             sen_head = ' '.join([t.head for t in sen._tokens])
             conll_feats.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
                                 'task': 'Universal Dependencies FEATS Tagging',
@@ -100,6 +101,7 @@ def conllu_txt2txt(fname):
         except:
             pass
         try:
+            # TODO FIXME here something is wrong says deprel but appends to head
             sen_deprel = ' '.join([t.deprel for t in sen._tokens])
             conll_head.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
                                'task': 'Universal Dependencies Head Tagging',
@@ -113,6 +115,7 @@ def conllu_txt2txt(fname):
             sen_feats = [t.feats for t in sen._tokens]
             feats = "|".join(e[0] + "=" + str(e[1]) for e in list(zip(sen_form, sen_feats))) \
                 .replace("{", "").replace("}", "")
+            # TODO FIXME here something is wrong says feats and form but appends to deprel
             conll_deprel.append({'src_lang': '{}'.format(src_lang), 'tgt_lang': '{}'.format(tgt_lang),
                                  'task': 'Universal Dependencies DEPREL Tagging',
                                  'input': sen.text,
@@ -142,6 +145,70 @@ def conllu_txt2txt(fname):
             f.flush()
 
 
+def conllu_separate_fields(fname):
+    """
+    Processes one conllu file
+    :param fname: absolute path to the conllu file
+    :return:
+    """
+    conll = pyconll.load_from_file(fname)
+    conll_upos = []
+    conll_xpos = []
+    conll_deprel = []
+
+    upos = []
+    xpos = []
+    deprel = []
+
+    upos_count = xpos_count = deprel_count = 0
+
+    src_lang = path_leaf(fname).split('_')[0]
+    for sen in conll:
+        try:
+            sen_upos = [t.upos for t in sen._tokens]
+            conll_upos.append({'src_lang': '{}'.format(src_lang),
+                               'input': sen.text, 'target': sen_upos
+                               })
+            upos.append(tuple(sen_upos))
+            upos_count += 1
+        except:
+            pass
+        try:
+            sen_xpos = [t.xpos for t in sen._tokens]
+            conll_xpos.append({'src_lang': '{}'.format(src_lang),
+                               'input': sen.text, 'target': sen_xpos
+                               })
+            xpos.append(tuple(sen_xpos))
+            xpos_count += 1
+        except:
+            pass
+        try:
+            sen_deprel = [t.deprel for t in sen._tokens]
+            conll_deprel.append({'src_lang': '{}'.format(src_lang),
+                                 'input': sen.text, 'target': sen_deprel
+                                 })
+            deprel.append(tuple(sen_deprel))
+            deprel_count += 1
+        except:
+            pass
+    # now save all the files
+    data = [
+        (conll_upos, "-PoS-set-upos.json"),
+        (conll_xpos, "-PoS-set-xpos.json"),
+        (conll_deprel, "-PoS-set-deprel.json"),
+    ]
+    data = [d for d in data if len(d[0]) > 0]
+
+    for lines, name in data:
+        jsn = json.dumps(lines)
+        saveto = fname.replace(".conllu", name)
+        with open(saveto, 'wb') as f:
+            # print("saving to {}".format(saveto))
+            f.write(jsn)
+            f.flush()
+    return (set(upos), upos_count), (set(xpos), xpos_count), (set(deprel), deprel_count)
+
+
 def _try_process(fname):
     try:
         conllu_txt2txt(fname)
@@ -161,3 +228,22 @@ def conllu_process(rootdir=CONLLU_BASEPATH, blacklist=BLACKLIST):
 
     with Pool(processes=cpu_count()) as pool:
         res = pool.map(_try_process, all_files)
+
+
+def _try_process_2list(fname):
+    try:
+        # return conllu_separate_fields(fname)
+        conllu_separate_fields(fname)
+    except Exception as e:
+        print("Error processing file: {} \nWith error: {}".format(fname, e))
+
+
+def conllu_process_2list(rootdir=CONLLU_BASEPATH, blacklist=BLACKLIST):
+    allconll = get_all_files_recurse(rootdir)
+    train, test, dev = filter_conllu_files(allconll, blacklist)
+    all_files = train + test + dev
+    # print(all_files)
+
+    with Pool(processes=cpu_count()) as pool:
+        res = pool.map(_try_process_2list, all_files)
+        # return res
