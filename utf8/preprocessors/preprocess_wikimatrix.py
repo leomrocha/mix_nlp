@@ -7,9 +7,11 @@ from pycountry import languages
 
 try:
     from utf8.utils import *
+    from utf8.blacklist import *
 except:
     # to solve issue with ipython executing this import
     from utils import *
+    from blacklist import *
 
 
 def _get_langs_from_fname(fname):
@@ -72,20 +74,6 @@ def wikimatrix_process(rootdir=WIKIMATRIX_BASEPATH):
     all_files = [f for f in filter_files(all_files, blacklist) if f.endswith(".tsv.gz")]
     with Pool(processes=cpu_count()) as pool:
         res = pool.map(_try_process, all_files)
-
-
-# list of blacklisted languages from the current research, this is due to resources availability only.
-# languages are chosen by: number of needed codepints, or by usage to reduce the number of input languages and files
-# in the training set and is mostrly arbitrary,
-MAYBE_BLACKLIST_LANGS = ['ceb', 'jv', 'ce', 'cv', 'dv', 'ht', 'hy', 'ku', 'mh', 'mi', 'ps', 'su', 'tk', 'ba', 'tg',
-                         'tt', 'ug'
-                         ]
-BLACKLIST_LANGS = ['ar', 'as', 'arz', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa', 'fo', 'gom', 'gu', 'hi', 'hu', 'id',
-                   'ilo', 'ja', 'ka', 'kk', 'ko', 'lmo', 'ml', 'mr', 'mwl', 'ne', 'pa', 'py', 'sh', 'si', 'ta', 'te',
-                   'th', 'tl', 'ur', 'vi',
-                   'wuu', 'yi', 'zb', 'zh'
-                   ] + MAYBE_BLACKLIST_LANGS
-
 
 def extract_charset(fname):
     try:
