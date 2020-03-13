@@ -3,7 +3,7 @@ Unicode symbol extraction from
 """
 import os
 
-PATH = '/home/leo/projects/Datasets/text/wiki-unicode/selected_sources'
+PATH = '/home/leo/projects/Datasets/text/wiki-unicode/selected_sources_small'
 # characters to exclude from
 # \t \n \r are already in the reserved space so we take them out of the selected charset
 EXCLUDE = "\t\n\r" \
@@ -37,7 +37,8 @@ MAYBE_EXCLUDE = "①②③④⑤⑥⑦⑧⑨⑩" \
                 "※‼‽‾‿⁀⁁⁂⁃⁄⁅⁆⁇⁈⁉⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞" \
                 "℀℁ℂ℃℄℅℆ℇ℈℉ℊℋℌℍℎℏℐℑℒℓ℔ℕ№℗℘ℙℚℛℜℝ℞℟" \
                 "℠℡™℣ℤ℥Ω℧ℨ℩KÅℬℭ℮ℯℰℱℲℳℴℵℶℷℸℹ℺℻ℼℽℾℿ⅀⅁⅂⅃⅄ⅅⅆⅇⅈⅉ⅊⅋⅌⅍ⅎ⅏" \
-                "⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅬⅭⅮⅯⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿↀↁↂↃↄↅↆↇↈ↉↊↋"
+                "¼½¾⅐⅑⅒⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞⅟ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫⅬⅭⅮⅯⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹⅺⅻⅼⅽⅾⅿↀↁↂↃↄↅↆↇↈ↉↊↋" \
+                # " '҈,  '҉,"  # ???
 
 # Symbols that were previously on the exclude list but after more text processing showed useful
 NOT_EXCLUDE = "←↑→↓↔↕↖↗↘↙"

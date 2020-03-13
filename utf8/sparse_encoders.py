@@ -15,6 +15,8 @@ import numpy as np
 import scipy as sp
 import scipy.sparse
 import time
+import unicodedata
+import torch.nn.functional as F
 
 try:
     from .utf8_encoder import *
@@ -320,6 +322,9 @@ def create_specific_redundant_codes():
     return codes
 
 
+# FIXME
+# The cycle code generator is WRONG and MUST be corrected, I'll just not use it for the moment and that's it.
+# WARNING this is NOT working, DO NOT USE
 def create_single_cycle_code(code_size, sizes):
     """
     :param code_size: number of elements in the code
@@ -331,6 +336,7 @@ def create_single_cycle_code(code_size, sizes):
         # compute index of the value '1'
         idx = np.arange(1, code_size + 1)
         idx = idx // s
+        # idx = idx % s
         # convert indices to dense binary matrix
         sc = np.zeros([code_size, s], dtype=bool)
         np.put(sc, idx, 1)
@@ -453,3 +459,155 @@ def create_codebook(charset, config=CONFIG,
         pickle.dump(codebook, f, pickle.HIGHEST_PROTOCOL)
 
     return codebook
+
+
+##############################################################
+# Last codes created that handle  compositional codes.
+# characters are
+
+def create_base_codebook(charset, special_codes=SPECIAL_CODES, code_size=2145 + RESERVED_CODE_SPACE,
+                         N=24, k=3,
+                         subcode_list=(3, 5, 11, 13),
+                         nul_row_is_zero=True, reserved_spaces=RESERVED_CODE_SPACE
+                         ):
+    """
+    :param special_codes: special codes mapping for the output dictionary
+    :param nul_row_is_zero: if the first row (the NUL one) should be zeros or the given code
+    :param reserved_spaces: the reserved spaces at the beginning of the codebook, 32 is the default as is the number of
+    control codes in utf-8. This later is used for remapping reserved SPECIAL_CODES, IS 32
+    :return:
+    """
+    # TODO this code is ugly but works wiht the right configuration, for the moment
+    # TODO make the configuration selection automatic from some config points and the charset
+    codes = [
+        sparse_code_Nk(code_size, N, k),
+        generate_multihot_prime_code(code_size, subcode_list),
+    ]
+
+    if nul_row_is_zero:
+        # assume nul row is the first one
+        for code in codes:
+            code[0, :] = 0
+    # create dict
+    char2int = OrderedDict()
+    int2char = OrderedDict()
+    # add the number of reserved chars at the beginning
+    for i in range(reserved_spaces):  # Warning, must be <128
+        # use utf-8 codepoints
+        c = str(bytes([i]), 'utf-8')
+        char2int[c] = i
+        # for the reverse mapping, to avoid issues on decoding, leave them unassigned UNASSIGNED='◁???▷'
+        # could use UNK but I'd rather have it be obviously different, leaving unassigned is an issue
+        int2char[i] = c  # UNASSIGNED
+    # overwrite the indices of the reverse mapping for the special codes
+    for c, i, c_alt in special_codes:
+        # Take into account this will duplicate the char2int mapping having 2 chars and the alternative code
+        # mapping to the same int
+        char2int[c] = i
+        # char2int[c_alt] = i
+        # but the int reverse index will be overwritten
+        int2char[i] = c
+
+    for i, c in enumerate(list(charset)):
+        # forward the index
+        j = i + reserved_spaces
+        char2int[c] = j
+        int2char[j] = c
+
+    # pickle all together
+    codebook = (codes, char2int, int2char)
+    #     with open(ofname, 'wb') as f:
+    #         print("saving file {} with codes.shape {} | char2int {} | int2char {}".format(
+    #             ofname, codes.shape, len(char2int), len(int2char)))
+    #         pickle.dump(codebook, f, pickle.HIGHEST_PROTOCOL)
+    return codebook
+
+
+# from
+# https://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
+
+def remove_accents(input_str):
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
+    return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
+
+
+def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
+    """
+    Converts a char sequence to a code dictionary for compositional code generation
+
+    The idea behind the scenes is to generate several codes from convolutional and sum of the characters.
+    The final code is decided by a post-processing step.
+
+    The codebook for the input should be able to encode ALL values given as input, in this idea there is no exception
+    handling and an exception is expected if a symbol is not present.
+
+    :param c:
+    :param codebook:
+    :param padded_codebook:
+    :param circ_padded_codebook:
+    :param char2int:
+    :return:
+    """
+    # convert to lowercase for the symbol representation
+    #
+    c_len = len(c)
+    c = unicodedata.normalize('NFKD', c)
+    nc = c.lower()
+    ac = remove_accents(nc)
+
+    nc_vecs = [codebook[char2int[i]] for i in nc]
+    ac_vecs = [codebook[char2int[i]] for i in ac]
+
+    # padded version to be able to convolve later in the right dimension
+    nc_padded = [padded_codebook[char2int[i]] for i in nc]
+    ac_padded = [padded_codebook[char2int[i]] for i in ac]
+    # circular padding for circular convolution
+    nc_cpadded = [circ_padded_codebook[char2int[i]] for i in nc]
+    ac_cpadded = [circ_padded_codebook[char2int[i]] for i in ac]
+
+    # circular convolution -> keeps order of elements in token
+    nc_conv = nc_padded[0] if len(nc_padded) > 0 else codebook[0]
+    if len(nc_padded) > 1:
+        for padded in nc_cpadded[1:]:
+            #         print(padded.shape, padded.view((1,1,-1)).shape, nc_conv.shape)
+            nc_conv = F.conv1d(padded.view((1, 1, -1)), nc_conv.view((1, 1, -1)))  # .view(padded.shape[0])
+
+    ac_conv = ac_padded[0] if len(ac_padded) > 0 else codebook[0]
+    if len(ac_conv) > 1:
+        for padded in ac_cpadded[1:]:
+            ac_conv = F.conv1d(padded.view((1, 1, -1)), ac_conv.view((1, 1, -1)))  # .view(padded.shape[0])
+
+    # vector sum, keeps the values only but don't keep order
+
+    nc_sum = nc_vecs[0]
+    for v in nc_vecs[1:]:
+        nc_sum = np.add(nc_sum, v)
+
+    ac_sum = ac_vecs[0] if len(ac_vecs) > 0 else codebook[0]
+    if len(ac_vecs) > 1:
+        for v in ac_vecs[1:]:
+            ac_sum = np.add(ac_sum, v)
+
+    # case representation -> dim = 3
+    islower_case = c.islower()
+    isupper_case = c.isupper()
+    notcase = not (c.lower() or c.upper())  # only true if is not all upper or lower
+    # starts with uppercase or not -> dim = 2 10|01
+    istitle = c.istitle()
+    # if all elements are numeric (does not understand decimals) -> dim = 3
+    isnum = c.isnumeric()  # takes into account other things like exponentials, japanese and chinese numeric characters
+    isalnum = c.isalnum()
+    isalpha = c.isalpha()
+
+    code_dict = {
+        'token': c,  # Normalized NFKD token
+        'complete_conv': nc_conv,
+        'non_accent_conv': ac_conv,
+        'complete_sum': nc_sum,
+        'non_accent_sum': ac_sum,
+        'casing': [isupper_case, islower_case, notcase, istitle, not istitle],
+        'alnum': [isnum, isalnum, isalpha],
+        'len': c_len,  # length
+    }
+
+    return code_dict
