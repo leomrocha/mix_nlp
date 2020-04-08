@@ -1,7 +1,7 @@
 # import numpy as np
-# from numpy import fft
+from numpy import fft
 # import torch
-from torch import fft
+# from torch import fft
 
 
 def fftshift(x):
