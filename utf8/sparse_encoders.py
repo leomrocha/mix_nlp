@@ -16,6 +16,8 @@ import scipy as sp
 import scipy.sparse
 import time
 import unicodedata
+import unidecode
+
 import torch.nn.functional as F
 
 try:
@@ -362,9 +364,9 @@ def create_codematrix_from_conf(config=[]):
     if len(config) <= 0:
         config = [
             # segment, number of code-points, (n,k), (coprimes), (cycles), dimension, sparcity
-            (2, NCODES[1], (24, 3), (3, 5, 11, 13), (6, 2), 64, 9/64),
+            (2, NCODES[1], (24, 3), (3, 5, 11, 13), (6, 2), 64, 9 / 64),
             # (2, 1916, (24, 3), (3, 5, 11, 13), (6, 2), 64, 9 / 64),
-            (3, NCODES[2], (37, 4), (11, 13, 19, 23), (11, 7, 4, 3), 128, 12/128),
+            (3, NCODES[2], (37, 4), (11, 13, 19, 23), (11, 7, 4, 3), 128, 12 / 128),
         ]
     codes = []
     print(col)
@@ -435,7 +437,7 @@ def create_codebook(charset, config=CONFIG,
         char2int[c] = i
         # for the reverse mapping, to avoid issues on decoding, leave them unassigned UNASSIGNED='◁???▷'
         # could use UNK but I'd rather have it be obviously different, leaving unassigned is an issue
-        int2char[i] = c   # UNASSIGNED
+        int2char[i] = c  # UNASSIGNED
     # overwrite the indices of the reverse mapping for the special codes
     for c, i, c_alt in special_codes:
         # Take into account this will duplicate the char2int mapping having 2 chars and the alternative code
@@ -465,25 +467,34 @@ def create_codebook(charset, config=CONFIG,
 # Last codes created that handle  compositional codes.
 # characters are
 
-def create_base_codebook(charset, special_codes=SPECIAL_CODES, code_size=2145 + RESERVED_CODE_SPACE,
+
+def create_base_codebook(charset, special_codes=SPECIAL_CODES, code_size=2145 + 33,
                          N=24, k=3,
-                         subcode_list=(3, 5, 11, 13),
+                         subcode_list=(2, 5, 9, 11, 13),  # subcode_list=(2,3,5,11,13),
+                         # cycle_list=(2, 3),  # (4,6,10,12),  # WARNING< DO NOT USE < bug in the cycle code generator
                          nul_row_is_zero=True, reserved_spaces=RESERVED_CODE_SPACE
                          ):
     """
+    :param charset:
+    :param special_codes:
+    :param code_size:
+    :param N:
+    :param k:
+    :param subcode_list: configuration for the prime configuration
     :param special_codes: special codes mapping for the output dictionary
     :param nul_row_is_zero: if the first row (the NUL one) should be zeros or the given code
     :param reserved_spaces: the reserved spaces at the beginning of the codebook, 32 is the default as is the number of
     control codes in utf-8. This later is used for remapping reserved SPECIAL_CODES, IS 32
     :return:
     """
-    # TODO this code is ugly but works wiht the right configuration, for the moment
+    # TODO this code is ugly but works with the right configuration, for the moment
     # TODO make the configuration selection automatic from some config points and the charset
     codes = [
         sparse_code_Nk(code_size, N, k),
         generate_multihot_prime_code(code_size, subcode_list),
-    ]
+        #         create_single_cycle_code(code_size, cycle_list),  # this code generator is only for redundancy
 
+    ]
     if nul_row_is_zero:
         # assume nul row is the first one
         for code in codes:
@@ -558,27 +569,31 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
     nc_vecs = [codebook[char2int[i]] for i in nc]
     ac_vecs = [codebook[char2int[i]] for i in ac]
 
-    # padded version to be able to convolve later in the right dimension
+    # padded version to be able to convolve later
     nc_padded = [padded_codebook[char2int[i]] for i in nc]
     ac_padded = [padded_codebook[char2int[i]] for i in ac]
-    # circular padding for circular convolution
+
     nc_cpadded = [circ_padded_codebook[char2int[i]] for i in nc]
     ac_cpadded = [circ_padded_codebook[char2int[i]] for i in ac]
 
     # circular convolution -> keeps order of elements in token
     nc_conv = nc_padded[0] if len(nc_padded) > 0 else codebook[0]
     if len(nc_padded) > 1:
-        for padded in nc_cpadded[1:]:
-            #         print(padded.shape, padded.view((1,1,-1)).shape, nc_conv.shape)
-            nc_conv = F.conv1d(padded.view((1, 1, -1)), nc_conv.view((1, 1, -1)))  # .view(padded.shape[0])
+        for cpadded in nc_cpadded[1:]:
+            olen = nc_conv.shape[0]  # original vector length before
+            nc_conv = np.convolve(nc_conv, cpadded, mode='same')
+            idx = (nc_conv.shape[0] - olen)//2
+            nc_conv = nc_conv if nc_conv.shape[0] == olen else nc_conv[idx:-idx]
 
     ac_conv = ac_padded[0] if len(ac_padded) > 0 else codebook[0]
     if len(ac_conv) > 1:
-        for padded in ac_cpadded[1:]:
-            ac_conv = F.conv1d(padded.view((1, 1, -1)), ac_conv.view((1, 1, -1)))  # .view(padded.shape[0])
+        for cpadded in ac_cpadded[1:]:
+            olen = ac_conv.shape[0]  # original vector length before
+            ac_conv = np.convolve(ac_conv, cpadded, mode='same')
+            idx = (nc_conv.shape[0] - olen)//2
+            ac_conv = ac_conv if ac_conv.shape[0] == olen else ac_conv[idx:-idx]
 
     # vector sum, keeps the values only but don't keep order
-
     nc_sum = nc_vecs[0]
     for v in nc_vecs[1:]:
         nc_sum = np.add(nc_sum, v)
@@ -605,9 +620,56 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
         'non_accent_conv': ac_conv,
         'complete_sum': nc_sum,
         'non_accent_sum': ac_sum,
-        'casing': [isupper_case, islower_case, notcase, istitle, not istitle],
+        # 'casing': [isupper_case, islower_case, notcase, istitle, not istitle],
+        'casing': [isupper_case, islower_case, notcase, istitle],
         'alnum': [isnum, isalnum, isalpha],
         'len': c_len,  # length
     }
 
     return code_dict
+
+
+CHAR_FPATH = "/home/leo/projects/Datasets/text/wiki-unicode/selected_sources_small/selected_chars.chars"
+
+
+def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_SPACE, size_factor=2):
+
+    # recover source of the chars to encode
+    with open(fpath, "r") as f:
+        chars = f.read()
+
+    # complete the symbols checking that there are upper and lowercase, ensure that they are encoded in
+    # the right normalization
+    first_symbols = []
+
+    for c in chars:
+        nc = unicodedata.normalize('NFKD', c)
+        for i in nc:
+            # be sure all cases are represented in the set
+            first_symbols.append(i.upper())
+            first_symbols.append(i.lower())
+            break
+    # sort and take out a few symbols that I don't want and couldn't set in the filter of the original file
+    first_symbols = sorted(list(set(first_symbols).difference(set(['҈',  '҉']))))
+    all_chars = sorted(list(set(first_symbols + list(unicodedata.normalize('NFKD', ''.join(chars))))))
+    # create the base codebook from which the composition will be created
+    codes, char2int, int2char = create_base_codebook(all_chars, code_size=len(all_chars) + reserved_codespace,
+                                                     N=24, k=3, subcode_list=(2, 5, 9, 11, 13)
+                                                     )
+    # create the base matrices for the compositions
+    codematrix = np.concatenate(codes, axis=1).astype('float16')
+    # padding for circular convolution
+    padded_codematrix = np.zeros((codematrix.shape[0], codematrix.shape[1] * size_factor)).astype('float16')
+    pad_dim = (padded_codematrix.shape[1] - codematrix.shape[1]) // 2
+    # pad_dim = codematrix.shape[1] // 2
+    padded_codematrix[:, pad_dim:-pad_dim] = codematrix
+    # circular padding to make circular convolution a reality with numpy.convolve
+    # is done here to do it only once and with matrix operations
+    circ_padded_codematrix = np.concatenate([padded_codematrix, padded_codematrix], axis=1)
+    # create now all the charcodes dictionaries from which all compositional codes will be derived
+    charcodes = [get_code_item(c, codematrix, padded_codematrix, circ_padded_codematrix, char2int) for c in chars]
+    # charcodes now can be used as a database
+
+    return charcodes
+
+
