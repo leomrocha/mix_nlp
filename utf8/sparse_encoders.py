@@ -665,6 +665,7 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # print("all_base_chars len = ", len(all_base_chars))
     # create the base codebook from which the composition will be created
     codes, char2int, int2char = create_base_codebook(all_base_chars, code_size=len(all_base_chars) + reserved_codespace,
+                                                     # N=24, k=3, subcode_list=(2, 5, 7, 11, 13)
                                                      N=22, k=3, subcode_list=(2, 5, 7, 11, 13)
                                                      )
     # print("all_base_chars len = ", len(all_base_chars))
