@@ -10,7 +10,7 @@ CHAR_MASK = '▒'  # To use as a mask for a character
 # ◆◇◈◉◊○◌◍◎●◐◑◒◓
 # Begining Control Codes used for special purposes
 RESERVED_CODE_SPACE = 33  # the n# 32 is the space
-# \t, \r, \n and ' ' (space) are in this space, NOT TO OVERWRITE
+# \t, \r, \n and ' ' (space) are in this space, DO NOT OVERWRITE
 NUL = ('◌', 0x00, '◁NUL▷')  # NUL control code -> for Padding for example
 SOH = ('◀', 0x01, '◁SOH▷')  # SOH control code (Start of Heading) -> example: to indicate a task description or tgt lang
 STX = ('◂', 0x02, '◁STX▷')  # STX control code (Start of Text) -> start of text
@@ -22,4 +22,17 @@ MSK = ('▒', 0x1A, '◁MSK▷')  # Use this instead as mask for a single charac
 UNASSIGNED = '◁???▷'
 
 SPECIAL_CODES = (NUL, UNK, SOH, STX, ETX, EOT, MSK)
-# SPECIAL_CODES = (NUL, UNK, SOH, STX, ETX, EOT, SUB, MSK)
+
+SPECIAL_CODES_CHARS = [i[0] for i in SPECIAL_CODES]
+
+
+# using a function to avoid namespace pollution
+def set_special_codes():
+    # make sure that all the points are represented here
+    for i in range(RESERVED_CODE_SPACE):  # Warning, must be <128
+        # use utf-8 codepoints
+        c = str(bytes([i]), 'utf-8')
+        SPECIAL_CODES_CHARS.append(c)
+
+
+set_special_codes()

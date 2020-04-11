@@ -519,7 +519,7 @@ def create_base_codebook(charset, special_codes=SPECIAL_CODES, code_size=2145 + 
         # but the int reverse index will be overwritten
         int2char[i] = c
 
-    for i, c in enumerate(list(charset)):
+    for i, c in enumerate(list(set(charset))):
         # forward the index
         j = i + reserved_spaces
         char2int[c] = j
@@ -579,19 +579,20 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
     # circular convolution -> keeps order of elements in token
     nc_conv = nc_padded[0] if len(nc_padded) > 0 else codebook[0]
     if len(nc_padded) > 1:
+        #         print(nc_conv.shape)
         for cpadded in nc_cpadded[1:]:
+            #             print(c, padded.shape, nc_conv.shape)
             olen = nc_conv.shape[0]  # original vector length before
             nc_conv = np.convolve(nc_conv, cpadded, mode='same')
-            idx = (nc_conv.shape[0] - olen)//2
-            nc_conv = nc_conv if nc_conv.shape[0] == olen else nc_conv[idx:-idx]
+            #
+            nc_conv = nc_conv if nc_conv.shape[0] == olen else nc_conv[olen // 2:-olen // 2]
 
     ac_conv = ac_padded[0] if len(ac_padded) > 0 else codebook[0]
     if len(ac_conv) > 1:
         for cpadded in ac_cpadded[1:]:
             olen = ac_conv.shape[0]  # original vector length before
             ac_conv = np.convolve(ac_conv, cpadded, mode='same')
-            idx = (nc_conv.shape[0] - olen)//2
-            ac_conv = ac_conv if ac_conv.shape[0] == olen else ac_conv[idx:-idx]
+            ac_conv = ac_conv if ac_conv.shape[0] == olen else ac_conv[olen // 2:-olen // 2]
 
     # vector sum, keeps the values only but don't keep order
     nc_sum = nc_vecs[0]
@@ -610,7 +611,7 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
     # starts with uppercase or not -> dim = 2 10|01
     istitle = c.istitle()
     # if all elements are numeric (does not understand decimals) -> dim = 3
-    isnum = c.isnumeric()  # takes into account other things like exponentials, japanese and chinese numeric characters
+    isnum = c.isnumeric()  # takes into account other things like exponents, japanese and chinese numeric characters
     isalnum = c.isalnum()
     isalpha = c.isalpha()
 
@@ -620,7 +621,6 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
         'non_accent_conv': ac_conv,
         'complete_sum': nc_sum,
         'non_accent_sum': ac_sum,
-        # 'casing': [isupper_case, islower_case, notcase, istitle, not istitle],
         'casing': [isupper_case, islower_case, notcase, istitle],
         'alnum': [isnum, isalnum, isalpha],
         'len': c_len,  # length
@@ -637,25 +637,37 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # recover source of the chars to encode
     with open(fpath, "r") as f:
         chars = f.read()
-
     # complete the symbols checking that there are upper and lowercase, ensure that they are encoded in
     # the right normalization
+    all_chars = []
     first_symbols = []
-
+    # print("chars len = ", len(chars))
+    # print("1 first_symbols len = ", len(first_symbols))
     for c in chars:
+        # need to normalize the basic code to avoid later normalization mismatch with NFKD
+        cc = unicodedata.normalize('NFKC', c)
+        all_chars.append(cc.upper())
+        all_chars.append(cc.lower())
         nc = unicodedata.normalize('NFKD', c)
         for i in nc:
             # be sure all cases are represented in the set
             first_symbols.append(i.upper())
             first_symbols.append(i.lower())
             break
+    # print("1 all_chars len = ", len(all_chars))
+    all_chars = sorted(list(set(all_chars)))
+    # print("2 all_chars len = ", len(all_chars))
+    # print("2 first_symbols len = ", len(first_symbols))
     # sort and take out a few symbols that I don't want and couldn't set in the filter of the original file
     first_symbols = sorted(list(set(first_symbols).difference(set(['҈',  '҉']))))
-    all_chars = sorted(list(set(first_symbols + list(unicodedata.normalize('NFKD', ''.join(chars))))))
+    # print("3 first_symbols len = ", len(first_symbols))
+    all_base_chars = sorted(list(set(first_symbols + list(unicodedata.normalize('NFKD', ''.join(chars))))))
+    # print("all_base_chars len = ", len(all_base_chars))
     # create the base codebook from which the composition will be created
-    codes, char2int, int2char = create_base_codebook(all_chars, code_size=len(all_chars) + reserved_codespace,
-                                                     N=24, k=3, subcode_list=(2, 5, 9, 11, 13)
+    codes, char2int, int2char = create_base_codebook(all_base_chars, code_size=len(all_base_chars) + reserved_codespace,
+                                                     N=22, k=3, subcode_list=(2, 5, 7, 11, 13)
                                                      )
+    # print("all_base_chars len = ", len(all_base_chars))
     # create the base matrices for the compositions
     codematrix = np.concatenate(codes, axis=1).astype('float16')
     # padding for circular convolution
@@ -667,9 +679,39 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # is done here to do it only once and with matrix operations
     circ_padded_codematrix = np.concatenate([padded_codematrix, padded_codematrix], axis=1)
     # create now all the charcodes dictionaries from which all compositional codes will be derived
-    charcodes = [get_code_item(c, codematrix, padded_codematrix, circ_padded_codematrix, char2int) for c in chars]
+    charcodes = [get_code_item(c, codematrix, padded_codematrix, circ_padded_codematrix, char2int) for c in all_chars]
+    # print("charcodes len = ", len(charcodes))
     # charcodes now can be used as a database
-
     return charcodes
+
+
+def charcodes_dict2codebook(charcodes, fields=('complete_conv', 'non_accent_sum', 'casing', 'alnum'), dtype='int8'):
+    """
+    Converts a list of charcode dicts to a codebook and assignation mapping dicts for the encoding to be used
+
+    :param charcodes: a list containing the charcodes with the format output of get_code_item function
+    :param fields: the fields to use for the final codebook charcode MUST be the among the following fields:
+        'complete_conv', 'non_accent_conv', 'complete_sum', 'non_accent_sum', 'casing', 'alnum', 'len'
+    :param dtype: datatype for the output codebook. Default int8 as we don't need more for small convolutions
+
+    :return: a tuple (codebook, symbol2int, int2symbol)
+    """
+    charcodes = sorted(charcodes, key=lambda k: k['token'])
+    codes = []
+    symbol2int = OrderedDict()
+    int2symbol = OrderedDict()
+    for i in range(len(charcodes)):
+        c = charcodes[i]
+        symbol = c['token']
+        symbol2int[symbol] = i
+        int2symbol[i] = symbol
+        vecs = []
+        for f in fields:
+            vecs.append(np.array(c[f], dtype=dtype))
+        code = np.concatenate(vecs)
+        codes.append(code)
+
+    codes = np.stack(codes)
+    return codes, symbol2int, int2symbol
 
 
