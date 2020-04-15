@@ -663,12 +663,14 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # print("3 first_symbols len = ", len(first_symbols))
     all_base_chars = sorted(list(set(first_symbols + list(unicodedata.normalize('NFKD', ''.join(chars))))))
     # print("all_base_chars len = ", len(all_base_chars))
+
     # create the base codebook from which the composition will be created
     codes, char2int, int2char = create_base_codebook(all_base_chars, code_size=len(all_base_chars) + reserved_codespace,
                                                      # N=24, k=3, subcode_list=(2, 5, 7, 11, 13)
                                                      N=22, k=3, subcode_list=(2, 5, 7, 11, 13)
                                                      )
     # print("all_base_chars len = ", len(all_base_chars))
+
     # create the base matrices for the compositions
     codematrix = np.concatenate(codes, axis=1).astype('float16')
     # padding for circular convolution
@@ -679,6 +681,7 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # circular padding to make circular convolution a reality with numpy.convolve
     # is done here to do it only once and with matrix operations
     circ_padded_codematrix = np.concatenate([padded_codematrix, padded_codematrix], axis=1)
+
     # create now all the charcodes dictionaries from which all compositional codes will be derived
     charcodes = [get_code_item(c, codematrix, padded_codematrix, circ_padded_codematrix, char2int) for c in all_chars]
     # print("charcodes len = ", len(charcodes))
