@@ -16,5 +16,23 @@ BLACKLIST_LANGS = ['ar', 'as', 'arz', 'azb', 'bn', 'bp', 'ckb', 'eo', 'ew', 'fa'
                    'wuu', 'yi', 'zb', 'zh'
                    ] + MAYBE_BLACKLIST_LANGS + EXTRA_BLACKLIST
 
+# blacklists to reduce even more the number of languages, latin is left because will be used
+# FIRST to train to set a learning baseline ...
+# base, greek, old french and ancient greek will be nice too if I manage to transliterate it
+# extra blacklisting to reduce the number of alphabets used and other low resource and other non-official EU languages
+MORE_EXTRA_BLACKLIST = ["af", "gsw", "he",
+                        "ca", "cy", "eu", "ga", "gd", "gl", "cr", "hy", "tr",
+                       ]
+
+ANCIENT_LANGS = ["la", "grc", "fro"]  # latin, ancient greek, old french -> base for MANY languages
+GREEK_BLACKLIST = ["el", "grc"]
+
+# this means mainly taking out cyrillic scripts ... but bulgarian IS in the EU and uses
+# cyrillic so ... what should I do?
+CYRILLIC_BLACKLIST = ["be", "bg", "he", "ru", "sr", "uk"]
+
+
+BLACKLIST_LANGS = BLACKLIST_LANGS + MORE_EXTRA_BLACKLIST + CYRILLIC_BLACKLIST + GREEK_BLACKLIST
+
 BLACKLIST_LANGS = sorted(list(set(BLACKLIST_LANGS)))
 
