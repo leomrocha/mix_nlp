@@ -23,21 +23,79 @@ except:
 
 
 class ReZeroTransformerModel(nn.Module):
-    def __init__(self, d_model=512, n_head=8, n_hid=2048, n_layers=6, dropout=0.1, activation='relu'):
+    def __init__(self,
+                 embed_module, decoder_module,
+                 d_model=512, n_head=8, n_hid=2048, n_layers=6, dropout=0.1, activation='relu'
+                 ):
         super(ReZeroTransformerModel, self).__init__()
 
-        self.embeds = nn.Embedding()
-        # TODO here the code for deciding which variant to use, fixed embedding or NOT
+        self.embeds = embed_module
         self.transformer = ReZeroTransformerModule(d_model=d_model, n_head=n_head, n_hid=n_hid,
-                                         n_layers=n_layers, dropout=dropout, activation=activation)
-        self.decoder =
-        # TODO here do the decision on the variant to use for decoding:
+                                                   n_layers=n_layers, dropout=dropout, activation=activation)
+        self.decoder = decoder_module
         # one-hot, faiss
+
+    def froze_embed_train(self, mode=True):
+        super().train(mode)
+        self.embeds.requires_grad_(False)
 
     def forward(self, x):
         ebd = self.embeds(x)
         code = self.transformer(ebd)
         dec = self.decoder(code)
+        return dec
+
+
+class ReZeroTransformerBaseline(nn.Module):
+    def __init__(self, embed_shape,
+                 d_model=384, n_head=8, n_hid=1024, n_layers=5, dropout=0.1, activation='relu'
+                 ):
+        self.embeds = nn.Embedding(*embed_shape)
+        self.transformer = ReZeroTransformerModule(d_model=d_model, n_head=n_head, n_hid=n_hid,
+                                                   n_layers=n_layers, dropout=dropout, activation=activation)
+        self.decoder = nn.Linear(embed_shape[1], embed_shape[0])
+        self.log_softmax = nn.LogSoftmax(dim=embed_shape[0])
+
+    def forward(self, x):
+        ebd = self.embeds(x)
+        ebd = ebd.transpose(1, 2).contiguous()
+        code = self.transformer(ebd)
+        code = code.transpose(1, 2).contiguous()
+        dec = self.decoder(code)
+        dec = self.log_softmax(dec)
+        return dec
+
+
+class ReZeroTransformerFixedEncoding(nn.Module):
+    def __init__(self, embed_matrix, embed_hidd_dim=2048, embed_dense_dim=384,
+                 d_model=384, n_head=8, n_hid=1024, n_layers=5, dropout=0.1, activation='relu'
+                 ):
+        embed_shape = embed_matrix.shape
+        self.embeds = nn.Embedding(*embed_shape)
+        self.        embeds.weight.data.copy_(torch.from_numpy(embed_matrix))
+        self.embeds.requires_grad_(False)
+        self.lin_dense = nn.Sequential(
+            weight_norm(nn.Linear(embed_shape[1], embed_hidd_dim)),
+            weight_norm(nn.Linear(embed_hidd_dim, embed_dense_dim)),
+        )
+        self.encoder = nn.Sequential(self.embeds, self.lin_dense)
+
+        self.transformer = ReZeroTransformerModule(d_model=d_model, n_head=n_head, n_hid=n_hid,
+                                                   n_layers=n_layers, dropout=dropout, activation=activation)
+        self.decoder = nn.Linear(embed_dense_dim, embed_shape[0])
+        self.log_softmax = nn.LogSoftmax(dim=embed_shape[0])
+
+    def train(self, mode=True):
+        super().train(mode)
+        self.embeds.requires_grad_(False)
+
+    def forward(self, x):
+        ebd = self.encoder(x)
+        ebd = ebd.transpose(1, 2).contiguous()
+        code = self.transformer(ebd)
+        code = code.transpose(1, 2).contiguous()
+        dec = self.decoder(code)
+        dec = self.log_softmax(dec)
         return dec
 
 
@@ -52,7 +110,6 @@ class ConvModel(nn.Module):
                  dec_input_size=192, segments=2, N=24, k=3, coprimes=(3, 5, 11, 13), cycles=(4, 6, 8, 10, 12),
                  dec_use_transformer=True, transformer_ff_size=1024, dec_activation='gelu', dec_dropout=0.1
                  ):
-
         super(ConvModel, self).__init__()
         self.seq_len = seq_len
         self.lang_seq_len = lang_seq_len
