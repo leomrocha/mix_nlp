@@ -22,6 +22,25 @@ except:
     from sparse_decoders import UTF8SparseDecoderModule
 
 
+class ReZeroTransformerModel(nn.Module):
+    def __init__(self, d_model=512, n_head=8, n_hid=2048, n_layers=6, dropout=0.1, activation='relu'):
+        super(ReZeroTransformerModel, self).__init__()
+
+        self.embeds = nn.Embedding()
+        # TODO here the code for deciding which variant to use, fixed embedding or NOT
+        self.transformer = ReZeroTransformerModule(d_model=d_model, n_head=n_head, n_hid=n_hid,
+                                         n_layers=n_layers, dropout=dropout, activation=activation)
+        self.decoder =
+        # TODO here do the decision on the variant to use for decoding:
+        # one-hot, faiss
+
+    def forward(self, x):
+        ebd = self.embeds(x)
+        code = self.transformer(ebd)
+        dec = self.decoder(code)
+        return dec
+
+
 class ConvModel(nn.Module):
     def __init__(self, embed_matrix,
                  seq_len=512, lang_seq_len=60, vocab_size=1871,

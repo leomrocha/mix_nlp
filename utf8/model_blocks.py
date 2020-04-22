@@ -2,13 +2,43 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from torch.nn.modules.transformer import TransformerEncoder, TransformerEncoderLayer
+from torch.nn.modules.transformer import  TransformerEncoder, TransformerDecoder, TransformerEncoderLayer
 from torch.nn.utils import weight_norm
+from torch.nn.init import xavier_uniform_
 try:
     from .tools import get_activation_fn
 except:
     # to solve issue with ipython executing this import
     from tools import get_activation_fn
+
+from rezero.transformer import *
+
+
+class ReZeroTransformerModule(nn.Module):
+    """
+    Transformer Encoder-Decoder Module on ReZero variant
+    """
+    def __init__(self, d_model=512, n_head=8, n_hid=2048, n_layers=6, dropout=0.1, activation='relu'):
+        super(ReZeroTransformerModule, self).__init__()
+        encoder_layer = RZTXEncoderLayer(d_model=d_model, nhead=n_head, dim_feedforward=n_hid,
+                                         dropout=dropout, activation=activation)
+        decoder_layer = RZTXDecoderLayer(d_model=d_model, nhead=n_head, dim_feedforward=n_hid,
+                                         dropout=dropout, activation=activation)
+        self.encoder = TransformerEncoder(encoder_layer, n_layers, norm=None)
+        self.decoder = TransformerDecoder(decoder_layer, n_layers, norm=None)
+
+        self._reset_parameters()
+
+    def forward(self, x):
+        enc = self.encoder(x)
+        dec = self.decoder(enc)
+        return dec
+
+    def _reset_parameters(self):
+        r"""Initiate parameters in the transformer model."""
+        for p in self.parameters():
+            if p.dim() > 1:
+                xavier_uniform_(p)
 
 
 class Conv1DBlock(nn.Module):
