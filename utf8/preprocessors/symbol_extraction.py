@@ -43,6 +43,10 @@ MAYBE_EXCLUDE = "①②③④⑤⑥⑦⑧⑨⑩" \
 # Symbols that were previously on the exclude list but after more text processing showed useful
 NOT_EXCLUDE = "←↑→↓↔↕↖↗↘↙"
 
+# there are 107 letters, 52 diacritics and four prosodic marks in the IPA
+# this should be 163 characters
+PHONETIC = ""
+
 
 def extract_chars(fname, save_output=False):
     with open(fname, 'r') as f:
