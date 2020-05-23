@@ -3,7 +3,7 @@ from multiprocessing import Pool, cpu_count
 import gzip
 import os
 import orjson as json
-from pycountry import languages
+# from pycountry import languages
 
 try:
     from utf8.utils import *

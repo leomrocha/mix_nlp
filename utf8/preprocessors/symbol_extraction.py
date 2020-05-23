@@ -50,7 +50,7 @@ PHONETIC = ""
 
 def extract_chars(fname, save_output=False):
     with open(fname, 'r') as f:
-        chars = set(['\n', '\t', ' '])
+        chars = {'\n', '\t', ' '}
         txt = f.read()
         for c in txt:
             chars.add(c)
