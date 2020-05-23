@@ -2,9 +2,11 @@
 
 Based on https://bitbucket.org/c-w/gutenberg/
 copied from Gist: https://gist.github.com/andreasvc/b3b4189120d84dec8857
+and modified for my own needs to use it as API and
 
->>> md = readmetadata()
->>> md[123]
+> md = readmetadata(...)
+> md[123]
+
 {'LCC': {'PS'},
  'author': u'Burroughs, Edgar Rice',
  'authoryearofbirth': 1875,
@@ -33,6 +35,8 @@ import re
 import gzip
 import tarfile
 import urllib
+from urllib.request import urlretrieve
+
 import xml.etree.cElementTree as ElementTree
 try:
 	import cPickle as pickle
@@ -49,7 +53,7 @@ NS = dict(
 		dc='http://purl.org/dc/terms/',
 		dcam='http://purl.org/dc/dcam/',
 		rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-LINEBREAKRE = re.compile(ur'[ \t]*[\n\r]+[ \t]*')
+LINEBREAKRE = re.compile(r'[ \t]*[\n\r]+[ \t]*')
 ETEXTRE = re.compile(r'''
 	e(text|b?ook)
 	\s*
@@ -59,7 +63,7 @@ ETEXTRE = re.compile(r'''
 	''', re.IGNORECASE | re.VERBOSE)
 
 
-def readmetadata():
+def readmetadata(rdftar=RDFFILES, rdfurl=RDFURL, picklefile=PICKLEFILE):
 	"""Read/create cached metadata dump of Gutenberg catalog.
 
 	Returns:
@@ -82,31 +86,31 @@ def readmetadata():
 	Fields that are not part of the metadata are set to None.
 	http://www.gutenberg.org/wiki/Gutenberg:Help_on_Bibliographic_Record_Page
 	"""
-	if os.path.exists(PICKLEFILE):
-		metadata = pickle.load(gzip.open(PICKLEFILE, 'rb'))
+	if os.path.exists(picklefile):
+		metadata = pickle.load(gzip.open(picklefile, 'rb'))
 	else:
 		metadata = {}
-		for xml in getrdfdata():
+		for xml in getrdfdata(rdftar, rdfurl):
 			ebook = xml.find(r'{%(pg)s}ebook' % NS)
 			if ebook is None:
 				continue
 			result = parsemetadata(ebook)
 			if result is not None:
 				metadata[result['id']] = result
-		pickle.dump(metadata, gzip.open(PICKLEFILE, 'wb'), protocol=-1)
+		pickle.dump(metadata, gzip.open(picklefile, 'wb'), protocol=-1)
 	return metadata
 
 
-def getrdfdata():
+def getrdfdata(rdftar=RDFFILES, rdfurl=RDFURL):
 	"""Downloads Project Gutenberg RDF catalog.
 
 	Yields:
 		xml.etree.ElementTree.Element: An etext meta-data definition.
 
 	"""
-	if not os.path.exists(RDFFILES):
-		_, _ = urllib.urlretrieve(RDFURL, RDFFILES)
-	with tarfile.open(RDFFILES) as archive:
+	if not os.path.exists(rdftar):
+		_, _ = urlretrieve(rdfurl, rdftar)
+	with tarfile.open(rdftar) as archive:
 		for tarinfo in archive:
 			yield ElementTree.parse(archive.extractfile(tarinfo))
 
@@ -214,19 +218,20 @@ def etextno(lines):
 
 
 def fixsubtitles(title):
-	"""Introduce any subtitle with (semi)colons instead of newlines.
+	"""
+	Introduce any subtitle with (semi)colons instead of newlines.
 
 	The first subtitle is introduced with a colon, the rest with semicolons.
-
-	>>> fixsubtitles(u'First Across ...\r\nThe Story of ... \r\n'
-	... 'Being an investigation into ...')
-	u'First Across ...: The Story of ...; Being an investigation into ...'"""
+	fixsubtitles(r"First Across ...\r\nThe Story of ... \r\n"... 'Being an investigation into ...')
+	u'First Across ...: The Story of ...; Being an investigation into ...'
+	"""
 	tmp = LINEBREAKRE.sub(': ', title, 1)
 	return LINEBREAKRE.sub('; ', tmp)
 
 
 def safeunicode(arg, *args, **kwargs):
 	"""Coerce argument to unicode, if it's not already."""
-	return arg if isinstance(arg, unicode) else unicode(arg, *args, **kwargs)
+	return arg if isinstance(arg, str) else str(arg, *args, **kwargs)
+
 
 __all__ = ['readmetadata']
