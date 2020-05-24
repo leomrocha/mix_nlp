@@ -1,5 +1,6 @@
 import os
 import ntpath
+# import pathlib  # TODO replace ntpath for pathlib
 
 
 # from https://stackoverflow.com/questions/8384737/extract-file-name-from-path-no-matter-what-the-os-path-format
