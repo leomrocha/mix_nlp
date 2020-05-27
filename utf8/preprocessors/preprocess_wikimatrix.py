@@ -2,7 +2,10 @@ from multiprocessing import Pool, cpu_count
 
 import gzip
 import os
-import orjson as json
+try:
+    import orjson as json
+except:
+    import json
 # from pycountry import languages
 
 try:

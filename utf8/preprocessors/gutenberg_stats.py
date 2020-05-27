@@ -8,11 +8,16 @@ from pathlib import Path  # to deal with file paths, naming and other things in 
 import numpy as np
 # NLP imports
 import spacy
-from spacy.attrs import ORTH,NORM,TAG
+from spacy.attrs import ORTH, NORM, TAG
 # language imports
 from pycountry import languages  # to deal with language naming conventions
 # multiprocessing imports
 from multiprocessing import Pool, cpu_count
+
+try:
+    import orjson as json
+except:
+    import json
 
 # local tools imports
 # gutenberg project metadata parsing
@@ -85,15 +90,6 @@ def get_nlp_resource(metainfo):
     nlp = spacy.load(lang)
     return
 
-
-def process_gutenberg(filelist):
-    with Pool(processes=cpu_count()) as pool:
-        pass
-        # res = pool.map(extract_charset, all_files)
-
-
-# get next file
-
 # count total length of the text
 # Separate paragraphs I'll do it by at least a \n\n sequence (might not work for every language .. (I do care but I cant, so somebody that knows the language should correct those)
 # count the number of paragraphs ... ?
@@ -114,7 +110,19 @@ def process_gutenberg(filelist):
 # for the moment I don't care as I'm trying to make it work and will see later.
 # Nevertheless seems that most of the time is in IO operations
 
-def process_file(fname, rfd_meta):
+def _get_stats(arr):
+    stats = {'total_count': np.sum(arr),
+             'min': np.min(arr),
+             'max': np.max(arr),
+             'mean': np.mean(arr),
+             'median': np.median(arr),
+             'std': np.std(arr)
+             }
+    return stats
+
+
+# this function already works but there is a lot to cleanup and improve
+def process_gutenberg_file(fname, rfd_meta):
     # Gutenberg file id
     gut_id = int(get_file_id(fname))
     # meta information extracted from the Gutenber RFD database -> warning is around 1GB the DB
@@ -126,6 +134,7 @@ def process_file(fname, rfd_meta):
     # TODO FIXME, this is an issue with current spacy install not loading correctly ??
     import en_core_web_md
     nlp = en_core_web_md.load()
+
     # load and clean the file, asume zip as compressing format
     pth = Path(fname)  #
     ftxt = pth.name.replace(".zip", ".txt")  # inside gutenberg zip there should be a .txt file with the same name
@@ -136,17 +145,16 @@ def process_file(fname, rfd_meta):
     doc = nlp(txt)  # SpaCy tokenization
 
     stats_data = {'total_char_count': len(txt)}
-
+    # FIXME, the count can be by actual words and not only tokens too, doing an exclude of many things as in here:
+    #
     ocnt = doc.count_by(ORTH)
-    tokens = token_count = {doc.vocab.strings[k]: v for k, v in reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
+    words = [token.text for token in doc if not token.is_stop and not token.is_punct and not token.is_space]
+
+    tokens = token_count = {doc.vocab.strings[k]: v for k, v in
+                            reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
     token_lens = np.array([len(k) for k in token_count.keys()])
 
-    token_stats = {'min': np.min(token_lens),
-       'max': np.max(token_lens),
-       'mean': np.mean(token_lens),
-       'median': np.median(token_lens),
-       'std': np.std(token_lens)
-       }
+    token_stats = _get_stats(token_lens)
 
     sen_charcount = []  # sentence length in characters
     sen_tok_count = []  # sentence length in tokens
@@ -167,18 +175,8 @@ def process_file(fname, rfd_meta):
     sen_charcount = np.array(sen_charcount)
     sen_tok_count = np.array(sen_tok_count)
     # np.min(), np.max(), np.mean(), np.median(), np.std()
-    sen_stats['char_stats'] = {'min': np.min(sen_charcount),
-                               'max': np.max(sen_charcount),
-                               'mean': np.mean(sen_charcount),
-                               'median': np.median(sen_charcount),
-                               'std': np.std(sen_charcount)
-                               }
-    sen_stats['token_stats'] = {'min': np.min(sen_tok_count),
-                                'max': np.max(sen_tok_count),
-                                'mean': np.mean(sen_tok_count),
-                                'median': np.median(sen_tok_count),
-                                'std': np.std(sen_tok_count)
-                                }
+    sen_stats['char_stats'] = _get_stats(sen_charcount)
+    sen_stats['token_stats'] = _get_stats(sen_tok_count)
 
     stats_data['sentences'] = sen_stats
     stats_data['token_lengths'] = token_lens
@@ -210,38 +208,54 @@ def process_file(fname, rfd_meta):
     para_tok_lens = np.array(para_tok_lens)
     para_sen_lens = np.array(para_sen_lens)
 
-    main_para_char_stats = {'min': np.min(para_char_lens),
-                            'max': np.max(para_char_lens),
-                            'mean': np.mean(para_char_lens),
-                            'median': np.median(para_char_lens),
-                            'std': np.std(para_char_lens)
-                            }
-    main_para_tok_stats = {'min': np.min(para_tok_lens),
-                           'max': np.max(para_tok_lens),
-                           'mean': np.mean(para_tok_lens),
-                           'median': np.median(para_tok_lens),
-                           'std': np.std(para_tok_lens)
-                           }
-    main_para_sen_stats = {'min': np.min(para_sen_lens),
-                           'max': np.max(para_sen_lens),
-                           'mean': np.mean(para_sen_lens),
-                           'median': np.median(para_sen_lens),
-                           'std': np.std(para_sen_lens)
-                           }
+    main_para_char_stats = _get_stats(para_char_lens)
+    main_para_tok_stats = _get_stats(para_tok_lens)
+    main_para_sen_stats = _get_stats(para_sen_lens)
+
     para_stats = {'char_stats': main_para_char_stats,
                   'token_stats': main_para_tok_stats,
                   'sentence_stats': main_para_sen_stats}
 
     stats = {'char_count': len(txt),
-             'sentence_count': len(list(doc.sents)),
-             'total_token_count': sum(token_count.values()),
-             'different_token_count': len(list(token_count.keys())),
-             'token_length_stats': token_stats,
-             'sentence_char_stats': sen_stats['char_stats'],
-             'sentence_token_stats': sen_stats['token_stats'],
+             'tokens': {'total_token_count': sum(token_count.values()),
+                        'different_token_count': len(list(token_count.keys())),
+                        'token_length_stats': token_stats,
+                        'total_word_count': len(words),
+                        'different_word_count': len(set(words)),
+                        },
+             'sentences': {'sentence_count': len(list(doc.sents)),
+                           'char_stats': sen_stats['char_stats'],
+                           'token_stats': sen_stats['token_stats']
+                           },
              'paragraphs': para_stats,
              }
     # stats: aggregated statistics
     # stats_data: all data count
     # tokens: tokens, count of each token and token set
-    return stats, stats_data, tokens
+    return metainfo, stats, stats_data, tokens
+
+
+def process_file(fname, rdf_database):
+    metadata, stats, stats_data, tokens = process_gutenberg_file(fname)
+
+    meta_fname = fname.replace('.zip', '.metadata.json')
+    stats_fname = fname.replace('.zip', '.stats.json')
+    stats_data_fname = fname.replace('.zip', '.stats_raw_data.json')
+    tokens_fname = fname.replace('.zip', '.tokens.json')
+
+    # meta_jsn = json.dumps(stats)
+    # stats_jsn = json.dumps(stats)
+
+    saveto = fname.replace('.zip', '.extracted.tar.gz')
+    # TODO save data here ...
+    # with gzip.open(saveto, 'wb') as f:
+    #     # print("saving to {}".format(saveto))
+    #     f.write()
+    #     f.flush()
+
+
+def process_gutenberg(filelist):
+    with Pool(processes=cpu_count()) as pool:
+        pass
+        # res = pool.map(process_file, all_files)
+
