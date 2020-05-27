@@ -1,4 +1,5 @@
 # general imports for file manipulation
+from collections import defaultdict, Counter
 import os
 import sys
 import zipfile  # to read the zipped gutenberg text files
@@ -7,6 +8,7 @@ from pathlib import Path  # to deal with file paths, naming and other things in 
 import numpy as np
 # NLP imports
 import spacy
+from spacy.attrs import ORTH,NORM,TAG
 # language imports
 from pycountry import languages  # to deal with language naming conventions
 # multiprocessing imports
@@ -133,16 +135,18 @@ def process_file(fname, rfd_meta):
     # Start analysis
     doc = nlp(txt)  # SpaCy tokenization
 
-    tokens = {}
-
     stats_data = {'total_char_count': len(txt)}
-    #     stats['total_token_len'] = len(list(doc))  # can do it in another way and improve procesing speed
 
-    token_count = {}  # individual token count, frequency
-    token_lens = []  # to be able to draw histograms of token lengths
-    token_set = set()  # all tokens
+    ocnt = doc.count_by(ORTH)
+    tokens = token_count = {doc.vocab.strings[k]: v for k, v in reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
+    token_lens = np.array([len(k) for k in token_count.keys()])
 
-    tok_stats = {}
+    token_stats = {'min': np.min(token_lens),
+       'max': np.max(token_lens),
+       'mean': np.mean(token_lens),
+       'median': np.median(token_lens),
+       'std': np.std(token_lens)
+       }
 
     sen_charcount = []  # sentence length in characters
     sen_tok_count = []  # sentence length in tokens
@@ -151,20 +155,11 @@ def process_file(fname, rfd_meta):
     }
 
     for s in doc.sents:
-        clen = len(s.string)
+        # clen = len(s.string)
+        clen = len(s.text)
         sen_charcount.append(clen)
         tlen = len(s)
         sen_tok_count.append(tlen)
-        # token level
-        for t in s:
-            # WARNING -> something here might be better done in another way
-            token_set.add(t)
-            token_lens.append(len(t))
-            # FIXME: this is NOT working, every token appears only once
-            if t not in token_count:
-                token_count[t] = 1
-            else:
-                token_count[t] += 1
 
     sen_stats['char_count'] = sen_charcount
     sen_stats['token_count'] = sen_tok_count
@@ -187,9 +182,6 @@ def process_file(fname, rfd_meta):
 
     stats_data['sentences'] = sen_stats
     stats_data['token_lengths'] = token_lens
-
-    tokens['token_count'] = token_count
-    tokens['token_set'] = token_set
 
     # slows a lot the processing, but I don't care for the moment
     # I'm doubting using this as much of it is already done in the previous part
@@ -242,8 +234,9 @@ def process_file(fname, rfd_meta):
 
     stats = {'char_count': len(txt),
              'sentence_count': len(list(doc.sents)),
-             'total_token_count': sum(token_count.values()),  # something wrong with this value
-             'different_token_count': len(token_set),
+             'total_token_count': sum(token_count.values()),
+             'different_token_count': len(list(token_count.keys())),
+             'token_length_stats': token_stats,
              'sentence_char_stats': sen_stats['char_stats'],
              'sentence_token_stats': sen_stats['token_stats'],
              'paragraphs': para_stats,
