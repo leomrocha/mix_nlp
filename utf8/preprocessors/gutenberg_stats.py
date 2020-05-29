@@ -90,6 +90,7 @@ def get_nlp_resource(metainfo):
     nlp = spacy.load(lang)
     return
 
+
 # count total length of the text
 # Separate paragraphs I'll do it by at least a \n\n sequence (might not work for every language .. (I do care but I cant, so somebody that knows the language should correct those)
 # count the number of paragraphs ... ?
@@ -111,6 +112,7 @@ def get_nlp_resource(metainfo):
 # Nevertheless seems that most of the time is in IO operations
 
 def _get_stats(arr):
+    arr = np.array(arr)
     stats = {'total_count': np.sum(arr),
              'min': np.min(arr),
              'max': np.max(arr),
@@ -122,6 +124,8 @@ def _get_stats(arr):
 
 
 # this function already works but there is a lot to cleanup and improve
+# TODO modify all this to set Custom Attribute Extensions to the document instead:
+# https://spacy.io/usage/processing-pipelines#custom-components-attributes
 def process_gutenberg_file(fname, rfd_meta):
     # Gutenberg file id
     gut_id = int(get_file_id(fname))
@@ -142,80 +146,94 @@ def process_gutenberg_file(fname, rfd_meta):
     txt = f.read(ftxt).decode(encoding)
     txt = gutenberg_cleaner.simple_cleaner(txt)
     # Start analysis
-    doc = nlp(txt)  # SpaCy tokenization
+    doc = nlp(txt)  # SpaCy tokenization -> should take out all the steps that are not neede as NER
 
-    stats_data = {'total_char_count': len(txt)}
-    # FIXME, the count can be by actual words and not only tokens too, doing an exclude of many things as in here:
-    #
     ocnt = doc.count_by(ORTH)
     words = [token.text for token in doc if not token.is_stop and not token.is_punct and not token.is_space]
 
     tokens = token_count = {doc.vocab.strings[k]: v for k, v in
                             reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
+    # token_lens = [len(k) for k in token_count.keys()]
     token_lens = np.array([len(k) for k in token_count.keys()])
 
     token_stats = _get_stats(token_lens)
 
     sen_charcount = []  # sentence length in characters
     sen_tok_count = []  # sentence length in tokens
-    sen_stats = {
-        'sentence_count': len(list(doc.sents))  # number of sentences in the document
-    }
+    sen_word_count = []  # sentence length in tokens
 
     for s in doc.sents:
-        # clen = len(s.string)
+        # clen = len(s.string) -> use s.text instead
         clen = len(s.text)
         sen_charcount.append(clen)
         tlen = len(s)
         sen_tok_count.append(tlen)
+        ws = [token.text for token in s if not token.is_stop and not token.is_punct and not token.is_space]
+        sen_word_count.append(len(ws))
 
-    sen_stats['char_count'] = sen_charcount
-    sen_stats['token_count'] = sen_tok_count
-
-    sen_charcount = np.array(sen_charcount)
-    sen_tok_count = np.array(sen_tok_count)
-    # np.min(), np.max(), np.mean(), np.median(), np.std()
-    sen_stats['char_stats'] = _get_stats(sen_charcount)
-    sen_stats['token_stats'] = _get_stats(sen_tok_count)
-
-    stats_data['sentences'] = sen_stats
-    stats_data['token_lengths'] = token_lens
+    sen_char_stats = _get_stats(sen_charcount)
+    sen_token_stats = _get_stats(sen_tok_count)
+    sen_word_stats = _get_stats(sen_word_count)
 
     # slows a lot the processing, but I don't care for the moment
     # I'm doubting using this as much of it is already done in the previous part
     # also makes everything slooower ... need to do it faster so I wont count this stat (even though I do want it)
     # i might be able to do some estimation?, nevertheless
     # count number of paragraphs .. might not work on many languages
+    # Somehow this can be done instead as an extension to spacy, to make it faster and process things less times
     paragraphs = [l.strip() for l in txt.split('\n\n') if len(l.strip()) > 0]
 
     para_char_lens = []
     para_tok_lens = []
+    para_word_lens = []
     para_sen_lens = []
     for p in paragraphs:
-        d = nlp(p)
+        d = nlp(p)  # yes, this is slow, something must be done to accelerate it
         para_char_lens.append(len(p))
         para_tok_lens.append(len(list(d)))
+        ws = [token.text for token in d if not token.is_stop and not token.is_punct and not token.is_space]
+        para_word_lens.append(len(ws))
         para_sen_lens.append(len(list(d.sents)))
     #
-    stats_data['paragraphs'] = {
-        'paragraph_count': len(paragraphs),
-        'char_count': para_char_lens,
-        'token_count': para_tok_lens,
-        'sentence_count': para_sen_lens,
-    }
-
-    para_char_lens = np.array(para_char_lens)
-    para_tok_lens = np.array(para_tok_lens)
-    para_sen_lens = np.array(para_sen_lens)
-
     main_para_char_stats = _get_stats(para_char_lens)
     main_para_tok_stats = _get_stats(para_tok_lens)
+    main_para_word_stats = _get_stats(para_word_lens)
     main_para_sen_stats = _get_stats(para_sen_lens)
 
     para_stats = {'char_stats': main_para_char_stats,
                   'token_stats': main_para_tok_stats,
+                  'word_stats': main_para_word_stats,
                   'sentence_stats': main_para_sen_stats}
 
+    stats_data = {
+        # general data to be able to compute aggregated statistics on the global Gutenberg project files
+        'doc': {'paragraph_count': len(paragraphs),
+                'sentence_count': len(list(doc.sents)),  # number of sentences in the document,
+                'token_count': len(words),
+                'word_count': len(words),
+                'char_count': len(txt),
+                },  # document level statistics
+        'by_paragraph': {  # mappings between (item length in THING, count)
+            'sentence_length': Counter(para_sen_lens),
+            'word_length': Counter(para_word_lens),
+            'token_length': Counter(para_tok_lens),
+            'char_length': Counter(para_char_lens),
+        },
+        'by_sentence': {  # mappings between (item length in THING, count)
+            'word_length': Counter(sen_word_count),
+            'token_length': Counter(sen_tok_count),
+            'char_length': Counter(sen_charcount),
+        },
+        'by_token': {
+            'tokens': tokens,  # Mapping (token(str), count)
+            # 'token_length': {},  # mappings between (item length in THING, count)
+        },
+        'by_word': {  # Mapping (word, count)
+            'words': Counter(words),  # Mapping (word(str), count)
+            # 'word_length': {},  # mappings between (item length in THING, count)
+        },
+
+    }
     stats = {'char_count': len(txt),
              'tokens': {'total_token_count': sum(token_count.values()),
                         'different_token_count': len(list(token_count.keys())),
@@ -224,8 +242,9 @@ def process_gutenberg_file(fname, rfd_meta):
                         'different_word_count': len(set(words)),
                         },
              'sentences': {'sentence_count': len(list(doc.sents)),
-                           'char_stats': sen_stats['char_stats'],
-                           'token_stats': sen_stats['token_stats']
+                           'char_stats': sen_char_stats,
+                           'token_stats': sen_token_stats,
+                           'word_stats': sen_word_stats,
                            },
              'paragraphs': para_stats,
              }
@@ -258,4 +277,3 @@ def process_gutenberg(filelist):
     with Pool(processes=cpu_count()) as pool:
         pass
         # res = pool.map(process_file, all_files)
-
