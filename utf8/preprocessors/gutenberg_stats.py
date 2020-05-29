@@ -1,4 +1,5 @@
 # general imports for file manipulation
+import chardet
 from collections import defaultdict, Counter
 import os
 import sys
@@ -131,126 +132,134 @@ def _get_stats(arr):
 # TODO modify all this to set Custom Attribute Extensions to the document instead:
 # https://spacy.io/usage/processing-pipelines#custom-components-attributes
 def process_gutenberg_file(fname, metainfo):
-
-    # TODO extract format from metadata (if exists)
-    encoding = 'utf-8'  # asume all is compatible with utf-8, for the moment haven't found one that is not
-
     # spacy
     nlp = get_nlp_resource(metainfo)
 
-    # load and clean the file, asume zip as compressing format
-    pth = Path(fname)  #
-    ftxt = pth.name.replace(".zip", ".txt")  # inside gutenberg zip there should be a .txt file with the same name
-    f = zipfile.ZipFile(fname)
-    txt = f.read(ftxt).decode(encoding)
-    txt = gutenberg_cleaner.simple_cleaner(txt)
-    # Start analysis
-    doc = nlp(txt)  # SpaCy tokenization -> should take out all the steps that are not neede as NER
+    nlp.max_length = 1e7  # support larger volumes of text
+    with nlp.disable_pipes("ner"):
+        # load and clean the file, assume zip as compressing format
+        pth = Path(fname)  #
+        ftxt = pth.name.replace(".zip", ".txt")  # inside gutenberg zip there should be a .txt file with the same name
+        f = zipfile.ZipFile(fname)
+        btxt = f.read(ftxt)
+        # TODO extract format from metadata (if exists)
+        # encoding = 'utf-8'  # assume all is compatible with utf-8, for the moment haven't found one that is not
+        # guess the encoding
+        enc = chardet.detect(btxt)['encoding']
+        txt = btxt.decode(enc)
+        txt = gutenberg_cleaner.simple_cleaner(txt)
+        # Start analysis
+        doc = nlp(txt)  # SpaCy tokenization -> should take out all the steps that are not neede as NER
 
-    ocnt = doc.count_by(ORTH)
-    words = [token.text for token in doc if not token.is_stop and not token.is_punct and not token.is_space]
+        ocnt = doc.count_by(ORTH)
+        words = [token.text for token in doc if not token.is_stop and not token.is_punct and not token.is_space]
 
-    tokens = token_count = {doc.vocab.strings[k]: v for k, v in
-                            reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
-    # token_lens = [len(k) for k in token_count.keys()]
-    token_lens = np.array([len(k) for k in token_count.keys()])
+        tokens = token_count = {doc.vocab.strings[k]: v for k, v in
+                                reversed(sorted(ocnt.items(), key=lambda item: item[1]))}
+        token_lens = np.array([len(k) for k in token_count.keys()])
 
-    token_stats = _get_stats(token_lens)
+        token_stats = _get_stats(token_lens)
 
-    sen_charcount = []  # sentence length in characters
-    sen_tok_count = []  # sentence length in tokens
-    sen_word_count = []  # sentence length in tokens
+        sen_charcount = []  # sentence length in characters
+        sen_tok_count = []  # sentence length in tokens
+        sen_word_count = []  # sentence length in tokens
 
-    for s in doc.sents:
-        # clen = len(s.string) -> use s.text instead
-        clen = len(s.text)
-        sen_charcount.append(clen)
-        tlen = len(s)
-        sen_tok_count.append(tlen)
-        ws = [token.text for token in s if not token.is_stop and not token.is_punct and not token.is_space]
-        sen_word_count.append(len(ws))
+        try:
+            for s in doc.sents:
+                # clen = len(s.string) -> use s.text instead
+                clen = len(s.text)
+                sen_charcount.append(clen)
+                tlen = len(s)
+                sen_tok_count.append(tlen)
+                ws = [token.text for token in s if not token.is_stop and not token.is_punct and not token.is_space]
+                sen_word_count.append(len(ws))
 
-    sen_char_stats = _get_stats(sen_charcount)
-    sen_token_stats = _get_stats(sen_tok_count)
-    sen_word_stats = _get_stats(sen_word_count)
+            sen_char_stats = _get_stats(sen_charcount)
+            sen_token_stats = _get_stats(sen_tok_count)
+            sen_word_stats = _get_stats(sen_word_count)
+        except:
+            sen_char_stats = {}
+            sen_token_stats = {}
+            sen_word_stats = {}
+            pass  # nothing to see here, move along, this language is not supported
 
-    # slows a lot the processing, but I don't care for the moment
-    # I'm doubting using this as much of it is already done in the previous part
-    # also makes everything slooower ... need to do it faster so I wont count this stat (even though I do want it)
-    # i might be able to do some estimation?, nevertheless
-    # count number of paragraphs .. might not work on many languages
-    # Somehow this can be done instead as an extension to spacy, to make it faster and process things less times
-    paragraphs = [l.strip() for l in txt.split('\n\n') if len(l.strip()) > 0]
+        # slows a lot the processing, but I don't care for the moment
+        # I'm doubting using this as much of it is already done in the previous part
+        # also makes everything slooower ... need to do it faster so I wont count this stat (even though I do want it)
+        # i might be able to do some estimation?, nevertheless
+        # count number of paragraphs .. might not work on many languages
+        # Somehow this can be done instead as an extension to spacy, to make it faster and process things less times
+        paragraphs = [l.strip() for l in txt.split('\n\n') if len(l.strip()) > 0]
 
-    para_char_lens = []
-    para_tok_lens = []
-    para_word_lens = []
-    para_sen_lens = []
-    for p in paragraphs:
-        d = nlp(p)  # yes, this is slow, something must be done to accelerate it
-        para_char_lens.append(len(p))
-        para_tok_lens.append(len(list(d)))
-        ws = [token.text for token in d if not token.is_stop and not token.is_punct and not token.is_space]
-        para_word_lens.append(len(ws))
-        para_sen_lens.append(len(list(d.sents)))
-    #
-    main_para_char_stats = _get_stats(para_char_lens)
-    main_para_tok_stats = _get_stats(para_tok_lens)
-    main_para_word_stats = _get_stats(para_word_lens)
-    main_para_sen_stats = _get_stats(para_sen_lens)
+        para_char_lens = []
+        para_tok_lens = []
+        para_word_lens = []
+        para_sen_lens = []
+        for p in paragraphs:
+            d = nlp(p)  # yes, this is slow, something must be done to accelerate it
+            para_char_lens.append(len(p))
+            para_tok_lens.append(len(list(d)))
+            ws = [token.text for token in d if not token.is_stop and not token.is_punct and not token.is_space]
+            para_word_lens.append(len(ws))
+            para_sen_lens.append(len(list(d.sents)))
+        #
+        main_para_char_stats = _get_stats(para_char_lens)
+        main_para_tok_stats = _get_stats(para_tok_lens)
+        main_para_word_stats = _get_stats(para_word_lens)
+        main_para_sen_stats = _get_stats(para_sen_lens)
 
-    para_stats = {'char_stats': main_para_char_stats,
-                  'token_stats': main_para_tok_stats,
-                  'word_stats': main_para_word_stats,
-                  'sentence_stats': main_para_sen_stats}
+        para_stats = {'char_stats': main_para_char_stats,
+                      'token_stats': main_para_tok_stats,
+                      'word_stats': main_para_word_stats,
+                      'sentence_stats': main_para_sen_stats}
 
-    stats_data = {
-        # general data to be able to compute aggregated statistics on the global Gutenberg project files
-        'doc': {'paragraph_count': len(paragraphs),
-                'sentence_count': len(list(doc.sents)),  # number of sentences in the document,
-                'token_count': len(words),
-                'word_count': len(words),
-                'char_count': len(txt),
-                },  # document level statistics
-        'by_paragraph': {  # mappings between (item length in THING, count)
-            'sentence_length': Counter(para_sen_lens),
-            'word_length': Counter(para_word_lens),
-            'token_length': Counter(para_tok_lens),
-            'char_length': Counter(para_char_lens),
-        },
-        'by_sentence': {  # mappings between (item length in THING, count)
-            'word_length': Counter(sen_word_count),
-            'token_length': Counter(sen_tok_count),
-            'char_length': Counter(sen_charcount),
-        },
-        'by_token': {
-            'tokens': tokens,  # Mapping (token(str), count)
-            # 'token_length': {},  # mappings between (item length in THING, count)
-        },
-        'by_word': {  # Mapping (word, count)
-            'words': Counter(words),  # Mapping (word(str), count)
-            # 'word_length': {},  # mappings between (item length in THING, count)
-        },
+        stats_data = {
+            # general data to be able to compute aggregated statistics on the global Gutenberg project files
+            'doc': {'paragraph_count': len(paragraphs),
+                    'sentence_count': len(list(doc.sents)),  # number of sentences in the document,
+                    'token_count': len(words),
+                    'word_count': len(words),
+                    'char_count': len(txt),
+                    },  # document level statistics
+            'by_paragraph': {  # mappings between (item length in THING, count)
+                'sentence_length': Counter(para_sen_lens),
+                'word_length': Counter(para_word_lens),
+                'token_length': Counter(para_tok_lens),
+                'char_length': Counter(para_char_lens),
+            },
+            'by_sentence': {  # mappings between (item length in THING, count)
+                'word_length': Counter(sen_word_count),
+                'token_length': Counter(sen_tok_count),
+                'char_length': Counter(sen_charcount),
+            },
+            'by_token': {
+                'tokens': tokens,  # Mapping (token(str), count)
+                # 'token_length': {},  # mappings between (item length in THING, count)
+            },
+            'by_word': {  # Mapping (word, count)
+                'words': Counter(words),  # Mapping (word(str), count)
+                # 'word_length': {},  # mappings between (item length in THING, count)
+            },
 
-    }
-    stats = {'char_count': len(txt),
-             'tokens': {'total_token_count': sum(token_count.values()),
-                        'different_token_count': len(list(token_count.keys())),
-                        'token_length_stats': token_stats,
-                        'total_word_count': len(words),
-                        'different_word_count': len(set(words)),
-                        },
-             'sentences': {'sentence_count': len(list(doc.sents)),
-                           'char_stats': sen_char_stats,
-                           'token_stats': sen_token_stats,
-                           'word_stats': sen_word_stats,
-                           },
-             'paragraphs': para_stats,
-             }
-    # stats: aggregated statistics
-    # stats_data: all data count
-    # tokens: tokens, count of each token and token set
-    return metainfo, stats, stats_data, tokens
+        }
+        stats = {'char_count': len(txt),
+                 'tokens': {'total_token_count': sum(token_count.values()),
+                            'different_token_count': len(list(token_count.keys())),
+                            'token_length_stats': token_stats,
+                            'total_word_count': len(words),
+                            'different_word_count': len(set(words)),
+                            },
+                 'sentences': {'sentence_count': len(list(doc.sents)),
+                               'char_stats': sen_char_stats,
+                               'token_stats': sen_token_stats,
+                               'word_stats': sen_word_stats,
+                               },
+                 'paragraphs': para_stats,
+                 }
+        # stats: aggregated statistics
+        # stats_data: all data count
+        # tokens: tokens, count of each token and token set
+        return metainfo, stats, stats_data, tokens
 
 
 def process_file(fname, rdf_metadata):
@@ -259,6 +268,7 @@ def process_file(fname, rdf_metadata):
     if os.path.exists(saveto):
         return
     try:
+        print("Processing {}".format(fname))
         rfd_metadata, stats, stats_data, tokens = process_gutenberg_file(fname, rdf_metadata)
 
         outdict = {
@@ -271,7 +281,7 @@ def process_file(fname, rdf_metadata):
         jsn = json.dumps(outdict)
 
         with gzip.open(saveto, 'wb') as f:
-            print("saving to {}".format(saveto))
+            print("Saving to {}".format(saveto))
             f.write(jsn)
             f.flush()
 
@@ -279,27 +289,33 @@ def process_file(fname, rdf_metadata):
         print("Error processing file {} with Exception {}".format(fname, e))
 
 
-def process_gutenberg(filelist, rfd_meta, n_proc=cpu_count(), base_dir=BASE_DIR ):
+def process_gutenberg(filelist, rfd_meta, n_proc=cpu_count()):
     # pre-process file list and parametrization
     params = []
     for fname in filelist:
         # Gutenberg file id
-        fname = fname.strip().replace('\n', '').split(' ')[-1]
         gut_id = int(get_file_id(fname))
-        # meta information extracted from the Gutenber RFD database -> warning is around 1GB the DB
+        # meta information extracted from the Gutenberg RFD database -> warning the DB is a file of about 1GB
         try:
             meta = rfd_meta[gut_id]
-            params.append((os.path.join(base_dir, fname), meta))
+            params.append((fname, meta))
         except KeyError as e:
             print("ERROR No Metadata entry for id {} on file {}".format(gut_id, fname))
-
     with Pool(processes=n_proc) as pool:
         res = pool.starmap(process_file, params)
 
 
-def main(zipfilelist=ZIP_FILE_LIST):
+def _get_filest_from_ziplist(filelist, base_dir):
+    flist = [os.path.join(base_dir, f.strip().replace('\n', '').split(' ')[-1]) for f in filelist]
+    return flist
+
+
+def main(zipfilelist=ZIP_FILE_LIST, base_dir=BASE_DIR):
     with open(zipfilelist, "r") as f:
         gutfiles = f.readlines()
+        # clean zipfile that contains some garbage
+        gutfiles = _get_filest_from_ziplist(gutfiles, base_dir)
+
     gut_metadata = readmetadata(RDF_TAR_FILE)
     process_gutenberg(gutfiles, gut_metadata, cpu_count()*2)
 
