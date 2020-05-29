@@ -79,7 +79,7 @@ def get_metadata(rdf_tarfile=RDF_TAR_FILE):
 
 
 def get_nlp_resource(metainfo):
-    lang = 'xx'
+    lng = 'xx'
     try:
         lng = metainfo['language']
         if isinstance(lng, list) or isinstance(lng, tuple) and len(lng > 0):
@@ -92,40 +92,50 @@ def get_nlp_resource(metainfo):
         # just to avoid issues if there is no language tag, in that case go back to default
         pass
     # loading with shortcut ... maybe will need to use the spacy models dict that I've created earlier, we'll see
-    nlp = spacy.load(spacy_models_2[lang])
+    nlp = spacy.load(spacy_models_2[lng])
     return nlp
-
-
-# count total length of the text
-# Separate paragraphs I'll do it by at least a \n\n sequence (might not work for every language .. (I do care but I cant, so somebody that knows the language should correct those)
-# count the number of paragraphs ... ?
-
-# separate sentences (again, language depending, I'll do it by . characters and with spacy models ...
-# count the number of sentences per paragraph
-# separate words -> maybe here would need lemmatization to see some things correctly, but will have issues in non supported languages.
-# count number of words tokens per sentence -> tokens is already available in spacy, while words is a bit more .. difficult to define and be sure it works in a coherent way.
-# sum number of words tokens per paragraph
-# separate chars
-# count chars per word, sentence and paragraph
-# aggregate all words and count the number of occurrences
-# aggregate all the characters and count the number of occurrences
-# aggregate and sort results then save zip file with it
 
 
 # this implementation is quite inefficient as there are a few things done once and again behind the scenes,
 # for the moment I don't care as I'm trying to make it work and will see later.
 # Nevertheless seems that most of the time is in IO operations
 
+
 def _get_stats(arr):
-    arr = np.array(arr)
-    stats = {'total_count': np.sum(arr),
-             'min': np.min(arr),
-             'max': np.max(arr),
-             'mean': np.mean(arr),
-             'median': np.median(arr),
-             'std': np.std(arr)
-             }
+    stats = {}
+    try:
+        arr = np.array(arr)
+        stats = {'total_count': np.sum(arr).item(),
+                 'min': np.min(arr).item(),
+                 'max': np.max(arr).item(),
+                 'mean': np.mean(arr).item(),
+                 'median': np.median(arr).item(),
+                 'std': np.std(arr).item()
+                 }
+    except:
+        pass
     return stats
+
+
+def _tryread_zip(fname):
+    pth = Path(fname)  #
+    # gutenberg zip files have a few different ways of storing the zip files, this is problematic but we'll try
+    # to read the right one
+    # inside gutenberg zip there should be a .txt file with the same name
+    ftxt = pth.name.replace(".zip", ".txt")
+    txt_paths = [
+        ftxt,  # if txt file is in '/' inside the zip file
+        os.path.join(pth.parent.name, ftxt)
+    ]
+    f = zipfile.ZipFile(fname)
+    for p in txt_paths:
+        try:
+            btxt = f.read(p)
+            return btxt
+        except:
+            pass
+    # TODO Should raise an exception here
+    # raise
 
 
 # this function already works but there is a lot to cleanup and improve
@@ -138,13 +148,8 @@ def process_gutenberg_file(fname, metainfo):
     nlp.max_length = 1e7  # support larger volumes of text
     with nlp.disable_pipes("ner"):
         # load and clean the file, assume zip as compressing format
-        pth = Path(fname)  #
-        ftxt = pth.name.replace(".zip", ".txt")  # inside gutenberg zip there should be a .txt file with the same name
-        f = zipfile.ZipFile(fname)
-        btxt = f.read(ftxt)
-        # TODO extract format from metadata (if exists)
-        # encoding = 'utf-8'  # assume all is compatible with utf-8, for the moment haven't found one that is not
-        # guess the encoding
+        btxt = _tryread_zip(fname)
+        # guess the encoding instead  FUTURE extract format from metadata (if exists)
         enc = chardet.detect(btxt)['encoding']
         txt = btxt.decode(enc)
         txt = gutenberg_cleaner.simple_cleaner(txt)
@@ -164,8 +169,11 @@ def process_gutenberg_file(fname, metainfo):
         sen_tok_count = []  # sentence length in tokens
         sen_word_count = []  # sentence length in tokens
 
+        sentenciser_supported = True
+        sentence_count = 0
         try:
             for s in doc.sents:
+                sentence_count += 1
                 # clen = len(s.string) -> use s.text instead
                 clen = len(s.text)
                 sen_charcount.append(clen)
@@ -181,6 +189,7 @@ def process_gutenberg_file(fname, metainfo):
             sen_char_stats = {}
             sen_token_stats = {}
             sen_word_stats = {}
+            sentenciser_supported = False
             pass  # nothing to see here, move along, this language is not supported
 
         # slows a lot the processing, but I don't care for the moment
@@ -195,14 +204,16 @@ def process_gutenberg_file(fname, metainfo):
         para_tok_lens = []
         para_word_lens = []
         para_sen_lens = []
+
         for p in paragraphs:
             d = nlp(p)  # yes, this is slow, something must be done to accelerate it
             para_char_lens.append(len(p))
             para_tok_lens.append(len(list(d)))
             ws = [token.text for token in d if not token.is_stop and not token.is_punct and not token.is_space]
             para_word_lens.append(len(ws))
-            para_sen_lens.append(len(list(d.sents)))
-        #
+            if sentenciser_supported:
+                para_sen_lens.append(len(list(d.sents)))
+
         main_para_char_stats = _get_stats(para_char_lens)
         main_para_tok_stats = _get_stats(para_tok_lens)
         main_para_word_stats = _get_stats(para_word_lens)
@@ -216,7 +227,7 @@ def process_gutenberg_file(fname, metainfo):
         stats_data = {
             # general data to be able to compute aggregated statistics on the global Gutenberg project files
             'doc': {'paragraph_count': len(paragraphs),
-                    'sentence_count': len(list(doc.sents)),  # number of sentences in the document,
+                    'sentence_count': sentence_count,  # number of sentences in the document,
                     'token_count': len(words),
                     'word_count': len(words),
                     'char_count': len(txt),
@@ -249,7 +260,7 @@ def process_gutenberg_file(fname, metainfo):
                             'total_word_count': len(words),
                             'different_word_count': len(set(words)),
                             },
-                 'sentences': {'sentence_count': len(list(doc.sents)),
+                 'sentences': {'sentence_count': sentence_count,
                                'char_stats': sen_char_stats,
                                'token_stats': sen_token_stats,
                                'word_stats': sen_word_stats,
@@ -262,8 +273,23 @@ def process_gutenberg_file(fname, metainfo):
         return metainfo, stats, stats_data, tokens
 
 
+def _recursive_int2str(dict_data):
+    new_dict = {}
+    for k, v in dict_data.items():
+        k = str(k)  # always convert,
+        if isinstance(v, Counter):
+            v = dict(v)
+        if isinstance(v, dict):
+            new_dict[k] = _recursive_int2str(v)
+        else:
+            new_dict[k] = v
+    return new_dict
+
+
 def process_file(fname, rdf_metadata):
-    saveto = fname.replace('.zip', '.stats.tar.gz')
+    # saves the simple statistics and a complete dump too including the tokens and their count
+    saveto = fname.replace('.zip', '.stats.json.gz')
+    saveto_all = fname.replace('.zip', '.stats_all.json.gz')
     # if output file exists, ignore as it was already processed
     if os.path.exists(saveto):
         return
@@ -271,6 +297,18 @@ def process_file(fname, rdf_metadata):
         print("Processing {}".format(fname))
         rfd_metadata, stats, stats_data, tokens = process_gutenberg_file(fname, rdf_metadata)
 
+        # rfd_metadata contains sets, need to be converted to lists to be json serializable
+        for k, v in rfd_metadata.items():
+            if isinstance(v, set):
+                rfd_metadata[k] = list(v)
+
+        # stats_data contains numbers as keys, json needs strings, convert those
+        stats_data = _recursive_int2str(stats_data)
+
+        outsimple = {
+            'metadata': rdf_metadata,
+            'file_stats': stats,  # simple statistics
+        }
         outdict = {
             'metadata': rdf_metadata,
             'file_stats': stats,  # statistics
@@ -278,11 +316,17 @@ def process_file(fname, rdf_metadata):
             'tokens': tokens
         }
 
-        jsn = json.dumps(outdict)
+        jsn_simple = json.dumps(outsimple)
+        jsn_all = json.dumps(outdict)
 
         with gzip.open(saveto, 'wb') as f:
             print("Saving to {}".format(saveto))
-            f.write(jsn)
+            f.write(jsn_simple)
+            f.flush()
+
+        with gzip.open(saveto_all, 'wb') as f:
+            print("Saving to {}".format(saveto_all))
+            f.write(jsn_all)
             f.flush()
 
     except Exception as e:  # handling to avoid issues in the starmap pool
@@ -317,7 +361,7 @@ def main(zipfilelist=ZIP_FILE_LIST, base_dir=BASE_DIR):
         gutfiles = _get_filest_from_ziplist(gutfiles, base_dir)
 
     gut_metadata = readmetadata(RDF_TAR_FILE)
-    process_gutenberg(gutfiles, gut_metadata, cpu_count()*2)
+    process_gutenberg(gutfiles, gut_metadata, cpu_count()*4)
 
 
 if __name__ == '__main__':
