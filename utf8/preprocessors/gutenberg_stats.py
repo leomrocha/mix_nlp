@@ -2,6 +2,7 @@
 from collections import defaultdict, Counter
 import os
 import sys
+import gzip
 import zipfile  # to read the zipped gutenberg text files
 import rdflib  # to read the rdf directory of the gutenberg files
 from pathlib import Path  # to deal with file paths, naming and other things in a platform independent manner
@@ -29,23 +30,12 @@ except:
 # gutenberg specific imports
 import gutenberg_cleaner  # to clean headers and footers from gutenberg files, they are NOISE
 
-BASE_DIR = "/media/nfs/Datasets/text/Gutenberg/aleph.gutenberg.org"
+BASE_DIR = "/media/nfs/Datasets/text/Gutenberg"
+# BASE_DIR = "/media/nfs/Datasets/text/Gutenberg/aleph.gutenberg.org"
 RDF_TAR_FILE = "/media/nfs/Datasets/text/Gutenberg/rdf-files.tar.bz2"
+ZIP_FILE_LIST = "/media/nfs/Datasets/text/Gutenberg/zip_list.txt"
 # BASE_RDF_DIR = "/media/nfs/Datasets/text/Gutenberg/rdf_db/cache/epub"
 
-spacy_models_2 = {
-    'de': 'de_core_news_md',  # German
-    'el': 'el_core_news_sm',  # Greek
-    'en': 'en_core_web_md',  # English
-    'es': 'es_core_news_md',  # Spanish
-    'fr': 'fr_core_news_md',  # French
-    'it': 'it_core_news_sm',  # Italian
-    'lt': 'lt_core_news_sm',  # Lithuanian
-    'nb': 'nb_core_news_sm',  # Norwegian Bokmål
-    'nl': 'nl_core_news_sm',  # Dutch
-    'pt': 'pt_core_news_sm',  # Portuguese
-    'xx': 'xx_ent_wiki_sm',  # Multi-Lang
-}
 
 spacy_models = {
     'german': 'de_core_news_md',  # German
@@ -59,6 +49,20 @@ spacy_models = {
     'dutch': 'nl_core_news_sm',  # Dutch
     'portuguese': 'pt_core_news_sm',  # Portuguese
     'multi-lang': 'xx_ent_wiki_sm',  # Multi-Lang
+}
+
+spacy_models_2 = {
+    'de': 'de_core_news_md',  # German
+    'el': 'el_core_news_sm',  # Greek
+    'en': 'en_core_web_md',  # English
+    'es': 'es_core_news_md',  # Spanish
+    'fr': 'fr_core_news_md',  # French
+    'it': 'it_core_news_sm',  # Italian
+    'lt': 'lt_core_news_sm',  # Lithuanian
+    'nb': 'nb_core_news_sm',  # Norwegian Bokmål
+    'nl': 'nl_core_news_sm',  # Dutch
+    'pt': 'pt_core_news_sm',  # Portuguese
+    'xx': 'xx_ent_wiki_sm',  # Multi-Lang
 }
 
 
@@ -87,8 +91,8 @@ def get_nlp_resource(metainfo):
         # just to avoid issues if there is no language tag, in that case go back to default
         pass
     # loading with shortcut ... maybe will need to use the spacy models dict that I've created earlier, we'll see
-    nlp = spacy.load(lang)
-    return
+    nlp = spacy.load(spacy_models_2[lang])
+    return nlp
 
 
 # count total length of the text
@@ -126,18 +130,13 @@ def _get_stats(arr):
 # this function already works but there is a lot to cleanup and improve
 # TODO modify all this to set Custom Attribute Extensions to the document instead:
 # https://spacy.io/usage/processing-pipelines#custom-components-attributes
-def process_gutenberg_file(fname, rfd_meta):
-    # Gutenberg file id
-    gut_id = int(get_file_id(fname))
-    # meta information extracted from the Gutenber RFD database -> warning is around 1GB the DB
-    metainfo = rfd_meta[gut_id]
+def process_gutenberg_file(fname, metainfo):
+
     # TODO extract format from metadata (if exists)
     encoding = 'utf-8'  # asume all is compatible with utf-8, for the moment haven't found one that is not
+
     # spacy
-    # nlp = get_nlp_resource(metainfo)
-    # TODO FIXME, this is an issue with current spacy install not loading correctly ??
-    import en_core_web_md
-    nlp = en_core_web_md.load()
+    nlp = get_nlp_resource(metainfo)
 
     # load and clean the file, asume zip as compressing format
     pth = Path(fname)  #
@@ -254,26 +253,57 @@ def process_gutenberg_file(fname, rfd_meta):
     return metainfo, stats, stats_data, tokens
 
 
-def process_file(fname, rdf_database):
-    metadata, stats, stats_data, tokens = process_gutenberg_file(fname)
+def process_file(fname, rdf_metadata):
+    saveto = fname.replace('.zip', '.stats.tar.gz')
+    # if output file exists, ignore as it was already processed
+    if os.path.exists(saveto):
+        return
+    try:
+        rfd_metadata, stats, stats_data, tokens = process_gutenberg_file(fname, rdf_metadata)
 
-    meta_fname = fname.replace('.zip', '.metadata.json')
-    stats_fname = fname.replace('.zip', '.stats.json')
-    stats_data_fname = fname.replace('.zip', '.stats_raw_data.json')
-    tokens_fname = fname.replace('.zip', '.tokens.json')
+        outdict = {
+            'metadata': rdf_metadata,
+            'file_stats': stats,  # statistics
+            'stats_data': stats_data,  # statistics that are useful to aggregate with other results
+            'tokens': tokens
+        }
 
-    # meta_jsn = json.dumps(stats)
-    # stats_jsn = json.dumps(stats)
+        jsn = json.dumps(outdict)
 
-    saveto = fname.replace('.zip', '.extracted.tar.gz')
-    # TODO save data here ...
-    # with gzip.open(saveto, 'wb') as f:
-    #     # print("saving to {}".format(saveto))
-    #     f.write()
-    #     f.flush()
+        with gzip.open(saveto, 'wb') as f:
+            print("saving to {}".format(saveto))
+            f.write(jsn)
+            f.flush()
+
+    except Exception as e:  # handling to avoid issues in the starmap pool
+        print("Error processing file {} with Exception {}".format(fname, e))
 
 
-def process_gutenberg(filelist):
-    with Pool(processes=cpu_count()) as pool:
-        pass
-        # res = pool.map(process_file, all_files)
+def process_gutenberg(filelist, rfd_meta, n_proc=cpu_count(), base_dir=BASE_DIR ):
+    # pre-process file list and parametrization
+    params = []
+    for fname in filelist:
+        # Gutenberg file id
+        fname = fname.strip().replace('\n', '').split(' ')[-1]
+        gut_id = int(get_file_id(fname))
+        # meta information extracted from the Gutenber RFD database -> warning is around 1GB the DB
+        try:
+            meta = rfd_meta[gut_id]
+            params.append((os.path.join(base_dir, fname), meta))
+        except KeyError as e:
+            print("ERROR No Metadata entry for id {} on file {}".format(gut_id, fname))
+
+    with Pool(processes=n_proc) as pool:
+        res = pool.starmap(process_file, params)
+
+
+def main(zipfilelist=ZIP_FILE_LIST):
+    with open(zipfilelist, "r") as f:
+        gutfiles = f.readlines()
+    gut_metadata = readmetadata(RDF_TAR_FILE)
+    process_gutenberg(gutfiles, gut_metadata, cpu_count()*2)
+
+
+if __name__ == '__main__':
+    main()
+
