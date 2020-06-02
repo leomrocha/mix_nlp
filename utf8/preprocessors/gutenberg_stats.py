@@ -40,7 +40,7 @@ import gutenberg_cleaner  # to clean headers and footers from gutenberg files, t
 BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg"
 # BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/aleph.gutenberg.org"
 RDF_TAR_FILE = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf-files.tar.bz2"
-ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.txt"
+ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.dedup.txt"
 BASE_RDF_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf_db/cache/epub"
 
 
@@ -358,7 +358,8 @@ def process_gutenberg(filelist, rfd_meta, n_proc=cpu_count()):
 
 
 def _get_filest_from_ziplist(filelist, base_dir):
-    flist = [os.path.join(base_dir, f.strip().replace('\n', '').split(' ')[-1]) for f in filelist]
+    # flist = [os.path.join(base_dir, f.strip().replace('\n', '').split(' ')[-1]) for f in filelist]
+    flist = [os.path.join(base_dir, f.strip().replace('\n', '')) for f in filelist]
     return flist
 
 
