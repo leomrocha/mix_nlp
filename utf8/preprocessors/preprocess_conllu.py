@@ -11,7 +11,7 @@ except:
     # to solve issue with ipython executing this import
     from utils import *
 
-UD_VERSION = "2.5"
+UD_VERSION = "2.6"
 # Maybe blacklist
 MAYBE_BLACKLIST = ["Kurmanji", "Urdu", "Indonesian", "Coptic-Scriptorium", "Kazakh",
                    "Marathi", "Tamil", "Thai", "Warlpiri"]

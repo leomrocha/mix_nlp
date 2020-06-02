@@ -31,11 +31,17 @@ except:
 # gutenberg specific imports
 import gutenberg_cleaner  # to clean headers and footers from gutenberg files, they are NOISE
 
-BASE_DIR = "/media/nfs/Datasets/text/Gutenberg"
-# BASE_DIR = "/media/nfs/Datasets/text/Gutenberg/aleph.gutenberg.org"
-RDF_TAR_FILE = "/media/nfs/Datasets/text/Gutenberg/rdf-files.tar.bz2"
-ZIP_FILE_LIST = "/media/nfs/Datasets/text/Gutenberg/zip_list.txt"
-# BASE_RDF_DIR = "/media/nfs/Datasets/text/Gutenberg/rdf_db/cache/epub"
+# BASE_DIR = "/media/nfs/Datasets/text/Gutenberg"
+# # BASE_DIR = "/media/nfs/Datasets/text/Gutenberg/aleph.gutenberg.org"
+# RDF_TAR_FILE = "/media/nfs/Datasets/text/Gutenberg/rdf-files.tar.bz2"
+# ZIP_FILE_LIST = "/media/nfs/Datasets/text/Gutenberg/zip_list.txt"
+# # BASE_RDF_DIR = "/media/nfs/Datasets/text/Gutenberg/rdf_db/cache/epub"
+
+BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg"
+# BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/aleph.gutenberg.org"
+RDF_TAR_FILE = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf-files.tar.bz2"
+ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.txt"
+BASE_RDF_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf_db/cache/epub"
 
 
 spacy_models = {
@@ -291,7 +297,8 @@ def process_file(fname, rdf_metadata):
     saveto = fname.replace('.zip', '.stats.json.gz')
     saveto_all = fname.replace('.zip', '.stats_all.json.gz')
     # if output file exists, ignore as it was already processed
-    if os.path.exists(saveto):
+    if os.path.exists(saveto_all):
+        print("File {} already exists. Skipping".format(saveto_all))
         return
     try:
         print("Processing {}".format(fname))
@@ -345,6 +352,7 @@ def process_gutenberg(filelist, rfd_meta, n_proc=cpu_count()):
             params.append((fname, meta))
         except KeyError as e:
             print("ERROR No Metadata entry for id {} on file {}".format(gut_id, fname))
+    # TODO make the progress bar!!! tqdm and multiprocess??
     with Pool(processes=n_proc) as pool:
         res = pool.starmap(process_file, params)
 
@@ -361,7 +369,7 @@ def main(zipfilelist=ZIP_FILE_LIST, base_dir=BASE_DIR):
         gutfiles = _get_filest_from_ziplist(gutfiles, base_dir)
 
     gut_metadata = readmetadata(RDF_TAR_FILE)
-    process_gutenberg(gutfiles, gut_metadata, cpu_count()*4)
+    process_gutenberg(gutfiles, gut_metadata, cpu_count()-2)
 
 
 if __name__ == '__main__':
