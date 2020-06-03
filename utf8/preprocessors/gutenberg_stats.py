@@ -151,7 +151,8 @@ def process_gutenberg_file(fname, metainfo):
     # spacy
     nlp = get_nlp_resource(metainfo)
 
-    nlp.max_length = 1e7  # support larger volumes of text
+    # nlp.max_length = 1e7  # support larger volumes of text
+    nlp.max_length = 1e8  # support larger volumes of text -> max length found is around 77M chars length
     with nlp.disable_pipes("ner"):
         # load and clean the file, assume zip as compressing format
         btxt = _tryread_zip(fname)
