@@ -34,6 +34,7 @@ DISTRIBUTIONS = {"norm": stats.norm,
                  "skewnorm": stats.skewnorm,
                  "gennorm": stats.gennorm,
                  "beta": stats.beta,
+                 "betaprime": stats.betaprime,
                  }
 
 rootdir = CONLLU_BASEPATH
@@ -144,7 +145,7 @@ def get_best_distribution(data, distributions=DISTRIBUTIONS):
     return best_dist, best_p, params[best_dist]
 
 
-def compute_distributions(upos_data, deprel_data, sentences_data, langs):
+def compute_distributions(upos_data, deprel_data, sentences_data, langs=None):
 
     df_upos = pd.DataFrame(upos_data, columns=["lang", "text", "upos", "upos_len"])
     df_deprel = pd.DataFrame(deprel_data, columns=["lang", "text", "deprel", "deprel_len"])

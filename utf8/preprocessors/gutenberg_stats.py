@@ -40,7 +40,8 @@ import gutenberg_cleaner  # to clean headers and footers from gutenberg files, t
 BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg"
 # BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/aleph.gutenberg.org"
 RDF_TAR_FILE = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf-files.tar.bz2"
-ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.dedup.txt"
+# ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.dedup.txt"
+ZIP_FILE_LIST = "/home/leo/projects/mix_nlp/utf8/preprocessors/gut_len_err_zip_list.txt"
 BASE_RDF_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf_db/cache/epub"
 
 
@@ -152,7 +153,9 @@ def process_gutenberg_file(fname, metainfo):
     nlp = get_nlp_resource(metainfo)
 
     # nlp.max_length = 1e7  # support larger volumes of text
-    nlp.max_length = 1e8  # support larger volumes of text -> max length found is around 77M chars length
+    nlp.max_length = 3e7  # support larger volumes of text
+    # nlp.max_length = 1e8  # OoM :/ support larger volumes of text -> max length found is around 77M chars length
+    #
     with nlp.disable_pipes("ner"):
         # load and clean the file, assume zip as compressing format
         btxt = _tryread_zip(fname)
@@ -371,7 +374,8 @@ def main(zipfilelist=ZIP_FILE_LIST, base_dir=BASE_DIR):
         gutfiles = _get_filest_from_ziplist(gutfiles, base_dir)
 
     gut_metadata = readmetadata(RDF_TAR_FILE)
-    process_gutenberg(gutfiles, gut_metadata, cpu_count()-2)
+    # process_gutenberg(gutfiles, gut_metadata, cpu_count()-2)
+    process_gutenberg(gutfiles, gut_metadata, 1)
 
 
 if __name__ == '__main__':
