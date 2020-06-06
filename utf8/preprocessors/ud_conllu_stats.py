@@ -27,6 +27,7 @@ except:
 import pandas as pd
 import numpy as np
 from scipy import stats
+from scipy.signal import resample
 
 # UD_VERSION = "2.6"
 # BASEPATH = "/home/leo/projects/Datasets/text"
@@ -39,6 +40,7 @@ DISTRIBUTIONS = {"norm": stats.norm,
                  "gennorm": stats.gennorm,
                  "beta": stats.beta,
                  "betaprime": stats.betaprime,
+                 "lognorm": stats.lognorm,
                  }
 
 rootdir = CONLLU_BASEPATH
@@ -184,7 +186,20 @@ def compute_distributions(upos_data, deprel_data, sentences_data, langs=None):
     return langs_data
 
 
-def _get_stats(distrib, distrib_params, data):
+def _get_stats(distrib, distrib_params, data, n_bins=100, n_samples=100):
+    """
+    
+    :param distrib: distribution function (scipy.stats.[beta|norm|....]) 
+    :param distrib_params: parameters of the distribution
+    :param data:
+    :param n_bins: number of bins to compute for the histograms.
+    :param n_samples: number of samples for the CDF and PDF functions
+    :return: (stats, {cdf,pdf})
+    """
+    try:  # if data is a pandas dataframe (which it is) TODO cleanup these dirty things
+        data = data.to_numpy()
+    except:
+        pass
     mskv = [None, None, None, None]
     t_mskv = distrib.stats(*distrib_params)
     for i in range(len(t_mskv)):  # mean, variance, skew, kurtosis -> variable length
@@ -204,8 +219,18 @@ def _get_stats(distrib, distrib_params, data):
                       '80': distrib.interval(0.8, *distrib_params),
                       }
     }
-    ret_foo = {'cdf': distrib.cdf(data, *distrib_params),
-               'pdf': distrib.pdf(data, *distrib_params)
+    max_len = max(data)
+    x = np.linspace(0, max_len, 100)
+    hist, bin_edges = np.histogram(data, bins=n_bins),  # (hist, bin_edges)
+    # the function computation is to make life easy when drawing with bokeh ... some points still to clarify
+    # for this n_samples needs to be the same as n_bins
+    ret_foo = {'x': x,
+               'hist': hist,
+               'bin_edges': bin_edges,
+               # 'bin_edges_left': bin_edges[:-1],
+               # 'bin_edges_right': bin_edges[1:],
+               'cdf': resample(distrib.cdf(data, *distrib_params), n_samples),
+               'pdf': resample(distrib.pdf(data, *distrib_params), n_samples)
                }
     return ret_stats, ret_foo
 
@@ -288,7 +313,7 @@ def stats_dict2rows(lang, lang_data):
     return upos_data, deprel_data, text_data
 
 
-# convert to json  TODO this must be improved
+# convert to json  TODO this must be improved and all sent to the NumpyEncoder ...
 
 # This solution is modified from:
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
