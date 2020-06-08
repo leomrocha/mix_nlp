@@ -58,7 +58,7 @@ def conllu_get_fields(fname):
     conll = pyconll.load_from_file(fname)
     upos = []
     xpos = []
-    deprel = []
+    # deprel = []
     sentences = []
     forms = []
 
@@ -79,14 +79,15 @@ def conllu_get_fields(fname):
             xpos.append((src_lang, sen.text, tuple(sen_xpos)))
         except:
             pass
-        try:
-            sen_deprel = [t.deprel for t in sen._tokens]
-            deprel.append((src_lang, sen.text, tuple(sen_deprel)))
-        except:
-            pass
+        # try:
+        #     sen_deprel = [t.deprel for t in sen._tokens]
+        #     deprel.append((src_lang, sen.text, tuple(sen_deprel)))
+        # except:
+        #     pass
 
-    return (set(upos), len(upos)), (set(xpos), len(xpos)), (set(deprel), len(deprel)), (
-        set(sentences), len(sentences)), (set(forms), len(forms))
+    # return (set(upos), len(upos)), (set(xpos), len(xpos)), (set(deprel), len(deprel)), (
+    #     set(sentences), len(sentences)), (set(forms), len(forms))
+    return (set(upos), len(upos)), (set(xpos), len(xpos)), (set(sentences), len(sentences)), (set(forms), len(forms))
 
 
 def _try_get_2list(fname):
@@ -109,24 +110,26 @@ def conllu_process_get_2list(rootdir=CONLLU_BASEPATH, blacklist=BLACKLIST):
 
 def extract_data_from_fields(results):
     upos_data = []
-    deprel_data = []
+    # deprel_data = []
     sentences_data = []
     forms_data = []
 
     for r in results:
-        upos_val, xpos_val, deprel_val, sentences_val, forms_val = r
+        # upos_val, xpos_val, deprel_val, sentences_val, forms_val = r
+        upos_val, xpos_val, sentences_val, forms_val = r
         #     print("lala 1")
         forms_data.extend(forms_val[0])
         for val in upos_val[0]:
             #         print(val)
             lang1, txt1, upos = val
             upos_data.append((lang1, txt1, upos, len(upos)))
-        for lang3, txt3, deprel in deprel_val[0]:
-            deprel_data.append((lang3, txt3, deprel, len(deprel)))
+        # for lang3, txt3, deprel in deprel_val[0]:
+        #     deprel_data.append((lang3, txt3, deprel, len(deprel)))
         for lang4, txt4 in sentences_val[0]:
             sentences_data.append((lang4, txt4, len(txt4)))
 
-    return upos_data, deprel_data, sentences_data, forms_data
+    return upos_data, sentences_data, forms_data
+    # return upos_data, deprel_data, sentences_data, forms_data
 
 
 def get_best_distribution(data, distributions=DISTRIBUTIONS):
@@ -151,9 +154,10 @@ def get_best_distribution(data, distributions=DISTRIBUTIONS):
     return best_dist, best_p, params[best_dist]
 
 
-def compute_distributions(upos_data, deprel_data, sentences_data, langs=None):
+# def compute_distributions(upos_data, deprel_data, sentences_data, langs=None):
+def compute_distributions(upos_data, sentences_data, langs=None):
     df_upos = pd.DataFrame(upos_data, columns=["lang", "text", "upos", "upos_len"])
-    df_deprel = pd.DataFrame(deprel_data, columns=["lang", "text", "deprel", "deprel_len"])
+    # df_deprel = pd.DataFrame(deprel_data, columns=["lang", "text", "deprel", "deprel_len"])
     df_txt = pd.DataFrame(sentences_data, columns=["lang", "text", "text_len"])
 
     if langs is None:
@@ -167,15 +171,15 @@ def compute_distributions(upos_data, deprel_data, sentences_data, langs=None):
             dest_lang = languages.get(alpha_2=lang) if len(lang) == 2 else languages.get(alpha_3=lang)
             dest_lang = dest_lang.name
             lng_upos_len = df_upos.loc[df_upos['lang'] == lang]['upos_len']
-            lng_deprel_len = df_deprel.loc[df_deprel['lang'] == lang]['deprel_len']
+            # lng_deprel_len = df_deprel.loc[df_deprel['lang'] == lang]['deprel_len']
             lng_text_len = df_txt.loc[df_txt['lang'] == lang]['text_len']
 
             langs_data[lang] = {
                 'lang': dest_lang,
                 'upos_len': lng_upos_len,
                 'upos_distrib': get_best_distribution(lng_upos_len),
-                'deprel_len': lng_deprel_len,
-                'deprel_distrib': get_best_distribution(lng_deprel_len),
+                # 'deprel_len': lng_deprel_len,
+                # 'deprel_distrib': get_best_distribution(lng_deprel_len),
                 'text_len': lng_text_len,
                 'text_distrib': get_best_distribution(lng_text_len),
             }
@@ -242,11 +246,11 @@ def _get_lang_stats(lang_data, distributions=DISTRIBUTIONS):
     upos_data = lang_data['upos_len']
     upos_stats, upos_functions = _get_stats(upos_distrib, upos_distrib_params, upos_data)
     #
-    deprel_distrib = distributions[lang_data['deprel_distrib'][0]]
-    deprel_distrib_params = lang_data['deprel_distrib'][2]
-    #     print('deprel', deprel_distrib, deprel_distrib_params)
-    deprel_data = lang_data['deprel_len']
-    deprel_stats, deprel_functions = _get_stats(deprel_distrib, deprel_distrib_params, deprel_data)
+    # deprel_distrib = distributions[lang_data['deprel_distrib'][0]]
+    # deprel_distrib_params = lang_data['deprel_distrib'][2]
+    # #     print('deprel', deprel_distrib, deprel_distrib_params)
+    # deprel_data = lang_data['deprel_len']
+    # deprel_stats, deprel_functions = _get_stats(deprel_distrib, deprel_distrib_params, deprel_data)
     #
     text_distrib = distributions[lang_data['text_distrib'][0]]
     text_distrib_params = lang_data['text_distrib'][2]
@@ -255,11 +259,11 @@ def _get_lang_stats(lang_data, distributions=DISTRIBUTIONS):
     text_stats, text_functions = _get_stats(text_distrib, text_distrib_params, text_data)
 
     lang_data['upos_stats'] = upos_stats
-    lang_data['deprel_stats'] = deprel_stats
+    # lang_data['deprel_stats'] = deprel_stats
     lang_data['text_stats'] = text_stats
 
     lang_data['upos_functions'] = upos_functions
-    lang_data['deprel_functions'] = deprel_functions
+    # lang_data['deprel_functions'] = deprel_functions
     lang_data['text_functions'] = text_functions
 
     return lang_data
@@ -291,26 +295,29 @@ def flatten(lang, d, sep="_"):
 
 def stats_dict2table(all_lang_stats):
     upos_stats = []
-    deprel_stats = []
+    # deprel_stats = []
     text_stats = []
     for lang, lang_data in all_lang_stats.items():
-        upos_row, deprel_row, text_row = stats_dict2rows(lang, lang_data)
+        # upos_row, deprel_row, text_row = stats_dict2rows(lang, lang_data)
+        upos_row, text_row = stats_dict2rows(lang, lang_data)
         upos_stats.append(upos_row)
-        deprel_stats.append(deprel_row)
+        # deprel_stats.append(deprel_row)
         text_stats.append(text_row)
 
     upos_df = pd.DataFrame(upos_stats)
-    deprel_df = pd.DataFrame(deprel_stats)
+    # deprel_df = pd.DataFrame(deprel_stats)
     text_df = pd.DataFrame(text_stats)
 
-    return upos_df, deprel_df, text_df
+    # return upos_df, deprel_df, text_df
+    return upos_df, text_df
 
 
 def stats_dict2rows(lang, lang_data):
     upos_data = flatten(lang, lang_data['upos_stats'])
-    deprel_data = flatten(lang, lang_data['deprel_stats'])
+    # deprel_data = flatten(lang, lang_data['deprel_stats'])
     text_data = flatten(lang, lang_data['text_stats'])
-    return upos_data, deprel_data, text_data
+    return upos_data, text_data
+    # return upos_data, deprel_data, text_data
 
 
 # convert to json  TODO this must be improved and all sent to the NumpyEncoder ...
@@ -369,8 +376,10 @@ def _recursive_jsonify(dict_data):
 
 def generate_files(blacklist=[], saveto='conllu_stats.json.zip'):
     res = conllu_process_get_2list(blacklist=blacklist)
-    upos_data, deprel_data, sentences_data, forms_data = extract_data_from_fields(res)
-    langs_data = compute_distributions(upos_data, deprel_data, sentences_data)
+    # upos_data, deprel_data, sentences_data, forms_data = extract_data_from_fields(res)
+    # langs_data = compute_distributions(upos_data, deprel_data, sentences_data)
+    upos_data, sentences_data, forms_data = extract_data_from_fields(res)
+    langs_data = compute_distributions(upos_data, sentences_data)
 
     all_stats = {}
 
