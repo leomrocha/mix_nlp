@@ -225,7 +225,7 @@ def _get_stats(distrib, distrib_params, data, n_bins=100, n_samples=100):
     }
     max_len = max(data)
     x = np.linspace(0, max_len, 100)
-    hist, bin_edges = np.histogram(data, bins=n_bins),  # (hist, bin_edges)
+    hist, bin_edges = np.histogram(data, bins=n_bins)  # (hist, bin_edges)
     # the function computation is to make life easy when drawing with bokeh ... some points still to clarify
     # for this n_samples needs to be the same as n_bins
     ret_foo = {'x': x,
@@ -233,8 +233,8 @@ def _get_stats(distrib, distrib_params, data, n_bins=100, n_samples=100):
                'bin_edges': bin_edges,
                # 'bin_edges_left': bin_edges[:-1],
                # 'bin_edges_right': bin_edges[1:],
-               'cdf': resample(distrib.cdf(data, *distrib_params), n_samples),
-               'pdf': resample(distrib.pdf(data, *distrib_params), n_samples)
+               'cdf': resample(distrib.cdf(x, *distrib_params), n_samples),
+               'pdf': resample(distrib.pdf(x, *distrib_params), n_samples)
                }
     return ret_stats, ret_foo
 
@@ -326,24 +326,24 @@ def stats_dict2rows(lang, lang_data):
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
 # https://github.com/mpld3/mpld3/issues/434
 
-class NumpyEncoder(json.JSONEncoder):
-    """ Special json encoder for numpy types """
-
-    def default(self, obj):
-        if isinstance(obj, (tuple, set)):
-            return list(obj)
-        elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
-                              np.int16, np.int32, np.int64, np.uint8,
-                              np.uint16, np.uint32, np.uint64)):
-            return int(obj)
-        elif isinstance(obj, (np.float_, np.float16, np.float32,
-                              np.float64)):
-            return float(obj)
-        elif isinstance(obj, np.ndarray):
-            return obj.tolist()
-        elif isinstance(obj, pd.Series):
-            obj = obj.to_list()
-        return json.JSONEncoder.default(self, obj)
+# class NumpyEncoder(json.JSONEncoder):
+#     """ Special json encoder for numpy types """
+#
+#     def default(self, obj):
+#         if isinstance(obj, (tuple, set)):
+#             return list(obj)
+#         elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
+#                               np.int16, np.int32, np.int64, np.uint8,
+#                               np.uint16, np.uint32, np.uint64)):
+#             return int(obj)
+#         elif isinstance(obj, (np.float_, np.float16, np.float32,
+#                               np.float64)):
+#             return float(obj)
+#         elif isinstance(obj, np.ndarray):
+#             return obj.tolist()
+#         elif isinstance(obj, pd.Series):
+#             obj = obj.to_list()
+#         return json.JSONEncoder.default(self, obj)
 
 
 def _recursive_jsonify(dict_data):
