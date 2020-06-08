@@ -30,9 +30,10 @@ from scipy import stats
 
 import bokeh
 from bokeh.plotting import figure, show
-from bokeh.palettes import Spectral4
-from bokeh.io import output_file
+# from bokeh.palettes import Spectral4
+# from bokeh.io import output_file
 from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn
+from bokeh.models.layouts import Column
 from bokeh.layouts import gridplot
 
 
