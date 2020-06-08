@@ -27,7 +27,14 @@ except:
 import pandas as pd
 import numpy as np
 from scipy import stats
-from scipy.signal import resample
+
+import bokeh
+from bokeh.plotting import figure, show
+from bokeh.palettes import Spectral4
+from bokeh.io import output_file
+from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn
+from bokeh.layouts import gridplot
+
 
 # UD_VERSION = "2.6"
 # BASEPATH = "/home/leo/projects/Datasets/text"
@@ -233,8 +240,8 @@ def _get_stats(distrib, distrib_params, data, n_bins=100, n_samples=100):
                'bin_edges': bin_edges,
                # 'bin_edges_left': bin_edges[:-1],
                # 'bin_edges_right': bin_edges[1:],
-               'cdf': resample(distrib.cdf(x, *distrib_params), n_samples),
-               'pdf': resample(distrib.pdf(x, *distrib_params), n_samples)
+               'cdf': distrib.cdf(x, *distrib_params),
+               'pdf': distrib.pdf(x, *distrib_params)
                }
     return ret_stats, ret_foo
 
@@ -269,7 +276,7 @@ def _get_lang_stats(lang_data, distributions=DISTRIBUTIONS):
     return lang_data
 
 
-def flatten(lang, d, sep="_"):
+def flatten_dict(lang, d, sep="_"):
     import collections
 
     obj = collections.OrderedDict()
@@ -293,6 +300,140 @@ def flatten(lang, d, sep="_"):
     return obj
 
 
+def make_plot(title, data_source):
+    # TODO make it even better being able to change the Sizing mode from a dropdown menu ?
+    hover = HoverTool(
+        names=["CDF"],
+        tooltips=[
+            ("length", '$x{int}'),
+            ("Count", "@hist{int}"),
+            ("pdf", "@pdf{1.111}"),
+            ("cdf", "@cdf{1.111}"),
+        ],
+        # display a tooltip whenever the cursor is vertically in line with a glyph
+        mode='vline',
+    )
+
+    p = figure(title=title, background_fill_color="#fafafa",
+               plot_height=500, sizing_mode="stretch_width",
+               tools="crosshair,pan,wheel_zoom,box_zoom,zoom_in,zoom_out,undo,redo,reset",
+               toolbar_location="left",
+               output_backend="webgl")
+    p.add_tools(hover)
+    # p = figure(title=title, tools='', background_fill_color="#fafafa")
+    p.xaxis.axis_label = 'Length'
+    p.yaxis.axis_label = 'Count'
+    # second axe, probability
+    p.extra_y_ranges = {"cdf(x)": Range1d(start=0., end=1.02),
+                        "Pr(x)": Range1d(start=0., end=max(data_source.data['pdf']) * 1.02)
+                        }
+
+    p.add_layout(LinearAxis(y_range_name="Pr(x)", axis_label='Pr(x)'), 'right')
+    p.quad(name='hist', top='hist', bottom=0, left='bin_edges_left', right='bin_edges_right',
+           fill_color="blue", line_color="white", alpha=0.5, legend_label="Freq.", source=data_source)
+    p.line(name='PDF', x='x', y='pdf', line_color="green", line_width=4, alpha=0.7, legend_label="PDF",
+           y_range_name="Pr(x)", source=data_source)
+    p.line(name='CDF', x='x', y='cdf', line_color="red", line_width=2, alpha=0.7, legend_label="CDF",
+           y_range_name="cdf(x)", source=data_source)
+
+    p.y_range.start = 0
+
+    p.title.align = 'center'
+    p.legend.location = "center_right"
+    #     p.legend.location = "bottom_right"
+    p.legend.background_fill_color = "#fefefe"
+    p.grid.grid_line_color = "grey"
+    #     p.legend.click_policy="mute"
+    p.legend.click_policy = "hide"
+
+    return p
+
+
+def _make_data_sources(lang_data):
+    lang_name = lang_data['lang']
+    ##
+    upos_plot_name = lang_name + ' - Text Length by UPOS Count'
+    upos_stats = lang_data['upos_stats']
+    upos_functions = lang_data['upos_functions']
+
+    upos_data_source = ColumnDataSource({'hist': upos_functions['hist'],
+                                         'bin_edges_left': upos_functions['bin_edges'][:-1],
+                                         'bin_edges_right': upos_functions['bin_edges'][1:],
+                                         'x': upos_functions['x'],
+                                         'pdf': upos_functions['pdf'],
+                                         'cdf': upos_functions['cdf']
+                                         }
+                                        )
+    # TODO refactor this to make it better ...
+    text_plot_name = lang_name + ' - Text Length by Character Count'
+    text_stats = lang_data['text_stats']
+    text_functions = lang_data['text_functions']
+
+    text_data_source = ColumnDataSource({'hist': text_functions['hist'],
+                                         'bin_edges_left': text_functions['bin_edges'][:-1],
+                                         'bin_edges_right': text_functions['bin_edges'][1:],
+                                         'x': text_functions['x'],
+                                         'pdf': text_functions['pdf'],
+                                         'cdf': text_functions['cdf']
+                                         }
+                                        )
+    return (upos_plot_name, upos_data_source, upos_stats), (text_plot_name, text_data_source, text_stats)
+
+
+def _make_stats_tables(stats):
+    name_col = [k for k in stats.keys() if k != 'intervals' and stats[k] is not None]
+    value_col = [round(float(stats[k]), 3) for k in name_col if stats[k] is not None]
+
+    interval_names = list(stats['intervals'].keys())
+    interval_values = [round(float(i[1]), 1) for i in stats['intervals'].values()]
+
+    data = dict(
+        names=name_col,
+        values=value_col,
+    )
+    source = ColumnDataSource(data)
+
+    columns = [
+        TableColumn(field="names", title="Name"),
+        TableColumn(field="values", title="Value"),
+    ]
+    data_table = DataTable(source=source, columns=columns, width=150, fit_columns=True, index_position=None)
+
+    int_data = dict(
+        names=interval_names,
+        values=interval_values,
+    )
+    int_source = ColumnDataSource(int_data)
+
+    int_columns = [
+        TableColumn(field="names", title="interval"),
+        TableColumn(field="values", title="Max Value"),
+    ]
+
+    interval_table = DataTable(source=int_source, columns=int_columns, width=100, fit_columns=True, index_position=None)
+
+    return data_table, interval_table
+
+
+def _make_grid_plot(lang_data):
+    upos_plt_info, txt_plt_info = _make_data_sources(lang_data)
+    upos_plot = make_plot(*upos_plt_info[:2])
+    text_plot = make_plot(*txt_plt_info[:2])
+
+    upos_stats_table, upos_interval_table = _make_stats_tables(upos_plt_info[2])
+    text_stats_table, text_interval_table = _make_stats_tables(txt_plt_info[2])
+
+    upos_stats = Column(upos_stats_table, sizing_mode="fixed", height=350, width=150)
+    upos_interval = Column(upos_interval_table, sizing_mode="fixed", height=350, width=150, margin=(0, 0, 0, 10))
+    text_stats = Column(text_stats_table, sizing_mode="fixed", height=350, width=150)
+    text_interval = Column(text_interval_table, sizing_mode="fixed", height=350, width=150, margin=(0, 0, 0, 10))
+
+    gp = gridplot([upos_stats, upos_interval, upos_plot,
+                   text_stats, text_interval, text_plot],
+                  ncols=3, sizing_mode="stretch_width", plot_height=350)
+    return gp
+
+
 def stats_dict2table(all_lang_stats):
     upos_stats = []
     # deprel_stats = []
@@ -313,9 +454,9 @@ def stats_dict2table(all_lang_stats):
 
 
 def stats_dict2rows(lang, lang_data):
-    upos_data = flatten(lang, lang_data['upos_stats'])
+    upos_data = flatten_dict(lang, lang_data['upos_stats'])
     # deprel_data = flatten(lang, lang_data['deprel_stats'])
-    text_data = flatten(lang, lang_data['text_stats'])
+    text_data = flatten_dict(lang, lang_data['text_stats'])
     return upos_data, text_data
     # return upos_data, deprel_data, text_data
 
@@ -374,7 +515,7 @@ def _recursive_jsonify(dict_data):
 ###
 
 
-def generate_files(blacklist=[], saveto='conllu_stats.json.zip'):
+def generate_files(blacklist=[], saveto='conllu_stats.json.gz'):
     res = conllu_process_get_2list(blacklist=blacklist)
     # upos_data, deprel_data, sentences_data, forms_data = extract_data_from_fields(res)
     # langs_data = compute_distributions(upos_data, deprel_data, sentences_data)
@@ -390,7 +531,9 @@ def generate_files(blacklist=[], saveto='conllu_stats.json.zip'):
     all_stats_copy = copy.deepcopy(all_stats)
     all_stats_copy = _recursive_jsonify(all_stats_copy)
     jsn = json.dumps(all_stats_copy)
+    # this is with default json lib
     # jsn = json.dumps(all_stats_copy, cls=NumpyEncoder)
+    # for non compressed file -> too big, not worth it
     # with open('conllu_stats.json', 'w') as f:
     #     f.write(jsn)
     #     f.flush()
