@@ -462,8 +462,52 @@ def stats_dict2rows(lang, lang_data):
     # return upos_data, deprel_data, text_data
 
 
-# convert to json  TODO this must be improved and all sent to the NumpyEncoder ...
+# complete tables showing stats for all the available languages
+def _make_complete_stat_tables(all_lang_stats):
 
+    df_tables = (upos_df, text_df) = stats_dict2table(all_lang_stats)
+    intervals = ['intervals_99', 'intervals_98', 'intervals_95', 'intervals_90', 'intervals_85', 'intervals_80']
+    cols_to_drop = intervals + ['intervals_99_low', 'intervals_98_low',
+                                'intervals_95_low', 'intervals_90_low',
+                                'intervals_85_low', 'intervals_80_low',
+                                'skew', 'kurtosis']
+    # separate and clean the data
+    for df in df_tables:
+        df = df.round(2)
+        #         df = df.apply(_column_round(2))
+        for interval in intervals:
+            df[[interval + '_low', interval + '_high']] = pd.DataFrame(df[interval].tolist(), index=df.index)
+        df.drop(columns=cols_to_drop)
+
+    bk_tables = []
+
+    def _get_title(col_name):
+        if col_name == 'lang_code':
+            return 'Code'
+        elif col_name == 'lang_name':
+            return 'Language'
+        else:
+            return col_name.replace('intervals_', '').replace('_high', '').replace('_low', '')
+
+    def _get_width(col_name):
+        if col_name == 'lang_code':
+            return 60
+        elif col_name == 'lang_name':
+            return 140
+        else:
+            return 50
+
+    for table in df_tables:
+        columns = [TableColumn(field=Ci, title=_get_title(Ci), width=_get_width(Ci)) for Ci in
+                   table.columns]  # bokeh columns
+        data_table = DataTable(columns=columns, source=ColumnDataSource(table), sizing_mode='stretch_width',
+                               fit_columns=False)  # bokeh table
+        bk_tables.append(data_table)
+
+    return bk_tables
+
+
+# convert to json  TODO this must be improved and all sent to the NumpyEncoder ...
 # This solution is modified from:
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
 # https://github.com/mpld3/mpld3/issues/434
