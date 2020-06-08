@@ -5,8 +5,8 @@ import gzip
 import math
 import os
 import sys
-# import orjson as json
-import json
+import orjson as json
+# import json
 
 import pyconll
 import pyconll.util
@@ -397,7 +397,8 @@ def generate_files(blacklist=[], saveto='conllu_stats.json.zip'):
 
     with gzip.open(saveto, 'wb') as f:
         print("Saving to {}".format(saveto))
-        f.write(jsn.encode('utf-8'))
+        # f.write(jsn.encode('utf-8'))
+        f.write(jsn)
         f.flush()
 
     return all_stats
