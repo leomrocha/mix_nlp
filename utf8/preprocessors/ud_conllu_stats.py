@@ -671,8 +671,8 @@ def generate_html(all_stats):
     all_stats_copy = copy.deepcopy(all_stats)
     upos_table, text_table = _make_complete_stats_tables(all_stats_copy)
 
-    _generate_html_table(upos_table, 'plots_tables/upos_table.html')
-    _generate_html_table(text_table, 'plots_tables/text_table.html')
+    _generate_html_table(upos_table, 'upos_table')
+    _generate_html_table(text_table, 'text_table')
 
 
 def main():
