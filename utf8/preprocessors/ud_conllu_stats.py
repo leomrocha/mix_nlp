@@ -8,6 +8,8 @@ import sys
 import orjson as json
 # import json
 
+from pathlib import Path
+
 import pyconll
 import pyconll.util
 from pycountry import languages
@@ -34,7 +36,9 @@ from bokeh.plotting import figure, show
 # from bokeh.io import output_file
 from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn
 from bokeh.models.layouts import Column
-from bokeh.layouts import gridplot
+from bokeh.layouts import gridplot, column, row, Spacer
+from bokeh.resources import CDN
+from bokeh.embed import components, file_html, json_item, autoload_static
 
 
 # UD_VERSION = "2.6"
@@ -411,7 +415,7 @@ def _make_stats_tables(stats):
         TableColumn(field="values", title="Max Value"),
     ]
 
-    interval_table = DataTable(source=int_source, columns=int_columns, width=100, fit_columns=True, index_position=None)
+    interval_table = DataTable(source=int_source, columns=int_columns, width=120, fit_columns=True, index_position=None)
 
     return data_table, interval_table
 
@@ -463,7 +467,7 @@ def stats_dict2rows(lang, lang_data):
 
 
 # complete tables showing stats for all the available languages
-def _make_complete_stat_tables(all_lang_stats):
+def _make_complete_stats_tables(all_lang_stats):
 
     df_tables = (upos_df, text_df) = stats_dict2table(all_lang_stats)
     intervals = ['intervals_99', 'intervals_98', 'intervals_95', 'intervals_90', 'intervals_85', 'intervals_80']
@@ -560,6 +564,74 @@ def _recursive_jsonify(dict_data):
 ###
 
 
+def _save_file(obj, fpath):
+    with open(fpath, 'w') as f:
+        f.write(obj)
+        f.flush()
+
+
+def _generate_html_plots(all_stats, path='./plots{}/', fname="{}_plot{}"):
+    all_grids = {}
+    all_grids_html = {}
+    all_grids_json = {}
+
+    for lang, data in all_stats.items():
+        grid = _make_grid_plot(data)
+        all_grids[lang] = grid
+        plt_name = lang + " stats plot"
+        # complete html page
+        html = file_html(grid, CDN, plt_name)
+        all_grids_html[lang] = html
+        # grid as json information
+        # jsn_grid = json.dumps(json_item(grid, plt_name))
+        # all_grids_json[lang] = jsn_grid
+
+        # save html
+        Path(path.format('_html')).mkdir(parents=True, exist_ok=True)
+        html_fname = os.path.join(path.format('_html'), fname.format(lang, '.html'))
+        _save_file(html, html_fname)
+        # save json
+        # Path(path.format('_json')).mkdir(parents=True, exist_ok=True)
+        # json_fname = os.path.join(path.format('_json'), fname.format(lang, '.json'))
+        # _save_file(jsn_grid, json_fname)
+
+    # all_components = (all_components_script, all_components_div) = components(all_grids)
+    # # save all grids as component
+    # Path(path.format('_components')).mkdir(parents=True, exist_ok=True)
+    # comp_fname_script = os.path.join(path.format('_components'), fname.format('all_components', '_script.html'))
+    # comp_fname_div = os.path.join(path.format('_components'), fname.format('all_components', '_div.html'))
+    # _save_file(all_components_div, comp_fname_div)
+    # _save_file(all_components_script, comp_fname_script)
+
+    return all_grids, all_grids_html
+    # return all_grids, all_grids_html, all_components
+
+
+def _generate_html_table(table, name, path='./tables_{}/', fname="{}_table{}"):
+
+    Path(path.format('html')).mkdir(parents=True, exist_ok=True)
+
+    html_fname = os.path.join(path.format('html'), fname.format(name, '.html'))
+    html = file_html(table, CDN, name)
+    _save_file(html, html_fname)
+
+    # Path(path.format('json')).mkdir(parents=True, exist_ok=True)
+    # jsn_fname = os.path.join(path.format('json'), fname.format(name, '.json'))
+    # jsn = json.dumps(json_item(table, name))
+    # _save_file(json, jsn_fname)
+
+    # Path(path.format('components')).mkdir(parents=True, exist_ok=True)
+    # cmp_script_fname = os.path.join(path.format('components'), fname.format(name, '_script.html'))
+    # cmp_div_fname = os.path.join(path.format('components'), fname.format(name, '_div.html'))
+    # cmp_script, cmp_div = components(table)
+    # # _save_file(cmp_script, cmp_script_fname)
+    # # _save_file(cmp_div, cmp_div_fname)
+
+    return html
+    # return html, (cmp_script, cmp_div)
+    # return html, jsn, (cmp_script, cmp_div)
+
+
 def generate_files(blacklist=[], saveto='conllu_stats.json.gz'):
     res = conllu_process_get_2list(blacklist=blacklist)
     # upos_data, deprel_data, sentences_data, forms_data = extract_data_from_fields(res)
@@ -592,3 +664,20 @@ def generate_files(blacklist=[], saveto='conllu_stats.json.gz'):
     return all_stats
 
 
+def generate_html(all_stats):
+    all_stats_copy = copy.deepcopy(all_stats)
+    all_grids, all_grids_html, all_grid_components = _generate_html_plots(all_stats_copy)
+
+    all_stats_copy = copy.deepcopy(all_stats)
+    upos_table, text_table = _make_complete_stats_tables(all_stats_copy)
+
+    _generate_html_table(upos_table, 'plots_tables/upos_table.html')
+
+
+def main():
+    all_stats = generate_files()
+    generate_html(all_stats)
+
+
+if __name__ == '__main__':
+    main()
