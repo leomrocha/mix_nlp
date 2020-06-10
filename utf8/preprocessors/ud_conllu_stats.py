@@ -468,20 +468,20 @@ def stats_dict2rows(lang, lang_data):
 
 # complete tables showing stats for all the available languages
 def _make_complete_stats_tables(all_lang_stats):
-
-    df_tables = (upos_df, text_df) = stats_dict2table(all_lang_stats)
+    upos_df, text_df = stats_dict2table(all_lang_stats)
+    df_tables = (upos_df.round(2), text_df.round(2))
     intervals = ['intervals_99', 'intervals_98', 'intervals_95', 'intervals_90', 'intervals_85', 'intervals_80']
     cols_to_drop = intervals + ['intervals_99_low', 'intervals_98_low',
                                 'intervals_95_low', 'intervals_90_low',
                                 'intervals_85_low', 'intervals_80_low',
                                 'skew', 'kurtosis']
     # separate and clean the data
+    df_clean_tables = []
     for df in df_tables:
-        df = df.round(2)
-        #         df = df.apply(_column_round(2))
         for interval in intervals:
             df[[interval + '_low', interval + '_high']] = pd.DataFrame(df[interval].tolist(), index=df.index)
-        df.drop(columns=cols_to_drop)
+        df = df.drop(columns=cols_to_drop).round(2)
+        df_clean_tables.append(df)
 
     bk_tables = []
 
@@ -501,7 +501,7 @@ def _make_complete_stats_tables(all_lang_stats):
         else:
             return 50
 
-    for table in df_tables:
+    for table in df_clean_tables:
         columns = [TableColumn(field=Ci, title=_get_title(Ci), width=_get_width(Ci)) for Ci in
                    table.columns]  # bokeh columns
         data_table = DataTable(columns=columns, source=ColumnDataSource(table), sizing_mode='stretch_width',
