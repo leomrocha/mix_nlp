@@ -34,7 +34,7 @@ import bokeh
 from bokeh.plotting import figure, show
 # from bokeh.palettes import Spectral4
 # from bokeh.io import output_file
-from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn, Dropdown
+from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn, Label
 from bokeh.models.layouts import Column, Panel, Tabs
 from bokeh.models.callbacks import CustomJS
 from bokeh.layouts import gridplot, column, row, Spacer
@@ -361,7 +361,8 @@ def make_plot(title, data_source):
     p.grid.grid_line_color = "grey"
     #     p.legend.click_policy="mute"
     p.legend.click_policy = "hide"
-
+    leo_label = Label(x=0, y=10, text='leomrocha.github.io')
+    p.add_layout(leo_label)
     return p
 
 
@@ -591,7 +592,7 @@ def _save_file(obj, fpath):
         f.flush()
 
 
-def _generate_html_plots(all_stats, path='./plots{}/', fname="{}_plot{}"):
+def _generate_html_plots(all_stats, path='./conllu_blog/plots{}/', fname="{}_plot{}"):
     all_grids = {}
     all_grids_html = {}
     all_grids_json = {}
@@ -628,7 +629,7 @@ def _generate_html_plots(all_stats, path='./plots{}/', fname="{}_plot{}"):
     # return all_grids, all_grids_html, all_components
 
 
-def _generate_html_table(table, name, path='./tables_{}/', fname="{}_table{}"):
+def _generate_html_table(table, name, path='./conllu_blog/tables_{}/', fname="{}_table{}"):
 
     Path(path.format('html')).mkdir(parents=True, exist_ok=True)
 
