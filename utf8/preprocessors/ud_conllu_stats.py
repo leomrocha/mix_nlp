@@ -34,8 +34,9 @@ import bokeh
 from bokeh.plotting import figure, show
 # from bokeh.palettes import Spectral4
 # from bokeh.io import output_file
-from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn
-from bokeh.models.layouts import Column
+from bokeh.models import LinearAxis, Range1d, HoverTool, ColumnDataSource, DataTable, TableColumn, Dropdown
+from bokeh.models.layouts import Column, Panel, Tabs
+from bokeh.models.callbacks import CustomJS
 from bokeh.layouts import gridplot, column, row, Spacer
 from bokeh.resources import CDN
 from bokeh.embed import components, file_html, json_item, autoload_static
@@ -200,6 +201,16 @@ def compute_distributions(upos_data, sentences_data, langs=None):
             print("Error processing lang {} with Exception {}".format(lang, e))
             pass
     return langs_data
+
+
+def _try_compute_distributions(upos_data, sentence_data):
+    try:
+        return compute_distributions(upos_data=upos_data, sentences_data=sentence_data)
+    except Exception as e:
+        print("Error computing distributions With error: {}".format(e))
+
+
+# TODO parallelization of compute_distributions with starmap
 
 
 def _get_stats(distrib, distrib_params, data, n_bins=100, n_samples=100):
@@ -418,6 +429,16 @@ def _make_stats_tables(stats):
     interval_table = DataTable(source=int_source, columns=int_columns, width=120, fit_columns=True, index_position=None)
 
     return data_table, interval_table
+
+
+# def _make_grid_datasources(lang_data):
+#     upos_plt_info, txt_plt_info = _make_data_sources(lang_data)
+#     upos_plot = make_plot(*upos_plt_info[:2])
+#     text_plot = make_plot(*txt_plt_info[:2])
+#
+#     upos_stats_table, upos_interval_table = _make_stats_tables(upos_plt_info[2])
+#     text_stats_table, text_interval_table = _make_stats_tables(txt_plt_info[2])
+#     pass
 
 
 def _make_grid_plot(lang_data):
