@@ -13091,7 +13091,7 @@ div#notebook {
 <h2 id="Dataset">Dataset<a class="anchor-link" href="#Dataset">&#182;</a></h2><p><a href="https://universaldependencies.org/">Universal Dependencies</a> <a href="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3226">v2.6</a></p>
 <p>The process is the same for any UD version.</p>
 <p>The Data is <strong>353MB</strong> compressed in gzip format and <strong>2.1GB</strong> in uncompressed raw text format.</p>
-<p>The entire pipeline takes less than 20 minutes to process and generate all graphs and html output from the uncompressed UD dataset on 1 CPU core of an intel 7700.</p>
+<!--<p>The entire pipeline takes less than 20 minutes to process and generate all graphs and html output from the uncompressed UD dataset on 1 CPU core of an intel 7700.</p>-->
 
 </div>
 </div>
@@ -13169,7 +13169,7 @@ This is not an issue  from the code point of view. The important thing is if thi
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Future-Work">Future Work<a class="anchor-link" href="#Future-Work">&#182;</a></h2><p>We are currently working on a more in depth analysis of the complete Gutenberg project dataset ( ~60K books in several languages) that will discriminate several other text characteristics.</p>
-<p>Stay tuned for those results ;)</p>
+<!--<p>Stay tuned for those results ;)</p>-->
 
 </div>
 </div>
@@ -13182,9 +13182,28 @@ This is not an issue  from the code point of view. The important thing is if thi
 </div>
 </div>
 </div>
-   <div class="lang_select" >
+      <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can select the language you want to explore from the dropdown menu.</p>
+<p>The language graphs are interactive, you can turn on and off the histogram, PDF and CDF clicking on the leyend.</p>
+<p>All tables can be reordered clicking over the column titles.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The graphs show (from top to bottom) the UPOS, which equals to the token length, and the character length of the sentences.</p>
+<p>The interval column tells what percentage (quantile) of data from the dataset will be captured by choosing the value on htat row. The only displayed value is the max (right) one which is the most interesting one. The low (left) values are not shown.</p>
+
+</div>
+</div>
+</div>
+   <div class="lang_select centerize" >
        <style>
-        .lang_select {
+        .centerize {
           text-align: center;
         }
         </style>
@@ -13199,7 +13218,7 @@ This is not an issue  from the code point of view. The important thing is if thi
           embed_graph.parentNode.replaceChild(clone, embed_graph)
         }
        </script>
-       <p>Select the language yo want to explore: </p>
+       <p>Select the language yo want to explore:
       <select id="graph_lang_select" onchange="langGraphSelect()" >
         <option value="af">[af] - Afrikaans</option>
         <option value="aii">[aii] - Assyrian Neo-Aramaic</option>
@@ -13292,10 +13311,10 @@ This is not an issue  from the code point of view. The important thing is if thi
         <option value="yo">[yo] - Yoruba</option>
         <option value="yue">[yue] - Yue Chinese</option>
         <option value="zh">[zh] - Chinese</option>
-      </select>
+      </select></p>
    </div>
 
-    <div class="cell border-box-sizing text_cell rendered">
+    <div class="cell border-box-sizing text_cell rendered centerize">
       <div class="inner_cell">
         <div id="appendix-graph-div">
           <embed id="appendix-graph" type="text/html" src="plots_html/fr_plot.html"  width="100%" height="800">
@@ -13310,21 +13329,45 @@ This is not an issue  from the code point of view. The important thing is if thi
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following tables contain the list and statistics for all languages. The tables are also interactive, you can reorder them clicking in.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Table-for-all-languages-with-per-UPOS-(token)-length">Table for all languages with per UPOS (token) length<a class="anchor-link" href="#Table-for-all-languages-with-per-UPOS-(token)-length">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered  centerize">
       <div class="inner_cell">
         <div id="appendix-char-table-div">
           <embed id="appendix-char-table" type="text/html" src="tables_html/text_table.html"  width="80%" height="450">
         </div>
       </div>
     </div>
-
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Table-for-all-languages-with-per-character-length">Table for all languages with per character length<a class="anchor-link" href="#Table-for-all-languages-with-per-character-length">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered  centerize">
       <div class="inner_cell">
         <div id="appendix-upos-table-div">
           <embed id="appendix-upos-table" type="text/html" src="tables_html/upos_table.html"  width="80%" height="450">
         </div>
       </div>
     </div>
+
+
+
 </div>
 
 </div>
