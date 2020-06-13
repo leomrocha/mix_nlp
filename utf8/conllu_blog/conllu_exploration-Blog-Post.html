@@ -13145,10 +13145,10 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Observations">Observations<a class="anchor-link" href="#Observations">&#182;</a></h2><p>The histograms show a skew on the distribution, this can be a skewed gaussian, a generalized gaussian or a beta distribution form. Due to this, I will be testing different distribution fits with the Kolmogorov-Smirnov test.</p>
+<h2 id="Observations">Observations<a class="anchor-link" href="#Observations">&#182;</a></h2><p>The histograms show a skew on the distribution, this can be a skewed gaussian, a generalized gaussian or a beta distribution form. Due to this, we test different distribution fits with the Kolmogorov-Smirnov test.</p>
 <p>There are many languages that do not have enough samples so the dsitribution fit will not be good  and errors will be big.
 This is not an issue  from the code point of view. The important thing is if this data is used, take into account the number of samples available.</p>
-<p>While doing this work I found quite interesting that are languages whose number of tokens or characters avoid certain bins in the histogram (Bulgarian, Breton Welsh, Danish, Slovak, Tamil and Thai are a few examples of this). This can mean that, either the language structure supports only those lengths, or that the analyzed dataset only contains samples that avoid some sentence lengths.</p>
+<p>While doing this work we found quite interesting that are languages whose number of tokens or characters avoid certain bins in the histogram (Bulgarian, Breton Welsh, Danish, Slovak, Tamil and Thai are a few examples of this). This can mean that, either the language structure supports only those lengths, or that the analyzed dataset only contains samples that avoid some sentence lengths.</p>
 <p>For some languages the number of samples is too small to make any good assumption from the data.</p>
 <p>There is one missing language in the analysis, the language code is <strong>qhe</strong> correspinding to the <em>UD_Hindi_English-HIENCS</em> folder. This is because the files contain only underscore and space characters.</p>
 
