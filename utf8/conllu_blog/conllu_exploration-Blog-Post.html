@@ -13077,11 +13077,23 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="A-statistical-Conllu-file-Exploration-of--Universal-Dependencies">A statistical Exploration of Universal Dependencies Conllu Files<a class="anchor-link" href="#A-statistical-Conllu-file-Exploration-of--Universal-Dependencies">&#182;</a></h1><h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h2><p>While much work is being done in the current days on NLP and NLU, there is little work on describing why a certain length of transformer (or other as LSTM time steps) architecture has been chosen for the training, it is mostly arbitrary and depends on the goal of the work and resources available (mainly hardware). These decisions are hard once the model has been trained and there is nothing that can be done to extend the length of a transformer (for example) without having to retrain the entire network. There are however some works that tackle variable length sequences.</p>
+<p><a href="https://leomrocha.github.com">Leo's Home page</a> -- <a href="https://leomrocha.github.io/ud_conllu_v2.6">Project's Home Page</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="A-statistical-Exploration-of-Universal-Dependencies-Conllu-Files">A statistical Exploration of Universal Dependencies Conllu Files<a class="anchor-link" href="#A-statistical-Exploration-of-Universal-Dependencies-Conllu-Files">&#182;</a></h1><h2 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h2><p>While much work is being done in the current days on NLP and NLU, there is little work on describing why a certain length of transformer (or other as LSTM time steps) architecture has been chosen for the training, it is mostly arbitrary and depends on the goal of the work and resources available (mainly hardware). These decisions are hard once the model has been trained and there is nothing that can be done to extend the length of a transformer (for example) without having to retrain the entire network. There are however some works that tackle variable length sequences.</p>
 <p>This work presents the first complete analysis (from our knowledge) of the Universal Dependencies v2.6 dataset and presents the global and individual results by language.</p>
 <p>This work does not intend to be a conference level paper (that is why there are no references to papers on the subject), but an informational technical report that might help to better select the most effective compromise text or token length for your particular NLP application.</p>
 <p>The number of analyzed languages is 91, the token length is measured as the named UPOS tag in the dataset, while the character length is just that. There is no analysis on what constitutes a word or not, this means that a token includes the punctuation and other symbols presents in the text samples.</p>
-<h4 id="Note:-this-is-not-a-tutorial">Note: this is not a tutorial<a class="anchor-link" href="#Note:-this-is-not-a-tutorial">&#182;</a></h4>
+<h4 id="Notes:">Notes:<a class="anchor-link" href="#Notes:">&#182;</a></h4><ul>
+<li>The graphs and tables in this post is best viewed in a computer</li>
+<li>This is not a tutorial</li>
+</ul>
+
 </div>
 </div>
 </div>
@@ -13091,7 +13103,7 @@ div#notebook {
 <h2 id="Dataset">Dataset<a class="anchor-link" href="#Dataset">&#182;</a></h2><p><a href="https://universaldependencies.org/">Universal Dependencies</a> <a href="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-3226">v2.6</a></p>
 <p>The process is the same for any UD version.</p>
 <p>The Data is <strong>353MB</strong> compressed in gzip format and <strong>2.1GB</strong> in uncompressed raw text format.</p>
-<!--<p>The entire pipeline takes less than 20 minutes to process and generate all graphs and html output from the uncompressed UD dataset on 1 CPU core of an intel 7700.</p>-->
+<p>The entire pipeline takes less than 20 minutes to process and generate all graphs and html output from the uncompressed UD dataset on 1 CPU core of an intel 7700.</p>
 
 </div>
 </div>
@@ -13119,7 +13131,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Method---Steps">Method - Steps<a class="anchor-link" href="#Method---Steps">&#182;</a></h2><p>Some code detail can be seen at the Apendix of this document, the complete code is available in the <a href="TODO">repository</a>.</p>
+<h2 id="Method---Steps">Method - Steps<a class="anchor-link" href="#Method---Steps">&#182;</a></h2><p>Some code detail can be seen at the Apendix of this document, the complete code is available in the <a href="https://leomrocha.github.io/ud_conllu_v2.6">repository</a>.</p>
 <ol>
 <li>A single zipped file containing the dataset was downloaded locally and uncompressed</li>
 <li>All the file tree is explored, a list of all the files is returned. All files, train, test and dev are used for this analysis to have the maximum amount of data available.</li>
@@ -13135,8 +13147,8 @@ div#notebook {
 <li>Every language is now processed independently and several possible distributions are tested, only the one with the best Kolmogorov-Smirnov test result is chosen as a result. This is the most time-expensive step in the pipe.</li>
 <li>Statistics are computed for every language</li>
 <li>Results are converted to json and saved in a single gz file (available to download in the github repository)</li>
-<li>Statistics tables and plots are done per language, graphs can be explored in the <a href="TODO">project's github page</a></li>
-<li>Tables are created for upos and text (character) length for all the languages together. These tables are available in the  <a href="TODO">project's github page</a></li>
+<li>Statistics tables and plots are done per language, graphs can be explored here and are available in the <a href="https://leomrocha.github.io/ud_conllu_v2.6O/conllu_blog/plots_html/">project's github page</a></li>
+<li>Tables are created for upos and text (character) length for all the languages together. These tables are available in the  <a href="https://leomrocha.github.io/ud_conllu_v2.6/conllu_blog/tables_html/">project's github page</a></li>
 </ol>
 
 </div>
@@ -13174,7 +13186,6 @@ This is not an issue  from the code point of view. The important thing is if thi
 </div>
 </div>
 </div>
-
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13182,7 +13193,7 @@ This is not an issue  from the code point of view. The important thing is if thi
 </div>
 </div>
 </div>
-      <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>You can select the language you want to explore from the dropdown menu.</p>
@@ -13369,13 +13380,22 @@ This is not an issue  from the code point of view. The important thing is if thi
 
 
 </div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
 
 </div>
+</div>
 
-
 </div>
-</div>
-</div>
+    </div>
+  </div>
 </body>
 
  
