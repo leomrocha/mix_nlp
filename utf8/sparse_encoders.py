@@ -623,16 +623,24 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
         'non_accent_sum': ac_sum,
         'casing': [isupper_case, islower_case, notcase, istitle],
         'alnum': [isnum, isalnum, isalpha],
-        'len': c_len,  # length
+        'len': c_len,  # length -> I can encode it with Fourier approximations, a few sine waves should suffice
     }
 
     return code_dict
 
 
-CHAR_FPATH = "/home/leo/projects/Datasets/text/wiki-unicode/selected_sources_small/selected_chars.chars"
+# CHAR_FPATH = "/home/leo/projects/Datasets/text/wiki-unicode/selected_sources_small/selected_chars.chars"
+CHAR_FPATH = "./charsets/selected_chars.chars"
 
 
 def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_SPACE, size_factor=2):
+    """
+
+    :param fpath: path to the char vocabulary
+    :param reserved_codespace: code spaces to NOT touch, reserved
+    :param size_factor: the size factor for the circular convolution composition
+    :return: dictionary of the codes
+    """
 
     # recover source of the chars to encode
     with open(fpath, "r") as f:
