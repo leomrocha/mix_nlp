@@ -614,6 +614,7 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
     isnum = c.isnumeric()  # takes into account other things like exponents, japanese and chinese numeric characters
     isalnum = c.isalnum()
     isalpha = c.isalpha()
+    # TODO implement is_float (check if floating point)
 
     code_dict = {
         'token': c,  # Normalized NFKD token
