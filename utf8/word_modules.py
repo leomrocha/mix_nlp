@@ -77,18 +77,27 @@ class WordEncoder(nn.Module):
         # language activation
         self.lang_activ = FourierActivation() if activation is None else activation
         # language encoding matrix
-
+        self.lang_matrix = nn.Parameter(torch.rand(lang_mat_size, word_mat_size))  # TODO make a better initialization
         # word vector FF encoding
-
+        ff_word = nn.Sequential(
+            nn.Linear(in_word_size, hid_word_size),
+            nn.Linear(hid_word_size, word_mat_size),
+        )
+        self.ff_word = SkipZero(ff_word)
         # word activation
-
+        self.word_activ = FourierActivation() if activation is None else activation
         # composed FF encoding
-
+        ff_compose = nn.Sequential(
+            nn.Linear(word_mat_size, hid_word_size),
+            nn.Linear(hid_word_size, word_mat_size),
+        )
+        self.ff_compose = SkipZero(ff_compose)
         # composed activation
+        self.compose_activ = FourierActivation() if activation is None else activation
 
-    def froze_embed_train(self, mode=True):
-        super().train(mode)
-        # self.embeds.requires_grad_(False)
+    def _init_weights(self):
+        # TODO
+        pass
 
     def forward(self, lang_vec, word_vec):
         """
@@ -96,6 +105,11 @@ class WordEncoder(nn.Module):
         :param word_vec:
         :return: latent
         """
+        lat_lang = self.lang_activ(self.ff_lang(lang_vec))
+        word_gate = torch.mm(lat_lang, self.lang_matrix)
 
+        lat_word = self.word_activ(self.ff_word(word_vec))
+        lat_word = lat_word * word_gate
+        latent = self.compose_activ(self.ff_compose(lat_word))
         return latent
 
