@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from torch.nn.modules.transformer import  TransformerEncoder, TransformerDecoder, TransformerEncoderLayer
+from torch.nn.modules.transformer import TransformerEncoder, TransformerDecoder, TransformerEncoderLayer
 from torch.nn.utils import weight_norm
 from torch.nn.init import xavier_uniform_
 try:
