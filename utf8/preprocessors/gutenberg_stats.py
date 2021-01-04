@@ -206,7 +206,7 @@ def process_gutenberg_file(fname, metainfo):
         # slows a lot the processing, but I don't care for the moment
         # I'm doubting using this as much of it is already done in the previous part
         # also makes everything slooower ... need to do it faster so I wont count this stat (even though I do want it)
-        # i might be able to do some estimation?, nevertheless
+        # I might be able to do some estimation?, nevertheless
         # count number of paragraphs .. might not work on many languages
         # Somehow this can be done instead as an extension to spacy, to make it faster and process things less times
         paragraphs = [l.strip() for l in txt.split('\n\n') if len(l.strip()) > 0]

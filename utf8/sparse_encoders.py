@@ -616,12 +616,13 @@ def get_code_item(c, codebook, padded_codebook, circ_padded_codebook, char2int):
     isalpha = c.isalpha()
     # TODO implement is_float (check if floating point)
 
+    # TODO implement: beginning and of word, prefixes and suffixes
     code_dict = {
         'token': c,  # Normalized NFKD token
         'complete_conv': nc_conv,
-        'non_accent_conv': ac_conv,
-        'complete_sum': nc_sum,
-        'non_accent_sum': ac_sum,
+        'non_accent_conv': ac_conv, 
+        'complete_sum': nc_sum,  # bag of words
+        'non_accent_sum': ac_sum,  # bag of words lowercase
         'casing': [isupper_case, islower_case, notcase, istitle],
         'alnum': [isnum, isalnum, isalpha],
         'len': c_len,  # length -> I can encode it with Fourier approximations, a few sine waves should suffice
