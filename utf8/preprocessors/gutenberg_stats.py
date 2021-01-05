@@ -205,7 +205,7 @@ def process_gutenberg_file(fname, metainfo):
 
         # slows a lot the processing, but I don't care for the moment
         # I'm doubting using this as much of it is already done in the previous part
-        # also makes everything slooower ... need to do it faster so I wont count this stat (even though I do want it)
+        # also makes everything slooower ... need to do it faster so I won't count this stat (even though I do want it)
         # I might be able to do some estimation?, nevertheless
         # count number of paragraphs .. might not work on many languages
         # Somehow this can be done instead as an extension to spacy, to make it faster and process things less times
@@ -239,7 +239,7 @@ def process_gutenberg_file(fname, metainfo):
             # general data to be able to compute aggregated statistics on the global Gutenberg project files
             'doc': {'paragraph_count': len(paragraphs),
                     'sentence_count': sentence_count,  # number of sentences in the document,
-                    'token_count': len(words),
+                    'token_count': len(tokens),  # corrected error here, it said len(words) -> processed data is wrong
                     'word_count': len(words),
                     'char_count': len(txt),
                     },  # document level statistics
