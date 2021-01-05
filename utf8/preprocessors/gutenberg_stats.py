@@ -38,12 +38,12 @@ import gutenberg_cleaner  # to clean headers and footers from gutenberg files, t
 # ZIP_FILE_LIST = "/media/nfs/Datasets/text/Gutenberg/zip_list.txt"
 # # BASE_RDF_DIR = "/media/nfs/Datasets/text/Gutenberg/rdf_db/cache/epub"
 
-BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg"
-# BASE_DIR = "/home/leo/projects/Datasets/text/Gutenberg/aleph.gutenberg.org"
-RDF_TAR_FILE = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf-files.tar.bz2"
-# ZIP_FILE_LIST = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/zip_list.dedup.txt"
+BASE_DIR = "/home/leo/projects/AI/Datasets/text/Gutenberg/Gutenberg"
+# BASE_DIR = "/home/leo/projects/AI/Datasets/text/Gutenberg/aleph.gutenberg.org"
+RDF_TAR_FILE = "/home/leo/projects/AI/Datasets/text/Gutenberg/Gutenberg/rdf-files.tar.bz2"
+# ZIP_FILE_LIST = "/home/leo/projects/AI/Datasets/text/Gutenberg/Gutenberg/zip_list.dedup.txt"
 ZIP_FILE_LIST = "/home/leo/projects/mix_nlp/utf8/preprocessors/gut_len_err_zip_list.txt"
-BASE_RDF_DIR = "/home/leo/projects/Datasets/text/Gutenberg/Gutenberg/rdf_db/cache/epub"
+BASE_RDF_DIR = "/home/leo/projects/AI/Datasets/text/Gutenberg/Gutenberg/rdf_db/cache/epub"
 
 
 spacy_models = {

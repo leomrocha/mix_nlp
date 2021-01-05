@@ -9,7 +9,7 @@ except:
     # hack to solve issue with ipython executing this import
     from utils import *
 
-BASEPATH = "/home/leo/projects/Datasets/text"
+BASEPATH = "/home/leo/projects/AI/Datasets/text"
 
 
 ########################################################################################################################
