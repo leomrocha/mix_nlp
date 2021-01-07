@@ -45,7 +45,7 @@ from bokeh.embed import components, file_html, json_item, autoload_static
 # UD_VERSION = "2.6"
 # BASEPATH = "/home/leo/projects/Datasets/text"
 # CONLLU_BASEPATH = os.path.join(BASEPATH, 'UniversalDependencies/ud-treebanks-v{}'.format(UD_VERSION))
-CONLLU_BASEPATH = "/home/leo/projects/Datasets/text/UniversalDependencies/ud-treebanks-v2.6"
+CONLLU_BASEPATH = "/home/leo/projects/AI/Datasets/text/UniversalDependencies/ud-treebanks-v2.6"
 
 #
 DISTRIBUTIONS = {"norm": stats.norm,
