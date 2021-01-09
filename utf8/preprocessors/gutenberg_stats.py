@@ -230,17 +230,28 @@ def process_gutenberg_file(fname, metainfo):
         main_para_word_stats = _get_stats(para_word_lens)
         main_para_sen_stats = _get_stats(para_sen_lens)
 
-        para_stats = {'char_stats': main_para_char_stats,
+        para_stats = {
+            # statistics about the number of characters on all the document paragraphs
+            'char_stats': main_para_char_stats,
+            # statistics about the number of tokens on all the document paragraphs
                       'token_stats': main_para_tok_stats,
+            # statistics about the number of words on all the document paragraphs
                       'word_stats': main_para_word_stats,
+            # statistics about the number of sentences on all the document paragraphs
                       'sentence_stats': main_para_sen_stats}
 
         stats_data = {
             # general data to be able to compute aggregated statistics on the global Gutenberg project files
-            'doc': {'paragraph_count': len(paragraphs),
+            'doc': {
+                # number of paragraphs in the document
+                'paragraph_count': len(paragraphs),
+                # number of sentences in the document
                     'sentence_count': sentence_count,  # number of sentences in the document,
+                # number of tokens in the document
                     'token_count': len(tokens),  # corrected error here, it said len(words) -> processed data is wrong
+                # number of words in the document
                     'word_count': len(words),
+                # number of characters in the document
                     'char_count': len(txt),
                     },  # document level statistics
             'by_paragraph': {  # mappings between (item length in THING, count)
@@ -264,16 +275,29 @@ def process_gutenberg_file(fname, metainfo):
             },
 
         }
-        stats = {'char_count': len(txt),
-                 'tokens': {'total_token_count': sum(token_count.values()),
+        stats = {
+            # total number of characters in the document
+            'char_count': len(txt),
+                 'tokens': {
+                     # total number of tokens in the document
+                     'total_token_count': sum(token_count.values()),
+                     # total number of DISTINCT tokens in the document
                             'different_token_count': len(list(token_count.keys())),
+                     # Statistics corresponding to the length of the tokens in the document
                             'token_length_stats': token_stats,
+                     # total number of words in the document
                             'total_word_count': len(words),
+                     # total number of DISTINCT words in the document
                             'different_word_count': len(set(words)),
                             },
-                 'sentences': {'sentence_count': sentence_count,
+                 'sentences': {
+                     # number of sentences in the document
+                     'sentence_count': sentence_count,
+                     # statistics about the number of characters on all the document sentences
                                'char_stats': sen_char_stats,
+                     # statistics about the number of tokens on all the document sentences
                                'token_stats': sen_token_stats,
+                     # statistics about the number of words on all the document sentences
                                'word_stats': sen_word_stats,
                                },
                  'paragraphs': para_stats,
