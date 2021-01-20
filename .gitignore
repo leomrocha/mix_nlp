@@ -132,3 +132,7 @@ dmypy.json
 .idea/
 
 /utf8/nohup.out
+
+# jupyter in docker
+.jupyter/
+.local/share/jupyter
