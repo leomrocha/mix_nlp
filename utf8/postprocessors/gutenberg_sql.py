@@ -1,7 +1,7 @@
 
 # start with metainfo
 CREATE_METADATA_AUTHOR = """CREATE TABLE IF NOT EXISTS metadata.author (
-    name, (unique id
+    name, (unique id)
     yearofbirth,
     yearofdeath,
     );

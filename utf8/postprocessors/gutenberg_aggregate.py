@@ -18,8 +18,6 @@ def create_db():
 
 
 
-
-
 def main():
     pass
 
