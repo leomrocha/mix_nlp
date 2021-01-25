@@ -136,3 +136,6 @@ dmypy.json
 # jupyter in docker
 .jupyter/
 .local/share/jupyter
+
+# large files
+gutenberg_stats/
