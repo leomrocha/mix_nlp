@@ -3,8 +3,8 @@
 import os
 import sys
 import gzip
-import pandas as pd
 from pathlib import Path
+from collections import Counter
 
 try:
     import orjson as json
@@ -35,31 +35,27 @@ def sum_stats(data_source_path):
     :returns: a dict with summed values
     '''
     
-    # TODO: replace with Counter
     aggregated_stats = {
-        'doc': pd.Series(dtype=int), 
+        'doc': Counter(), 
         'by_paragraph': {
-            'sentence_length': pd.Series(dtype=int), 
-            'word_length': pd.Series(dtype=int), 
-            'token_length': pd.Series(dtype=int), 
-            'char_length': pd.Series(dtype=int),
+            'sentence_length': Counter(), 
+            'word_length': Counter(), 
+            'token_length': Counter(), 
+            'char_length': Counter(),
         }, 
         'by_sentence': { 
-            'word_length': pd.Series(dtype=int), 
-            'token_length': pd.Series(dtype=int), 
-            'char_length': pd.Series(dtype=int),
+            'word_length': Counter(), 
+            'token_length': Counter(), 
+            'char_length': Counter(),
         }, 
     }
 
     # will result in larger files and the computation will be slower 
-    # as pandas does some aligning on the index 
-    # https://pandas.pydata.org/pandas-docs/stable/user_guide/dsintro.html?highlight=alignment#vectorized-operations-and-label-alignment-with-series)
     if not 'short' in TARGET_DIR:
-        aggregated_stats['by_word'] = {'words': pd.Series(dtype=int)}
+        aggregated_stats['by_word'] = {'words': Counter()}
 
     # get all files (including sub directories)
     paths = list(Path(data_source_path).rglob("*stats_all*.json.gz"))
-
 
     levels = list(aggregated_stats.keys())
     levels.remove('doc')
@@ -68,24 +64,16 @@ def sum_stats(data_source_path):
         with gzip.open(path) as f:
             book = json.loads(f.read())
         
-        stats = book['stats_data']
+        book_stats = book['stats_data']
         
-        aggregated_stats['doc'] = aggregated_stats['doc'].add(
-            pd.Series(stats['doc']), fill_value=0
-        ).astype(int)
+        aggregated_stats['doc'].update(book_stats['doc'])
 
         # MAYBE: deal with nesting dynamically
         for level in levels:
-            for key in aggregated_stats[level].keys():
-                aggregated_stats[level][key] = aggregated_stats[level][key].add(
-                    pd.Series(stats[level][key]), fill_value=0
-                ).astype(int)
+            for dist_name, agg_dist in aggregated_stats[level].items():
+                agg_dist.update(book_stats[level][dist_name])
 
-    # remove pandas
-    aggregated_stats['doc'] = aggregated_stats['doc'].to_dict()
-    for level in levels:
-        for key, value in aggregated_stats[level].items():
-            aggregated_stats[level][key] = value.to_dict()
+    # MAYBE: remove Counters
 
     return aggregated_stats
 
