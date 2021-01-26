@@ -35,7 +35,7 @@ def sum_stats(data_source_path):
     :returns: a dict with summed values
     '''
     
-    # return {'list': os.listdir(data_source_path)}
+    # TODO: replace with Counter
     aggregated_stats = {
         'doc': pd.Series(dtype=int), 
         'by_paragraph': {
