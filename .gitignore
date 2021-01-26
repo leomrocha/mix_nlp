@@ -139,4 +139,3 @@ dmypy.json
 
 # large files
 gutenberg_stats/
-gutenberg_agg_stats/by_language_with_words/
