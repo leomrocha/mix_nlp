@@ -1,3 +1,3 @@
-FROM jupyter/datascience-notebook:703d8b2dcb88
+FROM jupyter/datascience-notebook:python-3.8.6
 
 RUN pip install pip install chartify
