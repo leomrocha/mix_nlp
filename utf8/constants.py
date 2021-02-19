@@ -2,7 +2,7 @@
 Definitions of constant values that will be used through all the project
 
 """
-# use Box Codes for the delimitation to avoid any encoding collition
+# use Box Codes for the delimitation to avoid any encoding collision
 SEPARATOR = '█'  # to use as separator instead of CSV or TSV
 CHAR_MASK = '▒'  # To use as a mask for a character
 # some interesting characters for use:

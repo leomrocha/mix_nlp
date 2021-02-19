@@ -669,7 +669,7 @@ def compositional_code_main(fpath=CHAR_FPATH, reserved_codespace=RESERVED_CODE_S
     # print("2 all_chars len = ", len(all_chars))
     # print("2 first_symbols len = ", len(first_symbols))
     # sort and take out a few symbols that I don't want and couldn't set in the filter of the original file
-    first_symbols = sorted(list(set(first_symbols).difference(set(['҈',  '҉']))))
+    first_symbols = sorted(list(set(first_symbols).difference({'҈', '҉'})))
     # print("3 first_symbols len = ", len(first_symbols))
     all_base_chars = sorted(list(set(first_symbols + list(unicodedata.normalize('NFKD', ''.join(chars))))))
     # print("all_base_chars len = ", len(all_base_chars))
