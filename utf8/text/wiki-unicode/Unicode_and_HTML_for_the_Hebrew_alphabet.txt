@@ -1,0 +1,753 @@
+   #alternate Edit this page Wikipedia (en)
+
+Unicode and HTML for the Hebrew alphabet
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+
+   The Unicode and HTML for the Hebrew alphabet are found in the following
+   tables. The Unicode Hebrew block extends from U+0590 to U+05FF and from
+   U+FB1D to U+FB4F. It includes letters, ligatures, combining diacritical
+   marks (niqqud and cantillation marks) and punctuation. The Numeric
+   Character References are included for HTML. These can be used in many
+   markup languages, and they are often used on web pages to create the
+   Hebrew glyphs presentable by the majority of web browsers.
+   [ ]
+
+Contents
+
+     * 1 Unicode
+          + 1.1 Character table
+          + 1.2 Compact table
+     * 2 HTML code tables
+     * 3 See also
+     * 4 External links
+
+Unicode[edit]
+
+Character table[edit]
+
+   Hebrew Niqqud are not included in this table
+    Code  Result            Description
+   U+05BE ־      Hebrew Punctuation Maqaf
+   U+05C0 ׀      Hebrew Punctuation Paseq
+   U+05C3 ׃      Hebrew Punctuation Sof Pasuq
+   U+05C6 ׆      Hebrew Punctuation Nun Hafukha
+   U+05D0 א      Hebrew Letter Alef
+   U+05D1 ב      Hebrew Letter Bet
+   U+05D2 ג      Hebrew Letter Gimel
+   U+05D3 ד      Hebrew Letter Dalet
+   U+05D4 ה      Hebrew Letter He
+   U+05D5 ו      Hebrew Letter Vav
+   U+05D6 ז      Hebrew Letter Zayin
+   U+05D7 ח      Hebrew Letter Het
+   U+05D8 ט      Hebrew Letter Tet
+   U+05D9 י      Hebrew Letter Yod
+   U+05DA ך      Hebrew Letter Final Kaf
+   U+05DB כ      Hebrew Letter Kaf
+   U+05DC ל      Hebrew Letter Lamed
+   U+05DD ם      Hebrew Letter Final Mem
+   U+05DE מ      Hebrew Letter Mem
+   U+05DF ן      Hebrew Letter Final Nun
+   U+05E0 נ      Hebrew Letter Nun
+   U+05E1 ס      Hebrew Letter Samekh
+   U+05E2 ע      Hebrew Letter Ayin
+   U+05E3 ף      Hebrew Letter Final Pe
+   U+05E4 פ      Hebrew Letter Pe
+   U+05E5 ץ      Hebrew Letter Final Tsadi
+   U+05E6 צ      Hebrew Letter Tsadi
+   U+05E7 ק      Hebrew Letter Qof
+   U+05E8 ר      Hebrew Letter Resh
+   U+05E9 ש      Hebrew Letter Shin
+   U+05EA ת      Hebrew Letter Tav
+   U+05F0 װ      Hebrew Ligature Yiddish Double Vav
+   U+05F1 ױ      Hebrew Ligature Yiddish Vav Yod
+   U+05F2 ײ      Hebrew Ligature Yiddish Double Yod
+   U+05F3 ׳      Hebrew Punctuation Geresh
+   U+05F4 ״      Hebrew Punctuation Gershayim
+
+Compact table[edit]
+
+   Main articles: Hebrew (Unicode block) and Alphabetic Presentation Forms
+   (Unicode block)
+   Hebrew^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+              0 1 2 3 4 5 6 7 8 9 A B C D E F
+       U+059x
+   ֑ ‎
+   ֒ ‎
+
+   ֓ ‎ ֔ ‎ ֕ ‎ ֖ ‎ ֗ ‎ ֘ ‎ ֙ ‎ ֚ ‎ ֛ ‎ ֜ ‎ ֝ ‎ ֞ ‎ ֟ ‎
+   U+05Ax
+   ֠ ‎ ֡ ‎ ֢ ‎ ֣ ‎ ֤ ‎ ֥ ‎ ֦ ‎ ֧ ‎ ֨ ‎ ֩ ‎ ֪ ‎ ֫ ‎ ֬ ‎ ֭ ‎ ֮ ‎ ֯ ‎
+   U+05Bx
+   ְ ‎ ֱ ‎ ֲ ‎ ֳ ‎ ִ ‎ ֵ ‎ ֶ ‎ ַ ‎ ָ ‎ ֹ ‎ ֺ ‎ ֻ ‎ ּ ‎ ֽ ‎ ־‎ ֿ ‎
+   U+05Cx
+   ׀‎ ׁ ‎ ׂ ‎ ׃‎ ׄ ‎ ׅ ‎ ׆‎ ׇ ‎
+   U+05Dx
+   א‎ ב‎ ג‎ ד‎ ה‎ ו‎ ז‎ ח‎ ט‎ י‎ ך‎ כ‎ ל‎ ם‎ מ‎ ן‎
+   U+05Ex
+   נ‎ ס‎ ע‎ ף‎ פ‎ ץ‎ צ‎ ק‎ ר‎ ש‎ ת‎ ׯ‎
+   U+05Fx
+   װ‎ ױ‎ ײ‎ ׳‎ ״‎
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+   Note I: The ligatures
+   װ ױ ײ‎ are intended for Yiddish. They are not used in Hebrew.
+   Note II: The symbol ״‎ is called a gershayim and is a punctuation mark
+   used in the Hebrew language to denote acronyms. It is written before
+   the last letter in the acronym. Gershayim is also the name of a note of
+   cantillation in the reading of the Torah, printed above the accented
+   letter.
+
+   Remaining graphs are in the Alphabetic Presentation Forms block:
+
+   Hebrew subset of Alphabetic Presentation Forms^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+FB1x (U+FB00–U+FB1C omitted)
+
+   יִ‎ ﬞ ‎ ײַ‎
+   U+FB2x
+   ﬠ‎ ﬡ‎ ﬢ‎ ﬣ‎ ﬤ‎ ﬥ‎ ﬦ‎ ﬧ‎ ﬨ‎ ﬩‎ שׁ‎ שׂ‎ שּׁ‎ שּׂ‎ אַ‎ אָ‎
+   U+FB3x
+   אּ‎ בּ‎ גּ‎ דּ‎ הּ‎ וּ‎ זּ‎ טּ‎ יּ‎ ךּ‎ כּ‎ לּ‎ מּ‎
+   U+FB4x
+   נּ‎ סּ‎ ףּ‎ פּ‎ צּ‎ קּ‎ רּ‎ שּ‎ תּ‎ וֹ‎ בֿ‎ כֿ‎ פֿ‎ ﭏ‎
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.^ Grey areas indicate non-assigned code points
+
+   Note: In Yiddish orthography only, the glyph, yud-ḥiriq (
+   יִ‎), pronounced /i/, can be optionally used, rather than typing yud
+   then ḥiriq (יִ‎). In Hebrew spelling this would be pronounced /ji/.
+   /i/ is written ḥiriq then yud ( ִי‎).
+
+HTML code tables[edit]
+
+   Note: HTML numeric character references can be in decimal format
+   (&#DDDD;) or hexadecimal format (&#xHHHH;). For example, &#1490; and
+   &#x05D2; (where "05D2" in hexadecimal is the same as "1490" in decimal)
+   both represent the Hebrew letter gimmel.
+
+   Hebrew alphabet
+
+   ב‎ בּ‎ א‎
+   &#1489; &#64305; &#1488;
+   ה‎ ד‎ ג‎
+   &#1492; &#1491; &#1490;
+   ח‎ ז‎ ו‎
+   &#1495; &#1494; &#1493;
+   כּ‎ י‎ ט‎
+   &#64315; &#1497; &#1496;
+   ל‎ ך‎ כ‎
+   &#1500; &#1498; &#1499;
+   נ‎ ם‎ מ‎
+   &#1504; &#1501; &#1502;
+   ע‎ ס‎ ן‎
+   &#1506; &#1505; &#1503;
+   ף‎ פ‎ פּ‎
+   &#1507; &#1508; &#64324;
+   ק‎ ץ‎ צ‎
+   &#1511; &#1509; &#1510;
+   שׂ‎ שׁ‎ ר‎
+   &#64299; &#64298; &#1512;
+   ת‎ תּ‎ ש‎
+   &#1514; &#64330; &#1513;
+
+   Vowels and unique characters
+   Patach (
+
+   ַ‎ ) Kamatz ( ָ‎ )
+   &#1463; &#1464;
+   Tzere (
+   ֵ‎ ) Segol ( ֶ‎ )
+   &#1461; &#1462;
+   Holam male
+   וֹ‎ Holam haser ( ֹ‎ )
+   &#64331; &#1465;
+   Shuruk
+   וּ‎ Kubutz ( ֻ‎ )
+   &#64309; &#1467;
+   Hiriq haser (
+   ִ‎ ) Hataf patach ( יֲ‎ )
+   &#1460; &‌#1458;
+   Hataf kamatz (
+   ֳ‎ ) Hataf segol ( יֱ‎ )
+   &‌#1459; &‌#1457;
+   Shva nach (
+   ְ‎ ) Shva na ( ְ‎ )
+   &#1456;
+   Dagesh (
+   ּ‎ )
+   &#1468;
+
+See also[edit]
+
+     * Alphabetic Presentation Forms (Unicode block)
+     * Hebrew (Unicode block)
+     * Hebrew alphabet
+     * Niqqud
+     * Yiddish orthography
+
+External links[edit]
+
+     * Unicode Hebrew: Range 0590-05FF
+     * Alphabetic Presentation Forms: Range FB00-FB4F
+     * Hebrew Unicode Chart
+
+     * v
+     * t
+     * e
+
+   Hebrew language
+
+   Overviews
+
+     * Language
+     * Alphabet
+     * History
+     * Ancient inscriptions
+     * Transliteration to English / from English
+     * Gematria
+
+   Eras
+
+     * Biblical (northern dialect)
+     * Mishnaic
+     * Medieval
+     * Modern
+
+   Reading traditions
+
+     * Ashkenazi
+     * Sephardi
+     * Italian
+     * Mizrahi (Syrian)
+     * Yemenite
+     * Samaritan
+     * Tiberian (extinct)
+     * Palestinian (extinct)
+     * Babylonian (extinct)
+
+   Orthography
+
+      Eras
+     * Biblical
+
+   Scripts
+     * Rashi
+     * Braille
+     * Ashuri
+     * Cursive
+     * Crowning
+     * Paleo-Hebrew
+     * Solitreo
+
+   Alphabet
+     * Alef
+     * Bet
+     * Gimel
+     * Dalet
+     * Hei
+     * Vav
+     * Zayin
+     * Het
+     * Tet
+     * Yud
+     * Kaf
+     * Lamed
+     * Mem
+     * Nun
+     * Samech
+     * Ayin
+     * Pei
+     * Tsadi
+     * Kuf
+     * Reish
+     * Shin
+     * Taw
+
+   Niqqud
+     * Tiberian
+     * Babylonian
+     * Palestinian
+     * Samaritan
+
+     * Shva
+     * Hiriq
+     * Tzere
+     * Segol
+     * Patach
+     * Kamatz
+     * Holam
+     * Kubutz and Shuruk
+     * Dagesh
+     * Mappiq
+     * Maqaf
+     * Rafe
+     * Sin/Shin Dot
+
+   Spelling
+     * with Niqqud / missing / full
+     * Mater lectionis
+     * Abbreviations
+     * Plene scriptum
+
+   Punctuation
+     * Diacritics
+     * Meteg
+     * Cantillation
+     * Geresh
+     * Gershayim
+     * Inverted nun
+     * Shekel sign
+     * Numerals
+
+   Phonology
+
+     * Biblical Hebrew
+     * Modern Hebrew
+     * Philippi's law
+     *
+     * Law of attenuation
+
+   Grammar
+
+     * Biblical
+     * Modern
+
+     * Verbal morphology
+     * Semitic roots
+     * Prefixes
+     * Suffixes
+     * Segolate
+     * Waw-consecutive
+
+   Academic
+
+     * Revival
+     * Academy
+     * Study
+     * Ulpan
+     * Keyboard
+     * Hebrew / ancient / modern Israeli literature
+     * Names
+     * Surnames
+     * Unicode and HTML
+
+   Reference works
+
+     * Gesenius' Hebrew Grammar
+     * Gesenius' Hebrew and Chaldee Lexicon to the Old Testament
+       Scriptures
+     * Brown–Driver–Briggs
+     * Strong's Concordance
+     * Hebrew and Aramaic Lexicon of the Old Testament
+
+     * v
+     * t
+     * e
+
+   Unicode
+
+   Unicode
+
+     * Unicode Consortium
+     * ISO/IEC 10646 (Universal Character Set)
+     * Versions
+
+   Code points
+
+     * Block
+          + List
+     * Universal Character Set
+     * Character charts
+     * Character property
+     * Plane
+     * Private Use Area
+
+   Characters
+
+   Special purpose
+     * BOM
+     * Combining grapheme joiner
+     * Left-to-right mark / Right-to-left mark
+     * Soft hyphen
+     * Variant form
+     * Word joiner
+     * Zero-width joiner
+     * Zero-width non-joiner
+     * Zero-width space
+
+   Lists
+     * Characters
+     * CJK Unified Ideographs
+     * Combining character
+     * Duplicate characters
+     * Numerals
+     * Scripts
+     * Spaces
+     * Symbols
+     * Halfwidth and fullwidth
+     * Alias names and abbreviations
+     * Whitespace characters
+
+   Processing
+
+   Algorithms
+     * Bidirectional text
+     * Collation
+          + ISO/IEC 14651
+     * Equivalence
+     * Variation sequences
+     * International Ideographs Core
+
+   Comparison
+     * BOCU-1
+     * CESU-8
+     * Punycode
+     * SCSU
+     * UTF-1
+     * UTF-7
+     * UTF-8
+     * UTF-16/UCS-2
+     * UTF-32/UCS-4
+     * UTF-EBCDIC
+
+   On pairs of
+   code points
+
+     * Combining character
+     * Compatibility characters
+     * Duplicate characters
+     * Equivalence
+     * Homoglyph
+     * Precomposed character
+          + list
+     * Z-variant
+     * Variation sequences
+     * Regional indicator symbol
+     * Emoji skin color
+
+   Usage
+
+     * Domain names (IDN)
+     * Email
+     * Fonts
+     * HTML
+          + entity references
+          + numeric references
+     * Input
+     * International Ideographs Core
+
+   Related standards
+
+     * Common Locale Data Repository (CLDR)
+     * GB 18030
+     * ISO/IEC 8859
+     * ISO 15924
+
+   Related topics
+
+     * Anomalies
+     * ConScript Unicode Registry
+     * Ideographic Research Group
+     * International Components for Unicode
+     * People involved with Unicode
+     * Han unification
+
+                     Scripts and symbols in Unicode
+   Common and
+   inherited scripts
+     * Combining marks
+     * Diacritics
+     * Punctuation marks
+     * Spaces
+     * Numbers
+
+   Modern scripts
+     * Adlam
+     * Arabic
+     * Armenian
+     * Balinese
+     * Bamum
+     * Batak
+     * Bengali
+     * Bopomofo
+     * Braille
+     * Buhid
+     * Burmese
+     * Canadian Aboriginal
+     * Chakma
+     * Cham
+     * Cherokee
+     * CJK Unified Ideographs (Han)
+     * Cyrillic
+     * Deseret
+     * Devanagari
+     * Geʽez
+     * Georgian
+     * Greek
+     * Gujarati
+     * Gunjala Gondi
+     * Gurmukhi
+     * Hangul
+     * Hanifi Rohingya
+     * Hanja
+     * Hanunuoo
+     * Hebrew
+     * Hiragana
+     * Javanese
+     * Kanji
+     * Kannada
+     * Katakana
+     * Kayah Li
+     * Khmer
+     * Lao
+     * Latin
+     * Lepcha
+     * Limbu
+     * Lisu (Fraser)
+     * Lontara
+     * Malayalam
+     * Masaram Gondi
+     * Mende Kikakui
+     * Medefaidrin
+     * Miao (Pollard)
+     * Mongolian
+     * Mru
+     * N'Ko
+     * Nag Mundari
+     * New Tai Lue
+     * Nüshu
+     * Nyiakeng Puachue Hmong
+     * Odia
+     * Ol Chiki
+     * Osage
+     * Osmanya
+     * Pahawh Hmong
+     * Pau Cin Hau
+     * Pracalit (Newa)
+     * Ranjana
+     * Rejang
+     * Samaritan
+     * Saurashtra
+     * Shavian
+     * Sinhala
+     * Sorang Sompeng
+     * Sundanese
+     * Syriac
+     * Tagbanwa
+     * Tai Le
+     * Tai Tham
+     * Tai Viet
+     * Tamil
+     * Tangsa
+     * Telugu
+     * Thaana
+     * Thai
+     * Tibetan
+     * Tifinagh
+     * Tirhuta
+     * Toto
+     * Vai
+     * Wancho
+     * Warang Citi
+     * Yi
+
+   Ancient and
+   historic scripts
+     * Ahom
+     * Anatolian hieroglyphs
+     * Ancient North Arabian
+     * Avestan
+     * Bassa Vah
+     * Bhaiksuki
+     * Brāhmī
+     * Carian
+     * Caucasian Albanian
+     * Coptic
+     * Cuneiform
+     * Cypriot
+     * Cypro-Minoan
+     * Dives Akuru
+     * Dogra
+     * Egyptian hieroglyphs
+     * Elbasan
+     * Elymaic
+     * Glagolitic
+     * Gothic
+     * Grantha
+     * Hatran
+     * Imperial Aramaic
+     * Inscriptional Pahlavi
+     * Inscriptional Parthian
+     * Kaithi
+     * Kawi
+     * Kharosthi
+     * Khitan small script
+     * Khojki
+     * Khudawadi
+     * Khwarezmian (Chorasmian)
+     * Linear A
+     * Linear B
+     * Lycian
+     * Lydian
+     * Mahajani
+     * Makasar
+     * Mandaic
+     * Manichaean
+     * Marchen
+     * Meetei Mayek
+     * Meroitic
+     * Modi
+     * Multani
+     * Nabataean
+     * Nandinagari
+     * Ogham
+     * Old Hungarian
+     * Old Italic
+     * Old Permic
+     * Old Persian cuneiform
+     * Old Sogdian
+     * Old Turkic
+     * Old Uyghur
+     * Palmyrene
+     * ʼPhags-pa
+     * Phoenician
+     * Psalter Pahlavi
+     * Runic
+     * Sharada
+     * Siddham
+     * Sogdian
+     * South Arabian
+     * Soyombo
+     * Sylheti Nagri
+     * Tagalog (Baybayin)
+     * Takri
+     * Tangut
+     * Ugaritic
+     * Vithkuqi
+     * Yezidi
+     * Zanabazar Square
+
+                     Notational scripts
+     * Duployan
+     * SignWriting
+
+   Symbols, emojis
+     * Cultural, political, and religious symbols
+     * Currency
+     * Control Pictures
+     * Mathematical operators and symbols
+          + List by subject
+     * Phonetic symbols (including IPA)
+     * Emoji
+
+     *  Category: Unicode
+     *  Category: Unicode blocks
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Unicode_and_HTML_for_the_He
+   brew_alphabet&oldid=1089376976"
+
+   Categories:
+     * Character encoding
+     * Hebrew alphabet
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+Languages
+
+     * Deutsch
+
+   Edit links
+
+     * This page was last edited on 23 May 2022, at 12:45 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

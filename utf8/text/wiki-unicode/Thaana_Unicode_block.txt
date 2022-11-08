@@ -1,0 +1,220 @@
+   #alternate Edit this page Wikipedia (en)
+
+Thaana (Unicode block)
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   Unicode character block
+   Thaana
+   Range U+0780..U+07BF
+   (64 code points)
+   Plane BMP
+   Scripts Thaana
+   Major alphabets Dhivehi
+   Assigned 50 code points
+   Unused 14 reserved code points
+   Unicode version history
+   3.0
+   (1999)
+
+   49 (+49)
+   3.2
+   (2002) 50 (+1)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Thaana is a Unicode block containing characters for the Thaana script
+   used for writing the Dhivehi and Arabic languages in the Maldives.
+
+   Thaana^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+078x ހ ށ ނ ރ ބ ޅ ކ އ ވ މ ފ ދ ތ ލ ގ ޏ
+   U+079x ސ ޑ ޒ ޓ ޔ ޕ ޖ ޗ ޘ ޙ ޚ ޛ ޜ ޝ ޞ ޟ
+   U+07Ax ޠ ޡ ޢ ޣ ޤ ޥ ަ ާ ި ީ ު ޫ ެ ޭ ޮ ޯ
+   U+07Bx ް ޱ
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Thaana block:
+
+   Version Final code points^[a] Count    UTC ID      L2 ID   WG2 ID Document
+   3.0     U+0780..07B0          49    UTC/1991-100
+   McGowan, Rick (1991-10-25), Maldivian (Dihevi) block description and
+   chart draft
+                                                    L2/97-036 N1519R
+
+   Everson, Michael (1997-05-30), Proposal for encoding the Thaana script
+   in ISO/IEC 10646
+   L2/97-197
+   Jenkins, John; Everson, Michael (1997-05-30), Thaana proposal
+   L2/97-288 N1603
+   Umamaheswaran, V. S. (1997-10-24), "8.16", Unconfirmed Meeting Minutes,
+   WG 2 Meeting # 33, Heraklion, Crete, Greece, 20 June – 4 July 1997
+   L2/97-255R
+   Aliprand, Joan (1997-12-03), "Maldividan (Thaana)", Approved Minutes –
+   UTC #73 & L2 #170 joint meeting, Palo Alto, CA – August 4-5, 1997
+   L2/98-161 N1699
+   Everson, Michael (1998-03-10), Thaana new code chart and name list
+   L2/98-173
+   Text for PDAM registration and consideration ballot for ISO 10646-1
+   Amendment 24 - Thaana, 1998-05-11
+   L2/98-158
+   Aliprand, Joan; Winkler, Arnold (1998-05-26), "Thaana", Draft Minutes –
+   UTC #76 & NCITS Subgroup L2 #173 joint meeting, Tredyffrin,
+   Pennsylvania, April 20-22, 1998
+   L2/98-286 N1703
+   Umamaheswaran, V. S.; Ksar, Mike (1998-07-02), "8.16", Unconfirmed
+   Meeting Minutes, WG 2 Meeting #34, Redmond, WA, USA; 1998-03-16--20
+   N1834
+   Summary of Voting/Table of Replies - Amendment 24 - Thaana, 1998-08-27
+   L2/98-323 N1909
+   ISO/IEC 10646-1/FPDAM 24, AMENDMENT 24: Thaana, 1998-10-23
+   L2/99-010 N1903 (pdf, html, doc)
+   Umamaheswaran, V. S. (1998-12-30), "6.7.7", Minutes of WG 2 meeting 35,
+   London, U.K.; 1998-09-21--25
+   L2/99-232 N2003
+   Umamaheswaran, V. S. (1999-08-03), "6.2.7 FPDAM24 – Thaana script",
+   Minutes of WG 2 meeting 36, Fukuoka, Japan, 1999-03-09--15
+   3.2 U+07B1 1 L2/00-120
+   Nelson, Paul; Beam, Paul; Gadir, Mohamen Abdul (2000-04-07), Proposal
+   to add characters for use with Thaana Script (Divehi language)
+   L2/00-115R2
+   Moore, Lisa (2000-08-08), "Thaana", Minutes Of UTC Meeting #83
+   L2/00-187
+   Moore, Lisa (2000-08-23), "Motion 84-M5", UTC minutes -- Boston, August
+   8-11, 2000
+   L2/00-328 N2264
+   Whistler, Ken (2000-09-19), Proposal for Encoding Thaana letter Naa in
+   the BMP
+   L2/01-050 N2253
+   Umamaheswaran, V. S. (2001-01-21), "Resolution M39.21 (Thaana Letter
+   Naa)", Minutes of the SC2/WG2 meeting in Athens, September 2000
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Thaana_(Unicode_block)&oldi
+   d=1086089102"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+     * Articles containing Dhivehi-language text
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 4 May 2022, at 03:21 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

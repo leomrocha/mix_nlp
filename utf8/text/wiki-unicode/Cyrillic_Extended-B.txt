@@ -1,0 +1,278 @@
+   #alternate Edit this page Wikipedia (en)
+
+Cyrillic Extended-B
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   For a list of all Cyrillic characters encoded in Unicode, see Cyrillic
+   script in Unicode.
+   Unicode character block
+   Cyrillic Extended-B
+   Range U+A640..U+A69F
+   (96 code points)
+   Plane BMP
+   Scripts Cyrillic
+   Major alphabets Old Cyrillic
+   Old Abkhazian
+   Assigned 96 code points
+   Unused 0 reserved code points
+   Unicode version history
+   5.1
+   (2008)
+
+   78 (+78)
+   6.0
+   (2010) 80 (+2)
+   6.1
+   (2012) 89 (+9)
+   7.0
+   (2014) 95 (+6)
+   8.0
+   (2015) 96 (+1)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Cyrillic Extended-B is a Unicode block containing Cyrillic characters
+   for writing Old Cyrillic and Old Abkhazian, and combining numeric
+   signs.
+
+Block[edit]
+
+   Cyrillic Extended-B^[1]
+   Official Unicode Consortium code chart (PDF)
+          0  1  2  3 4  5  6  7  8  9  A  B  C  D  E  F
+   U+A64x Ꙁ  ꙁ  Ꙃ  ꙃ Ꙅ  ꙅ  Ꙇ  ꙇ  Ꙉ  ꙉ  Ꙋ  ꙋ  Ꙍ  ꙍ  Ꙏ  ꙏ
+   U+A65x Ꙑ  ꙑ  Ꙓ  ꙓ Ꙕ  ꙕ  Ꙗ  ꙗ  Ꙙ  ꙙ  Ꙛ  ꙛ  Ꙝ  ꙝ  Ꙟ  ꙟ
+   U+A66x Ꙡ  ꙡ  Ꙣ  ꙣ Ꙥ  ꙥ  Ꙧ  ꙧ  Ꙩ  ꙩ  Ꙫ  ꙫ  Ꙭ  ꙭ  ꙮ   ꙯
+   U+A67x  ꙰  ꙱  ꙲ ꙳  ꙴ  ꙵ  ꙶ  ꙷ  ꙸ  ꙹ  ꙺ  ꙻ  ꙼  ꙽ ꙾  ꙿ
+   U+A68x Ꚁ  ꚁ  Ꚃ  ꚃ Ꚅ  ꚅ  Ꚇ  ꚇ  Ꚉ  ꚉ  Ꚋ  ꚋ  Ꚍ  ꚍ  Ꚏ  ꚏ
+   U+A69x Ꚑ  ꚑ  Ꚓ  ꚓ Ꚕ  ꚕ  Ꚗ  ꚗ  Ꚙ  ꚙ  Ꚛ  ꚛ  ꚜ  ꚝ   ꚞ  ꚟ
+   Notes
+
+          1.^ As of Unicode version 15.0
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Cyrillic Extended-B block:
+
+   Version        Final code points^[a]         Count   L2 ID   WG2 ID Document
+   5.1     U+A640..A65F, A662..A673, A67C..A697 78    L2/06-042
+   Cleminson, Ralph (2006-01-26), Proposal for additional Cyrillic
+   characters
+                                                      L2/06-181
+
+   Anderson, Deborah (2006-05-08), Responses to the UTC regarding
+   L2/06-042, Proposal for Additional Cyrillic Characters
+   L2/06-359
+   Cleminson, Ralph (2006-10-31), Proposal for additional Cyrillic
+   characters
+   L2/07-003 N3194
+   Everson, Michael; Birnbaum, David; Cleminson, Ralph; Derzhanski, Ivan;
+   Dorosh, Vladislav; Kryukov, Alexey; Paliga, Sorin; Ruppel, Klaas
+   (2007-01-12), Proposal to encode additional Cyrillic characters in the
+   BMP of the UCS
+   L2/07-055
+   Cleminson, Ralph (2007-01-19), Comments on Additional Cyrillic
+   Characters (L2/07-003 = WG2 N3194)
+   L2/07-015
+   Moore, Lisa (2007-02-08), "Cyrillic (C.13)", UTC #110 Minutes
+   L2/07-118R2
+   Moore, Lisa (2007-05-23), "111-C17", UTC #111 Minutes
+   L2/07-268 N3253 (pdf, doc)
+   Umamaheswaran, V. S. (2007-07-26), "M50.11", Unconfirmed minutes of WG
+   2 meeting 50, Frankfurt-am-Main, Germany; 2007-04-24/27
+   L2/22-002 N5170
+   Everson, Michael (2022-01-09), Proposal to revise the glyph of CYRILLIC
+   LETTER MULTIOCULAR O [U+A66E]
+   L2/22-023
+   Anderson, Deborah; Whistler, Ken; Pournader, Roozbeh; Constable, Peter
+   (2022-01-22), "1a. Cyrillic Letter Multiocular O", Recommendations to
+   UTC #170 January 2022 on Script Proposals
+   L2/22-016
+   Constable, Peter (2022-04-21), "Consensus 170-C5", UTC #170 Minutes,
+   "Approve a glyph change for U+A66E CYRILLIC LETTER MULTIOCULAR O from a
+   7-eyed glyph to a 10-eyed glyph for a change in Unicode 15.0."
+   6.0 U+A660..A661 2 L2/09-003R
+   Moore, Lisa (2009-02-12), "B.15.4", UTC #118 / L2 #215 Minutes
+   L2/09-020R N3563R
+   Cleminson, Ralph; Everson, Michael (2009-03-13), Proposal to encode two
+   Cyrillic characters in the BMP of the UCS
+   L2/09-234 N3603 (pdf, doc)
+   Umamaheswaran, V. S. (2009-07-08), "M54.13a", Unconfirmed minutes of WG
+   2 meeting 54
+   6.1 U+A674..A67B, A69F 9 L2/10-002 N3748
+   Everson, Michael; Baranov, Victor; Miklas, Heinz; Rabus, Achim
+   (2010-01-25), Proposal to encode nine Cyrillic characters for Slavonic
+   L2/10-015R
+   Moore, Lisa (2010-02-09), "C.12", UTC #122 / L2 #219 Minutes
+   N3803 (pdf, doc)
+   "M56.08d", Unconfirmed minutes of WG 2 meeting no. 56, 2010-09-24
+   7.0 U+A698..A69B 4 L2/09-310R N3772
+   Shardt, Yuri; Andreev, Aleksandr (2009-08-18), Proposal to Encode the
+   Typikon Symbols in Unicode
+   L2/11-016
+   Moore, Lisa (2011-02-15), "C.3.1", UTC #126 / L2 #223 Minutes
+   L2/10-394R N3974
+   Shardt, Yuri; Simmons, Nikita; Andreev, Aleksandr (2011-02-25),
+   Proposal to Encode Some Outstanding Early Cyrillic Characters in
+   Unicode
+   L2/11-127
+   Anderson, Deborah (2011-05-12), Suggested Collation for Cyrillic O's
+   (U+A698 - U+69B) from L2/10-394R
+   N4103
+   "11.2.14 Some outstanding early Cyrillic characters", Unconfirmed
+   minutes of WG 2 meeting 58, 2012-01-03
+   U+A69C..A69D 2 L2/10-357 N3914
+   Proposal to add characters used in Lithuanian dialectology to the UCS,
+   2010-10-29
+   L2/11-135
+   Tumasonis, Vladas; Pentzlin, Karl (2011-05-02), Revised proposal to add
+   characters used in Lithuanian dialectology
+   L2/11-189
+   Whistler, Ken; Constable, Peter (2011-05-11), Review of Characters for
+   Lithuanian Dialectology
+   L2/11-191 N4062
+   Constable, Peter; Whistler, Ken (2011-05-13), USNB Comments on N3914
+   -Characters for Lithuanian Dialectology
+   L2/11-116
+   Moore, Lisa (2011-05-17), "Consensus 127-C12", UTC #127 / L2 #224
+   Minutes, "Accept 14 characters for Lithuanian dialectology..."
+   L2/11-223 N4070
+   Tumasonis, Vladas; Pentzlin, Karl (2011-05-24), Second revised proposal
+   to add characters used in Lithuanian dialectology to the UCS
+   L2/11-248 N4116
+   Pentzlin, Karl (2011-06-09), Report on the ad hoc re "Lithuanian
+   dialectology" (SC2/WG2 N4070) held during the SC2/WG2 meeting at
+   Helsinki
+   N4103
+   "11.1.3 Lithuanian dialectology", Unconfirmed minutes of WG 2 meeting
+   58, 2012-01-03
+   8.0 U+A69E 1 L2/13-008 N4390
+   Andreev, Aleksandr; Shardt, Yuri; Simmons, Nikita (2013-01-21),
+   Proposal to Encode An Outstanding Early Cyrillic Character
+   L2/13-011
+   Moore, Lisa (2013-02-04), "C.5", UTC #134 Minutes
+   N4403 (pdf, doc)
+   Umamaheswaran, V. S. (2014-01-28), "10.3.4 One Slavonic Cyrillic
+   character", Unconfirmed minutes of WG 2 meeting 61, Holiday Inn,
+   Vilnius, Lithuania; 2013-06-10/14
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Cyrillic_Extended-B&oldid=1
+   110190879"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 14 September 2022, at 04:22 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

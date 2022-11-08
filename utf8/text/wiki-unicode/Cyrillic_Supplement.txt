@@ -1,0 +1,327 @@
+   #alternate Edit this page Wikipedia (en)
+
+Cyrillic Supplement
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   Group of Unicode symbols
+   For a list of all Cyrillic characters encoded in Unicode, see Cyrillic
+   script in Unicode.
+   Unicode character block
+   Cyrillic Supplement
+   Range U+0500..U+052F
+   (48 code points)
+   Plane BMP
+   Scripts Cyrillic
+   Major alphabets Abkhaz
+   Komi
+   Mordvin
+   Aleut
+   Assigned 48 code points
+   Unused 0 reserved code points
+   Unicode version history
+   3.2
+   (2002)
+
+   16 (+16)
+   5.0
+   (2006) 20 (+4)
+   5.1
+   (2008) 36 (+16)
+   5.2
+   (2009) 38 (+2)
+   6.0
+   (2010) 40 (+2)
+   7.0
+   (2014) 48 (+8)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Cyrillic Supplement is a Unicode block containing Cyrillic letters for
+   writing several minority languages, including Abkhaz, Kurdish, Komi,
+   Mordvin, Aleut, Azerbaijani, and Jakovlev's Chuvash orthography.
+
+Block[edit]
+
+   Cyrillic Supplement^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+050x Ԁ ԁ Ԃ ԃ Ԅ ԅ Ԇ ԇ Ԉ ԉ Ԋ ԋ Ԍ ԍ Ԏ ԏ
+   U+051x Ԑ ԑ Ԓ ԓ Ԕ ԕ Ԗ ԗ Ԙ ԙ Ԛ ԛ Ԝ ԝ Ԟ ԟ
+   U+052x Ԡ ԡ Ԣ ԣ Ԥ ԥ Ԧ ԧ Ԩ ԩ Ԫ ԫ Ԭ ԭ Ԯ ԯ
+   Notes
+
+          1.^ As of Unicode version 15.0
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Cyrillic Supplement block:
+
+   Version Final code points^[a] Count L2 ID WG2 ID Document
+   3.2 U+0500..050F 16 L2/98-211 N1744
+   Everson, Michael (1998-05-25), Additional Cyrillic characters for the
+   UCS
+   L2/98-292R (pdf, html, Figure 1)
+
+   "2.3", Comments on proposals to add characters from ISO standards
+   developed by ISO/TC 46/SC 4, 1998-08-19
+   L2/98-292 N1840
+   "2.3", Comments on proposals to add characters from ISO standards
+   developed by ISO/TC 46/SC 4, 1998-08-25
+   L2/98-293 N1885
+   "2.4", Comments on proposals to add various characters to ISO/IEC
+   10646, 1998-08-25
+   L2/98-301 N1847
+   Everson, Michael (1998-09-12), Responses to NCITS/L2 and Unicode
+   Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc)
+   Whistler, Ken; et al. (1998-09-22), Additional Characters for the UCS
+   L2/99-010 N1903 (pdf, html, doc)
+   Umamaheswaran, V. S. (1998-12-30), "8.1.5.1", Minutes of WG 2 meeting
+   35, London, U.K.; 1998-09-21--25
+   L2/00-182 N2224
+   Everson, Michael; Ruppel, Klaas; Trosterud, Trond (2000-06-09), Archaic
+   Komi Cyrillic characters for the BMP of the UCS
+   L2/00-187
+   Moore, Lisa (2000-08-23), "Komi Cyrillic", UTC minutes -- Boston,
+   August 8-11, 2000
+   L2/01-050 N2253
+   Umamaheswaran, V. S. (2001-01-21), "7.15 Komi Cyrillic", Minutes of the
+   SC2/WG2 meeting in Athens, September 2000
+   5.0 U+0510..0513 4 L2/05-080R2 N2933
+   Priest, Lorna (2005-08-02), Proposal to Encode Additional Cyrillic
+   Characters (rev 2005/08/18)
+   L2/05-215
+   Anderson, Deborah (2005-08-03), Feedback on Cyrillic letters EL WITH
+   HOOK and HA WITH HOOK (L2/05-080)
+   L2/05-230
+   Priest, Lorna (2005-08-11), Nameslist annotations for new Cyrillic
+   letters
+   L2/05-180
+   Moore, Lisa (2005-08-17), "Cyrillic (C.18)", UTC #104 Minutes
+   N2953 (pdf, doc)
+   Umamaheswaran, V. S. (2006-02-16), "7.2.4", Unconfirmed minutes of WG 2
+   meeting 47, Sophia Antipolis, France; 2005-09-12/15
+   5.1 U+0514..0523 16 L2/98-211 N1744
+   Everson, Michael (1998-05-25), Additional Cyrillic characters for the
+   UCS
+   L2/98-301 N1847
+   Everson, Michael (1998-09-12), Responses to NCITS/L2 and Unicode
+   Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc)
+   Whistler, Ken; et al. (1998-09-22), Additional Characters for the UCS
+   L2/99-010 N1903 (pdf, html, doc)
+   Umamaheswaran, V. S. (1998-12-30), "8.1.5.1", Minutes of WG 2 meeting
+   35, London, U.K.; 1998-09-21--25
+   L2/01-050 N2253
+   Umamaheswaran, V. S. (2001-01-21), "7.15 Komi Cyrillic", Minutes of the
+   SC2/WG2 meeting in Athens, September 2000
+   L2/06-042
+   Cleminson, Ralph (2006-01-26), Proposal for additional Cyrillic
+   characters
+   L2/06-181
+   Anderson, Deborah (2006-05-08), Responses to the UTC regarding
+   L2/06-042, Proposal for Additional Cyrillic Characters
+   L2/06-359
+   Cleminson, Ralph (2006-10-31), Proposal for additional Cyrillic
+   characters
+   L2/07-003 N3194
+   Everson, Michael; Birnbaum, David; Cleminson, Ralph; Derzhanski, Ivan;
+   Dorosh, Vladislav; Kryukov, Alexey; Paliga, Sorin; Ruppel, Klaas
+   (2007-01-12), Proposal to encode additional Cyrillic characters in the
+   BMP of the UCS
+   L2/07-055
+   Cleminson, Ralph (2007-01-19), Comments on Additional Cyrillic
+   Characters (L2/07-003 = WG2 N3194)
+   L2/07-015
+   Moore, Lisa (2007-02-08), "Cyrillic (C.13)", UTC #110 Minutes
+   L2/07-268 N3253 (pdf, doc)
+   Umamaheswaran, V. S. (2007-07-26), "M50.11", Unconfirmed minutes of WG
+   2 meeting 50, Frankfurt-am-Main, Germany; 2007-04-24/27
+   5.2 U+0524..0525 2 L2/08-144 N3435R
+   Everson, Michael; Priest, Lorna (2008-04-11), Proposal to encode two
+   Cyrillic characters for Abkhaz
+   L2/08-134 N3429
+   Ankwab, Alexander; Bzhanija, Akhara (2008-04-14), Glyph Changes for
+   Abkhaz
+   L2/08-161R2
+   Moore, Lisa (2008-11-05), "Motion 115-M2", UTC #115 Minutes
+   L2/08-412 N3553 (pdf, doc)
+   Umamaheswaran, V. S. (2008-11-05), "M53.11", Unconfirmed minutes of WG
+   2 meeting 53
+   6.0 U+0526..0527 2 L2/08-182 N3481
+   Priest, Lorna (2008-07-28), Proposal to Encode Additional Latin and
+   Cyrillic Characters
+   L2/08-161R2
+   Moore, Lisa (2008-11-05), "Consensus 115-C29", UTC #115 Minutes
+   L2/08-412 N3553 (pdf, doc)
+   Umamaheswaran, V. S. (2008-11-05), "M53.24a", Unconfirmed minutes of WG
+   2 meeting 53
+   7.0 U+0528..0529 2 L2/11-265 N4137
+   Yevlampiev, Ilya; Pentzlin, Karl (2011-07-06), Proposal to encode a
+   missing Cyrillic letter pair for the Orok language
+   L2/11-261R2
+   Moore, Lisa (2011-08-16), "Consensus 128-C39", UTC #128 / L2 #225
+   Minutes
+   N4253 (pdf, doc)
+   "M59.16h", Unconfirmed minutes of WG 2 meeting 59, 2012-09-12
+   U+052A..052D 4 L2/12-040 N4199
+   Everson, Michael (2012-01-31), Proposal to encode four Cyrillic
+   characters in the BMP of the UCS
+   L2/12-007
+   Moore, Lisa (2012-02-14), "C.14", UTC #130 / L2 #227 Minutes
+   N4253 (pdf, doc)
+   "M59.16i", Unconfirmed minutes of WG 2 meeting 59, 2012-09-12
+   U+052E..052F 2 L2/97-146 N1590
+   Trosterud, Trond (1997-06-09), Proposal to add 10 Cyrillic Sámi
+   characters to ISO/IEC 10646
+   L2/97-288 N1603
+   Umamaheswaran, V. S. (1997-10-24), "8.24.7", Unconfirmed Meeting
+   Minutes, WG 2 Meeting # 33, Heraklion, Crete, Greece, 20 June – 4 July
+   1997
+   L2/98-211 N1744
+   Everson, Michael (1998-05-25), Additional Cyrillic characters for the
+   UCS
+   L2/98-281R (pdf, html)
+   Aliprand, Joan (1998-07-31), "Cyrillic characters (IV.C.4)",
+   Unconfirmed Minutes – UTC #77 & NCITS Subgroup L2 # 174 JOINT MEETING,
+   Redmond, WA -- July 29-31, 1998
+   L2/98-301 N1847
+   Everson, Michael (1998-09-12), Responses to NCITS/L2 and Unicode
+   Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc)
+   Whistler, Ken; et al. (1998-09-22), Additional Characters for the UCS
+   L2/99-010 N1903 (pdf, html, doc)
+   Umamaheswaran, V. S. (1998-12-30), "8.1.5.1", Minutes of WG 2 meeting
+   35, London, U.K.; 1998-09-21--25
+   L2/01-050 N2253
+   Umamaheswaran, V. S. (2001-01-21), "7.15 Komi Cyrillic", Minutes of the
+   SC2/WG2 meeting in Athens, September 2000
+   L2/12-052R N4219R
+   Anderson, Deborah (2012-02-09), Request for 2 New Cyrillic Characters
+   for the Khanty and Nenets Languages
+   L2/12-007
+   Moore, Lisa (2012-02-14), "C.14", UTC #130 / L2 #227 Minutes
+   N4253 (pdf, doc)
+   "M59.16j", Unconfirmed minutes of WG 2 meeting 59, 2012-09-12
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Cyrillic_Supplement&oldid=1
+   110191177"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 14 September 2022, at 04:25 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

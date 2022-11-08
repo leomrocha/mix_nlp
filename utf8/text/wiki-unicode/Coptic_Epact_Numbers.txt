@@ -1,0 +1,218 @@
+   #alternate Edit this page Wikipedia (en)
+
+Coptic Epact Numbers
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   See also: Greek and Coptic (Unicode block) and Coptic (Unicode block)
+   For a list of all numerals encoded in Unicode, see Numerals in Unicode.
+   Unicode character block
+   Coptic Epact Numbers
+   Range U+102E0..U+102FF
+   (32 code points)
+   Plane SMP
+   Scripts Common (27 char.)
+   Inherited (1 char.)
+   Symbol sets Number forms
+   Assigned 28 code points
+   Unused 4 reserved code points
+   Unicode version history
+
+   7.0
+   (2014) 28 (+28)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Coptic Epact Numbers is a Unicode block containing old Coptic number
+   forms.
+
+   These numbers were used in some regions instead of letters of the
+   Coptic alphabet that were used for encoding numbers,^[3] as was common
+   in much of the world at the time, like Roman numerals. It was used most
+   extensively in the Bohairic dialect of the Coptic language that became
+   the liturgical language of Egyptian Christians. It contains separate
+   characters for each of the digits, 1-9 (0 was not indicated), each of
+   the tens numbers from 10-90, and each of the hundreds numbers from
+   100-900. Numbers were composed from left-to-right by successively
+   adding the values that each character or digit represented. There is a
+   thousand mark diacritic that multiplies the digit by one thousand (so 5
+   with thousand mark = 5,000, 900 with thousand mark indicates 900,000)
+   Two of the thousands marks together (visually similar to a tanween
+   al-kasra in Arabic) represents a million in a similar fashion, and
+   mirrors other Coptic conventions of indicating higher orders by
+   repetition of marks.
+
+   Coptic Epact Numbers^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+102Ex 𐋠 𐋡 𐋢 𐋣 𐋤 𐋥 𐋦 𐋧 𐋨 𐋩 𐋪 𐋫 𐋬 𐋭 𐋮 𐋯
+   U+102Fx 𐋰 𐋱 𐋲 𐋳 𐋴 𐋵 𐋶 𐋷 𐋸 𐋹 𐋺 𐋻
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Coptic Epact Numbers block:
+
+   Version Final code points^[a] Count   L2 ID    WG2 ID Document
+   7.0     U+102E0..102FB        28    L2/09-163R
+   Pandey, Anshuman (2009-09-15), Proposal to Encode Coptic Numerals in
+   ISO/IEC 10646
+                                       L2/10-114  N3786
+
+   Pandey, Anshuman (2010-04-10), Towards an Encoding for Coptic Numbers
+   in the UCS
+   L2/10-108
+   Moore, Lisa (2010-05-19), "C.8.1", UTC #123 / L2 #220 Minutes
+   L2/10-206R N3843R
+   Pandey, Anshuman (2010-06-21), Final Proposal to Encode Coptic Numbers
+   L2/10-333 N3886
+   Everson, Michael; Emmel, Stephen (2010-09-08), Towards the encoding of
+   a complete set of Coptic numbers
+   L2/10-421R N3958R
+   Pandey, Anshuman (2010-11-01), Request to Rename 'Coptic Numbers' to
+   'Coptic Epact Numerals'
+   L2/10-416R
+   Moore, Lisa (2010-11-09), "Consensus 125-C9", UTC #125 / L2 #222
+   Minutes, "Change the block name (for U+102E0 - U+102FF) from "Coptic
+   Numbers" to "Coptic Epact Numbers" and the character names from
+   "Coptic..." to "Coptic Epact..." for range U+102E0 - U+102FF."
+   L2/11-035
+   Lazrek, Azzeddine (2011-01-08), Opposition about encode Coptic Epact
+   numeral system
+   L2/11-065
+   Anderson, Deborah (2011-02-09), Comparison of Coptic Epact vs. Rumi
+   digits
+   L2/11-062R N3990
+   Pandey, Anshuman (2011-02-14), Final Proposal to Encode Coptic Epact
+   Numbers
+   L2/11-016
+   Moore, Lisa (2011-02-15), "C.16.1", UTC #126 / L2 #223 Minutes
+   N3903 (pdf, doc)
+   "M57.16", Unconfirmed minutes of WG2 meeting 57, 2011-03-31
+   N4103
+   "T.2. Coptic Numbers", Unconfirmed minutes of WG 2 meeting 58,
+   2012-01-03
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+    3. ^ Pandey, Anshuman (2011-02-14). "N3990: Final Proposal to Encode
+       Coptic Epact Numbers in ISO/IEC 10646" (PDF). ISO/IEC JTC1/SC2/WG2.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Coptic_Epact_Numbers&oldid=
+   1074058863"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 26 February 2022, at 05:36 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

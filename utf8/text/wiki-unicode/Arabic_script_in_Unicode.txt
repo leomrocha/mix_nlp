@@ -1,0 +1,1533 @@
+   #alternate Edit this page Wikipedia (en)
+
+Arabic script in Unicode
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+
+   Many scripts in Unicode, such as Arabic, have special orthographic
+   rules that require certain combinations of letterforms to be combined
+   into special ligature forms.
+
+   In English, the common ampersand (&) developed from a ligature in which
+   the handwritten Latin letters e and t (spelling et, Latin for and) were
+   combined.^[1] The rules governing ligature formation in Arabic can be
+   quite complex, requiring special script-shaping technologies such as
+   the Arabic Calligraphic Engine by DecoType.
+
+   As of Unicode 15.0, the Arabic script is contained in the following
+   blocks:^[2]
+     * Arabic (0600–06FF, 256 characters)
+     * Arabic Supplement (0750–077F, 48 characters)
+     * Arabic Extended-B (0870–089F, 41 characters)
+     * Arabic Extended-A (08A0–08FF, 96 characters)
+     * Arabic Presentation Forms-A (FB50–FDFF, 631 characters)
+     * Arabic Presentation Forms-B (FE70–FEFF, 141 characters)
+     * Rumi Numeral Symbols (10E60–10E7F, 31 characters)
+     * Arabic Extended-C (10EC0-10EFF, 3 characters)
+     * Indic Siyaq Numbers (1EC70–1ECBF, 68 characters)
+     * Ottoman Siyaq Numbers (1ED00–1ED4F, 61 characters)
+     * Arabic Mathematical Alphabetic Symbols (1EE00–1EEFF, 143
+       characters)
+
+   The basic Arabic range encodes the standard letters and diacritics, but
+   does not encode contextual forms (U+0621–U+0652 being directly based on
+   ISO 8859-6); and also includes the most common diacritics and
+   Arabic-Indic digits. The Arabic Supplement range encodes letter
+   variants mostly used for writing African (non-Arabic) languages. The
+   Arabic Extended-B and Arabic Extended-A ranges encode additional
+   Qur'anic annotations and letter variants used for various non-Arabic
+   languages. The Arabic Presentation Forms-A range encodes contextual
+   forms and ligatures of letter variants needed for Persian, Urdu, Sindhi
+   and Central Asian languages. The Arabic Presentation Forms-B range
+   encodes spacing forms of Arabic diacritics, and more contextual letter
+   forms. The presentation forms are present only for compatibility with
+   older standards, and are not currently needed for coding text.^[3] The
+   Arabic Mathematical Alphabetical Symbols block encodes characters used
+   in Arabic mathematical expressions. The Indic Siyaq Numbers block
+   contains a specialized subset of Arabic script that was used for
+   accounting in India under the Mughal Empire by the 17th century through
+   the middle of the 20th century.^[4]^[5] The Ottoman Siyaq Numbers block
+   contains a specialized subset of Arabic script, also known as Siyakat
+   numbers, used for accounting in Ottoman Turkish documents.^[6]
+   [ ]
+
+Contents
+
+     * 1 Contextual forms
+     * 2 Punctuation and ornaments
+     * 3 Word ligatures
+     * 4 Code blocks
+          + 4.1 Arabic
+               o 4.1.1 Character table
+               o 4.1.2 Compact table
+          + 4.2 Arabic Supplement
+          + 4.3 Arabic Extended-B
+          + 4.4 Arabic Extended-A
+          + 4.5 Arabic Presentation Forms A
+          + 4.6 Arabic Presentation Forms B
+          + 4.7 Rumi Numeral Symbols
+          + 4.8 Arabic Extended-C
+          + 4.9 Indic Siyaq Numbers
+          + 4.10 Ottoman Siyaq Numbers
+          + 4.11 Arabic Mathematical Alphabetic Symbols
+     * 5 References
+     * 6 External links
+
+Contextual forms[edit]
+
+   A demonstration for the basic alphabet used in Modern Standard Arabic:
+   General
+   Unicode         Contextual forms        Name
+     Isolated End     Middle     Beginning
+                                    0627
+                                   ا FE8D
+                                  ﺍ FE8E
+   ﺎ              ʾalif
+                                    0628
+                                   ب FE8F
+                                  ﺏ FE90
+                                  ﺐ FE92
+                                  ﺒ FE91
+   ﺑ bāʾ
+                                    062A
+                                   ت FE95
+                                  ﺕ FE96
+                                  ﺖ FE98
+                                  ﺘ FE97
+   ﺗ tāʾ
+                                    062B
+                                   ث FE99
+                                  ﺙ FE9A
+                                  ﺚ FE9C
+                                  ﺜ FE9B
+   ﺛ ṯāʾ
+                                    062C
+                                   ج FE9D
+                                  ﺝ FE9E
+                                  ﺞ FEA0
+                                  ﺠ FE9F
+   ﺟ ǧīm
+                                    062D
+                                   ح FEA1
+                                  ﺡ FEA2
+                                  ﺢ FEA4
+                                  ﺤ FEA3
+   ﺣ ḥāʾ
+                                    062E
+                                   خ FEA5
+                                  ﺥ FEA6
+                                  ﺦ FEA8
+                                  ﺨ FEA7
+   ﺧ ḫāʾ
+                                    062F
+                                   د FEA9
+                                  ﺩ FEAA
+   ﺪ              dāl
+                                    0630
+                                   ذ FEAB
+                                  ﺫ FEAC
+   ﺬ              ḏāl
+                                    0631
+                                   ر FEAD
+                                  ﺭ FEAE
+   ﺮ              rāʾ
+                                    0632
+                                   ز FEAF
+                                  ﺯ FEB0
+   ﺰ              zayn/zāy
+                                    0633
+                                   س FEB1
+                                  ﺱ FEB2
+                                  ﺲ FEB4
+                                  ﺴ FEB3
+   ﺳ sīn
+                                    0634
+                                   ش FEB5
+                                  ﺵ FEB6
+                                  ﺶ FEB8
+                                  ﺸ FEB7
+   ﺷ šīn
+                                    0635
+                                   ص FEB9
+                                  ﺹ FEBA
+                                  ﺺ FEBC
+                                  ﺼ FEBB
+   ﺻ ṣād
+                                    0636
+                                   ض FEBD
+                                  ﺽ FEBE
+                                  ﺾ FEC0
+                                  ﻀ FEBF
+   ﺿ ḍād
+                                    0637
+                                   ط FEC1
+                                  ﻁ FEC2
+                                  ﻂ FEC4
+                                  ﻄ FEC3
+   ﻃ ṭāʾ
+                                    0638
+                                   ظ FEC5
+                                  ﻅ FEC6
+                                  ﻆ FEC8
+                                  ﻈ FEC7
+   ﻇ ẓāʾ
+                                    0639
+                                   ع FEC9
+                                  ﻉ FECA
+                                  ﻊ FECC
+                                  ﻌ FECB
+   ﻋ ʿayn
+                                    063A
+                                   غ FECD
+                                  ﻍ FECE
+                                  ﻎ FED0
+                                  ﻐ FECF
+   ﻏ ġayn
+                                    0641
+                                   ف FED1
+                                  ﻑ FED2
+                                  ﻒ FED4
+                                  ﻔ FED3
+   ﻓ fāʾ
+                                    0642
+                                   ق FED5
+                                  ﻕ FED6
+                                  ﻖ FED8
+                                  ﻘ FED7
+   ﻗ qāf
+                                    0643
+                                   ك FED9
+                                  ﻙ FEDA
+                                  ﻚ FEDC
+                                  ﻜ FEDB
+   ﻛ kāf
+                                    0644
+                                   ل FEDD
+                                  ﻝ FEDE
+                                  ﻞ FEE0
+                                  ﻠ FEDF
+   ﻟ lām
+                                    0645
+                                   م FEE1
+                                  ﻡ FEE2
+                                  ﻢ FEE4
+                                  ﻤ FEE3
+   ﻣ mīm
+                                    0646
+                                   ن FEE5
+                                  ﻥ FEE6
+                                  ﻦ FEE8
+                                  ﻨ FEE7
+   ﻧ nūn
+                                    0647
+                                   ه FEE9
+                                  ﻩ FEEA
+                                  ﻪ FEEC
+                                  ﻬ FEEB
+   ﻫ hāʾ
+                                    0648
+                                   و FEED
+                                  ﻭ FEEE
+   ﻮ              wāw
+                                    064A
+                                   ي FEF1
+                                  ﻱ FEF2
+                                  ﻲ FEF4
+                                  ﻴ FEF3
+   ﻳ yāʾ
+                                    0622
+                                   آ FE81
+                                  ﺁ FE82
+   ﺂ              ʾalif maddah
+                                    0629
+                                   ة FE93
+                                  ﺓ FE94
+   ﺔ —        —   Tāʾ marbūṭah
+                                    0649
+                                   ى FEEF
+                                  ﻯ FEF0
+   ﻰ —        —   ʾalif maqṣūrah
+
+Punctuation and ornaments[edit]
+
+   Only the Arabic question mark ⟨؟⟩ and the Arabic comma ⟨،⟩ are used in
+   regular Arabic script typing and the comma is often substituted for the
+   Latin script comma (,).
+     * U+060C ،‎ ARABIC COMMA
+     * U+060D ؍‎ ARABIC DATE SEPARATOR
+     * U+060E ؎‎ ARABIC POETIC VERSE SIGN
+     * U+060F ؏‎ ARABIC SIGN MISRA
+     * U+061B ؛‎ ARABIC SEMICOLON
+     * U+061E ؞‎ ARABIC TRIPLE DOT PUNCTUATION MARK
+     * U+061F ؟‎ ARABIC QUESTION MARK
+     * U+066D ٭ ARABIC FIVE POINTED STAR
+     * U+06D4 ۔‎ ARABIC FULL STOP
+     * U+06DD ۝‎ ARABIC END OF AYAH
+     * U+06DE ۞‎ ARABIC START OF RUB EL HIZB
+     * U+06E9 ۩‎ ARABIC PLACE OF SAJDAH
+     * U+06FD ۽‎ ARABIC SIGN SINDHI AMPERSAND
+     * U+FD3E ﴾ Arabic ornate left parenthesis
+     * U+FD3F ﴿ Arabic ornate right parenthesis
+
+Word ligatures[edit]
+
+   Arabic Presentation Forms-A has a few characters defined as "word
+   ligatures" for terms frequently used in formulaic expressions in
+   Arabic. They are rarely used out of professional liturgical typing,
+   also the Rial grapheme is normally written fully, not by the ligature.
+     * U+FDF0 ﷰ‎ ARABIC LIGATURE SALLA USED AS KORANIC STOP SIGN ISOLATED
+       FORM (صلے)
+     * U+FDF1 ﷱ‎ ARABIC LIGATURE QALA USED AS KORANIC STOP SIGN ISOLATED
+       FORM (قلے)
+     * U+FDF2 ﷲ‎ ARABIC LIGATURE ALLAH ISOLATED FORM (الله)
+     * U+FDF3 ﷳ‎ ARABIC LIGATURE AKBAR ISOLATED FORM (اكبر), as in the
+       phrase الله أكبر Allāhu akbar
+     * U+FDF4 ﷴ‎ ARABIC LIGATURE MOHAMMAD ISOLATED FORM (محمد)
+     * U+FDF5 ﷵ‎ ARABIC LIGATURE SALAM ISOLATED FORM (صلعم, the
+       abbreviation for صلى الله عليه وسلم "peace be upon him")
+     * U+FDF6 ﷶ‎ ARABIC LIGATURE RASOUL ISOLATED FORM (رسول)
+     * U+FDF7 ﷷ‎ ARABIC LIGATURE ALAYHE ISOLATED FORM (عليه)
+     * U+FDF8 ﷸ‎ ARABIC LIGATURE WASALLAM ISOLATED FORM (وسلم)
+     * U+FDF9 ﷹ‎ ARABIC LIGATURE SALLA ISOLATED FORM (صلى)
+     * U+FDFA ﷺ‎ ARABIC LIGATURE SALLALLAHOU ALAYHE WASALLAM (صلى الله
+       عليه وسلم "peace be upon him")
+     * U+FDFB ﷻ‎ ARABIC LIGATURE JALLAJALALOUHOU (جل جلاله)
+     * U+FDFC ﷼‎ RIAL SIGN (ريال)
+     * U+FDFD ﷽‎ ARABIC LIGATURE BISMILLAH AR-RAHMAN AR-RAHEEM (بسم الله
+       الرحمن الرحيم bism-i llāh-i r-raḥmān-i r-raḥīm)
+
+Code blocks[edit]
+
+   See also: Arabic International Phonetic Alphabet and Help:IPA/Arabic
+
+Arabic[edit]
+
+Character table[edit]
+
+   Code Result Unicode name
+   U+0600 ؀   ‎
+   Arabic Number Sign
+   U+0601 ؁   ‎
+   Arabic Sign Sanah
+   U+0602 ؂   ‎
+   Arabic Footnote Marker
+   U+0603 ؃   ‎
+   Arabic Sign Safha
+   U+0604 ؄   ‎
+   Arabic Sign Samvat
+   U+0605 ؅   ‎
+   Arabic Number Mark Above
+   U+0606 ؆   ‎
+   Arabic-Indic Cube Root
+   U+0607 ؇   ‎
+   Arabic-Indic Fourth Root
+   U+0608 ؈   ‎
+   Arabic Ray
+   U+0609 ؉   ‎
+   Arabic-Indic Per Mille Sign
+   U+060A ؊   ‎
+   Arabic-Indic Per Ten Thousand Sign
+   U+060B ؋   ‎
+   Afghani Sign
+   U+060C ،   ‎
+   Arabic Comma
+   U+060D ؍   ‎
+   Arabic Date Separator
+   U+060E ؎   ‎
+   Arabic Poetic Verse Sign
+   U+060F ؏   ‎
+   Arabic Sign Misra
+   U+0610   ؐ   ‎
+   Arabic Sign Sallallahou Alayhe Wassallam
+   U+0611   ؑ   ‎
+   Arabic Sign Alayhe Assallam
+   U+0612   ؒ   ‎
+   Arabic Sign Rahmatullah Alayhe
+   U+0613   ؓ   ‎
+   Arabic Sign Radi Allahou Anhu
+   U+0614   ؔ   ‎
+   Arabic Sign Takhallus
+   U+0615 ؕ   ‎
+   Arabic Small High Tah
+   U+0616   ؖ   ‎
+   Arabic Small High Ligature Alef With Lam With Yeh
+   U+0617 ؗ   ‎
+   Arabic Small High Zain
+   U+0618   ؘ   ‎
+   Arabic Small Fatha
+   U+0619   ؙ   ‎
+   Arabic Small Damma
+   U+061A   ؚ   ‎
+   Arabic Small Kasra
+   U+061B ؛   ‎
+   Arabic Semicolon
+   U+061C   ؜   ‎
+   Arabic Letter Mark
+   U+061D   ؝   ‎
+   Arabic End Of Text Mark
+   U+061E ؞   ‎
+   Arabic Triple Dot Punctuation Mark
+   U+061F ؟   ‎
+   Arabic Question Mark
+   U+0620 ؠ   ‎
+   Arabic Letter Kashmiri Yeh
+   U+0621 ء   ‎
+   Arabic Letter Hamza
+   U+0622 آ   ‎
+   Arabic Letter Alef With Madda Above
+   U+0623 أ   ‎
+   Arabic Letter Alef With Hamza Above
+   U+0624 ؤ   ‎
+   Arabic Letter Waw With Hamza Above
+   U+0625 إ   ‎
+   Arabic Letter Alef With Hamza Below
+   U+0626 ئ   ‎
+   Arabic Letter Yeh With Hamza Above
+   U+0627 ا   ‎
+   Arabic Letter Alef
+   U+0628 ب   ‎
+   Arabic Letter Beh
+   U+0629 ة   ‎
+   Arabic Letter Teh Marbuta
+   U+062A ت   ‎
+   Arabic Letter Teh
+   U+062B ث   ‎
+   Arabic Letter Theh
+   U+062C ج   ‎
+   Arabic Letter Jeem
+   U+062D ح   ‎
+   Arabic Letter Hah
+   U+062E خ   ‎
+   Arabic Letter Khah
+   U+062F د   ‎
+   Arabic Letter Dal
+   U+0630 ذ   ‎
+   Arabic Letter Thal
+   U+0631 ر   ‎
+   Arabic Letter Reh
+   U+0632 ز   ‎
+   Arabic Letter Zain
+   U+0633 س   ‎
+   Arabic Letter Seen
+   U+0634 ش   ‎
+   Arabic Letter Sheen
+   U+0635 ص   ‎
+   Arabic Letter Sad
+   U+0636 ض   ‎
+   Arabic Letter Dad
+   U+0637 ط   ‎
+   Arabic Letter Tah
+   U+0638 ظ   ‎
+   Arabic Letter Zah
+   U+0639 ع   ‎
+   Arabic Letter Ain
+   U+063A غ   ‎
+   Arabic Letter Ghain
+   U+063B ػ   ‎
+   Arabic Letter Keheh With Two Dots Above
+   U+063C ؼ   ‎
+   Arabic Letter Keheh With Three Dots Below
+   U+063D ؽ   ‎
+   Arabic Letter Farsi Yeh With Inverted V
+   U+063E ؾ   ‎
+   Arabic Letter Farsi Yeh With Two Dots Above
+   U+063F ؿ   ‎
+   Arabic Letter Farsi Yeh With Three Dots Above
+   U+0640 ـ   ‎
+   Arabic Tatweel
+   U+0641 ف   ‎
+   Arabic Letter Feh
+   U+0642 ق   ‎
+   Arabic Letter Qaf
+   U+0643 ك   ‎
+   Arabic Letter Kaf
+   U+0644 ل   ‎
+   Arabic Letter Lam
+   U+0645 م   ‎
+   Arabic Letter Meem
+   U+0646 ن   ‎
+   Arabic Letter Noon
+   U+0647 ه   ‎
+   Arabic Letter Heh
+   U+0648 و   ‎
+   Arabic Letter Waw
+   U+0649 ى   ‎
+   Arabic Letter Alef Maksura
+   U+064A ي   ‎
+   Arabic Letter Yeh
+   U+064B   ً   ‎
+   Arabic Fathatan
+   U+064C   ٌ   ‎
+   Arabic Dammatan
+   U+064D   ٍ   ‎
+   Arabic Kasratan
+   U+064E   َ   ‎
+   Arabic Fatha
+   U+064F   ُ   ‎
+   Arabic Damma
+   U+0650   ِ   ‎
+   Arabic Kasra
+   U+0651   ّ   ‎
+   Arabic Shadda
+   U+0652   ْ   ‎
+   Arabic Sukun
+   U+0653   ٓ   ‎
+   Arabic Maddah Above
+   U+0654   ٔ   ‎
+   Arabic Hamza Above
+   U+0655   ٕ   ‎
+   Arabic Hamza Below
+   U+0656   ٖ   ‎
+   Arabic Subscript Alef
+   U+0657   ٗ   ‎
+   Arabic Inverted Damma
+   U+0658   ٘   ‎
+   Arabic Mark Noon Ghunna
+   U+0659   ٙ   ‎
+   Arabic Zwarakay
+   U+065A   ٚ   ‎
+   Arabic Vowel Sign Small V Above
+   U+065B   ٛ   ‎
+   Arabic Vowel Sign Inverted Small V Above
+   U+065C   ٜ   ‎
+   Arabic Vowel Sign Dot Below
+   U+065D   ٝ   ‎
+   Arabic Reversed Damma
+   U+065E   ٞ   ‎
+   Arabic Fatha With Two Dots
+   U+065F   ٟ   ‎
+   Arabic Wavy Hamza Below
+   U+0660 ٠   ‎
+   Arabic-Indic Digit Zero
+   U+0661 ١   ‎
+   Arabic-Indic Digit One
+   U+0662 ٢   ‎
+   Arabic-Indic Digit Two
+   U+0663 ٣   ‎
+   Arabic-Indic Digit Three
+   U+0664 ٤   ‎
+   Arabic-Indic Digit Four
+   U+0665 ٥   ‎
+   Arabic-Indic Digit Five
+   U+0666 ٦   ‎
+   Arabic-Indic Digit Six
+   U+0667 ٧   ‎
+   Arabic-Indic Digit Seven
+   U+0668 ٨   ‎
+   Arabic-Indic Digit Eight
+   U+0669 ٩   ‎
+   Arabic-Indic Digit Nine
+   U+066A ٪   ‎
+   Arabic Percent Sign
+   U+066B ٫   ‎
+   Arabic Decimal Separator
+   U+066C ٬   ‎
+   Arabic Thousands Separator
+   U+066D   ٭   Arabic Five Pointed Star
+   U+066E ٮ   ‎
+   Arabic Letter Dotless Beh
+   U+066F ٯ   ‎
+   Arabic Letter Dotless Qaf
+   U+0670 ٰ   ‎
+   Arabic Letter Superscript Alef
+   U+0671 ٱ   ‎
+   Arabic Letter Alef Wasla
+   U+0672 ٲ   ‎
+   Arabic Letter Alef With Wavy Hamza Above
+   U+0673 ٳ   ‎
+   Arabic Letter Alef With Wavy Hamza Below (deprecated)^[7]
+   U+0674 ٴ   ‎
+   Arabic Letter High Hamza
+   U+0675 ٵ   ‎
+   Arabic Letter High Hamza Alef
+   U+0676 ٶ   ‎
+   Arabic Letter High Hamza Waw
+   U+0677 ٷ   ‎
+   Arabic Letter U With Hamza Above
+   U+0678 ٸ   ‎
+   Arabic Letter High Hamza Yeh
+   U+0679 ٹ   ‎
+   Arabic Letter Tteh
+   U+067A ٺ   ‎
+   Arabic Letter Tteheh
+   U+067B ٻ   ‎
+   Arabic Letter Beeh
+   U+067C ټ   ‎
+   Arabic Letter Teh With Ring
+   U+067D ٽ   ‎
+   Arabic Letter Teh With Three Dots Above Downwards
+   U+067E پ   ‎
+   Arabic Letter Peh
+   U+067F ٿ   ‎
+   Arabic Letter Teheh
+   U+0680 ڀ   ‎
+   Arabic Letter Beheh
+   U+0681 ځ   ‎
+   Arabic Letter Hah With Hamza Above
+   U+0682 ڂ   ‎
+   Arabic Letter Hah With Two Dots Vertical Above
+   U+0683 ڃ   ‎
+   Arabic Letter Nyeh
+   U+0684 ڄ   ‎
+   Arabic Letter Dyeh
+   U+0685 څ   ‎
+   Arabic Letter Hah With Three Dots Above
+   U+0686 چ   ‎
+   Arabic Letter Tcheh
+   U+0687 ڇ   ‎
+   Arabic Letter Tcheheh
+   U+0688 ڈ   ‎
+   Arabic Letter Ddal
+   U+0689 ډ   ‎
+   Arabic Letter Dal With Ring
+   U+068A ڊ   ‎
+   Arabic Letter Dal With Dot Below
+   U+068B ڋ   ‎
+   Arabic Letter Dal With Dot Below And Small Tah
+   U+068C ڌ   ‎
+   Arabic Letter Dahal
+   U+068D ڍ   ‎
+   Arabic Letter Ddahal
+   U+068E ڎ   ‎
+   Arabic Letter Dul
+   U+068F ڏ   ‎
+   Arabic Letter Dal With Three Dots Above Downwards
+   U+0690 ڐ   ‎
+   Arabic Letter Dal With Four Dots Above
+   U+0691 ڑ   ‎
+   Arabic Letter Rreh
+   U+0692 ڒ   ‎
+   Arabic Letter Reh With Small V
+   U+0693 ړ   ‎
+   Arabic Letter Reh With Ring
+   U+0694 ڔ   ‎
+   Arabic Letter Reh With Dot Below
+   U+0695 ڕ   ‎
+   Arabic Letter Reh With Small V Below
+   U+0696 ږ   ‎
+   Arabic Letter Reh With Dot Below And Dot Above
+   U+0697 ڗ   ‎
+   Arabic Letter Reh With Two Dots Above
+   U+0698 ژ   ‎
+   Arabic Letter Jeh
+   U+0699 ڙ   ‎
+   Arabic Letter Reh With Four Dots Above
+   U+069A ښ   ‎
+   Arabic Letter Seen With Dot Below And Dot Above
+   U+069B ڛ   ‎
+   Arabic Letter Seen With Three Dots Below
+   U+069C ڜ   ‎
+   Arabic Letter Seen With Three Dots Below And Three Dots Above
+   U+069D ڝ   ‎
+   Arabic Letter Sad With Two Dots Below
+   U+069E ڞ   ‎
+   Arabic Letter Sad With Three Dots Above
+   U+069F ڟ   ‎
+   Arabic Letter Tah With Three Dots Above
+   U+06A0 ڠ   ‎
+   Arabic Letter Ain With Three Dots Above
+   U+06A1 ڡ   ‎
+   Arabic Letter Dotless Feh
+   U+06A2 ڢ   ‎
+   Arabic Letter Feh With Dot Moved Below
+   U+06A3 ڣ   ‎
+   Arabic Letter Feh With Dot Below
+   U+06A4 ڤ   ‎
+   Arabic Letter Veh
+   U+06A5 ڥ   ‎
+   Arabic Letter Feh With Three Dots Below
+   U+06A6 ڦ   ‎
+   Arabic Letter Peheh
+   U+06A7 ڧ   ‎
+   Arabic Letter Qaf With Dot Above
+   U+06A8 ڨ   ‎
+   Arabic Letter Qaf With Three Dots Above
+   U+06A9 ک   ‎
+   Arabic Letter Keheh
+   U+06AA ڪ   ‎
+   Arabic Letter Swash Kaf
+   U+06AB ګ   ‎
+   Arabic Letter Kaf With Ring
+   U+06AC ڬ   ‎
+   Arabic Letter Kaf With Dot Above
+   U+06AD ڭ   ‎
+   Arabic Letter Ng
+   U+06AE ڮ   ‎
+   Arabic Letter Kaf With Three Dots Below
+   U+06AF گ   ‎
+   Arabic Letter Gaf
+   U+06B0 ڰ   ‎
+   Arabic Letter Gaf With Ring
+   U+06B1 ڱ   ‎
+   Arabic Letter Ngoeh
+   U+06B2 ڲ   ‎
+   Arabic Letter Gaf With Two Dots Below
+   U+06B3 ڳ   ‎
+   Arabic Letter Gueh
+   U+06B4 ڴ   ‎
+   Arabic Letter Gaf With Three Dots Above
+   U+06B5 ڵ   ‎
+   Arabic Letter Lam With Small V
+   U+06B6 ڶ   ‎
+   Arabic Letter Lam With Dot Above
+   U+06B7 ڷ   ‎
+   Arabic Letter Lam With Three Dots Above
+   U+06B8 ڸ   ‎
+   Arabic Letter Lam With Three Dots Below
+   U+06B9 ڹ   ‎
+   Arabic Letter Noon With Dot Below
+   U+06BA ں   ‎
+   Arabic Letter Noon Ghunna
+   U+06BB ڻ   ‎
+   Arabic Letter Rnoon
+   U+06BC ڼ   ‎
+   Arabic Letter Noon With Ring
+   U+06BD ڽ   ‎
+   Arabic Letter Noon With Three Dots Above
+   U+06BE ھ   ‎
+   Arabic Letter Heh Doachashmee
+   U+06BF ڿ   ‎
+   Arabic Letter Tcheh With Dot Above
+   U+06C0 ۀ   ‎
+   Arabic Letter Heh With Yeh Above
+   U+06C1 ہ   ‎
+   Arabic Letter Heh Goal
+   U+06C2 ۂ   ‎
+   Arabic Letter Heh Goal With Hamza Above
+   U+06C3 ۃ   ‎
+   Arabic Letter Teh Marbuta Goal
+   U+06C4 ۄ   ‎
+   Arabic Letter Waw With Ring
+   U+06C5 ۅ   ‎
+   Arabic Letter Kirghiz Oe
+   U+06C6 ۆ   ‎
+   Arabic Letter Oe
+   U+06C7 ۇ   ‎
+   Arabic Letter U
+   U+06C8 ۈ   ‎
+   Arabic Letter Yu
+   U+06C9 ۉ   ‎
+   Arabic Letter Kirghiz Yu
+   U+06CA ۊ   ‎
+   Arabic Letter Waw With Two Dots Above
+   U+06CB ۋ   ‎
+   Arabic Letter Ve
+   U+06CC ی   ‎
+   Arabic Letter Farsi Yeh
+   U+06CD ۍ   ‎
+   Arabic Letter Yeh With Tail
+   U+06CE ێ   ‎
+   Arabic Letter Yeh With Small V
+   U+06CF ۏ   ‎
+   Arabic Letter Waw With Dot Above
+   U+06D0 ې   ‎
+   Arabic Letter E
+   U+06D1 ۑ   ‎
+   Arabic Letter Yeh With Three Dots Below
+   U+06D2 ے   ‎
+   Arabic Letter Yeh Barree
+   U+06D3 ۓ   ‎
+   Arabic Letter Yeh Barree With Hamza Above
+   U+06D4 ۔   ‎
+   Arabic Full Stop
+   U+06D5 ە   ‎
+   Arabic Letter Ae
+   U+06D6 ۖ   ‎
+   Arabic Small High Ligature Sad With Lam With Alef Maksura
+   U+06D7 ۗ   ‎
+   Arabic Small High Ligature Qaf With Lam With Alef Maksura
+   U+06D8 ۘ   ‎
+   Arabic Small High Meem Initial Form
+   U+06D9 ۙ   ‎
+   Arabic Small High Lam Alef
+   U+06DA ۚ   ‎
+   Arabic Small High Jeem
+   U+06DB   ۛ   ‎
+   Arabic Small High Three Dots
+   U+06DC ۜ   ‎
+   Arabic Small High Seen
+   U+06DD ۝   ‎
+   Arabic End of Ayah
+   U+06DE ۞   ‎
+   Arabic Star of Rub El Hizb
+   U+06DF   ۟   ‎
+   Arabic Small High Rounded Zero
+   U+06E0   ۠   ‎
+   Arabic Small High Upright Rectangular Zero
+   U+06E1 ۡ   ‎
+   Arabic Small High Dotless Head Of Khah
+   U+06E2 ۢ   ‎
+   Arabic Small High Meem Isolated Form
+   U+06E3 ۣ   ‎
+   Arabic Small Low Seen
+   U+06E4   ۤ   ‎
+   Arabic Small High Madda
+   U+06E5 ۥ   ‎
+   Arabic Small Waw
+   U+06E6 ۦ   ‎
+   Arabic Small Yeh
+   U+06E7 ۧ   ‎
+   Arabic Small High Yeh
+   U+06E8 ۨ   ‎
+   Arabic Small High Noon
+   U+06E9 ۩   ‎
+   Arabic Place Of Sajdah
+   U+06EA   ۪   ‎
+   Arabic Empty Centre Low Stop
+   U+06EB   ۫   ‎
+   Arabic Empty Centre High Stop
+   U+06EC   ۬   ‎
+   Arabic Rounded High Stop With Filled Centre
+   U+06ED ۭ   ‎
+   Arabic Small Low Meem
+   U+06EE ۮ   ‎
+   Arabic Letter Dal With Inverted V
+   U+06EF ۯ   ‎
+   Arabic Letter Reh With Inverted V
+   U+06F0 ۰   ‎
+   Extended Arabic-Indic Digit Zero
+   U+06F1 ۱   ‎
+   Extended Arabic-Indic Digit One
+   U+06F2 ۲   ‎
+   Extended Arabic-Indic Digit Two
+   U+06F3 ۳   ‎
+   Extended Arabic-Indic Digit Three
+   U+06F4 ۴   ‎
+   Extended Arabic-Indic Digit Four
+   U+06F5 ۵   ‎
+   Extended Arabic-Indic Digit Five
+   U+06F6 ۶   ‎
+   Extended Arabic-Indic Digit Six
+   U+06F7 ۷   ‎
+   Extended Arabic-Indic Digit Seven
+   U+06F8 ۸   ‎
+   Extended Arabic-Indic Digit Eight
+   U+06F9 ۹   ‎
+   Extended Arabic-Indic Digit Nine
+   U+06FA ۺ   ‎
+   Arabic Letter Sheen With Dot Below
+   U+06FB ۻ   ‎
+   Arabic Letter Dad With Dot Below
+   U+06FC ۼ   ‎
+   Arabic Letter Ghain With Dot Below
+   U+06FD ۽   ‎
+   Arabic Sign Sindhi Ampersand
+   U+06FE ۾   ‎
+   Arabic Sign Sindhi Postposition Men
+   U+06FF ۿ   ‎
+   Arabic Letter Heh With Inverted V
+
+Compact table[edit]
+
+   Arabic^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0   1   2   3   4   5   6 7 8 9 A B C     D   E F
+   U+060x  ؀   ؁   ؂   ؃   ؄   ؅  ؆ ؇ ؈ ؉ ؊ ؋ ،     ؍   ؎ ؏
+   U+061x ؐ   ؑ   ؒ   ؓ   ؔ   ؕ   ؖ ؗ ؘ ؙ ؚ ؛  ALM  ؝   ؞ ؟
+   U+062x ؠ   ء   آ   أ   ؤ   إ   ئ ا ب ة ت ث ج     ح   خ د
+   U+063x ذ   ر   ز   س   ش   ص   ض ط ظ ع غ ػ ؼ     ؽ   ؾ ؿ
+   U+064x ـ   ف   ق   ك   ل   م   ن ه و ى ي ً ٌ     ٍ   َ ُ
+   U+065x ِ   ّ   ْ   ٓ   ٔ   ٕ   ٖ ٗ ٘ ٙ ٚ ٛ ٜ     ٝ   ٞ ٟ
+   U+066x ٠   ١   ٢   ٣   ٤   ٥   ٦ ٧ ٨ ٩ ٪ ٫ ٬     ٭   ٮ ٯ
+   U+067x ٰ   ٱ   ٲ   ٳ   ٴ   ٵ   ٶ ٷ ٸ ٹ ٺ ٻ ټ     ٽ   پ ٿ
+   U+068x ڀ   ځ   ڂ   ڃ   ڄ   څ   چ ڇ ڈ ډ ڊ ڋ ڌ     ڍ   ڎ ڏ
+   U+069x ڐ   ڑ   ڒ   ړ   ڔ   ڕ   ږ ڗ ژ ڙ ښ ڛ ڜ     ڝ   ڞ ڟ
+   U+06Ax ڠ   ڡ   ڢ   ڣ   ڤ   ڥ   ڦ ڧ ڨ ک ڪ ګ ڬ     ڭ   ڮ گ
+   U+06Bx ڰ   ڱ   ڲ   ڳ   ڴ   ڵ   ڶ ڷ ڸ ڹ ں ڻ ڼ     ڽ   ھ ڿ
+   U+06Cx ۀ   ہ   ۂ   ۃ   ۄ   ۅ   ۆ ۇ ۈ ۉ ۊ ۋ ی     ۍ   ێ ۏ
+   U+06Dx ې   ۑ   ے   ۓ   ۔   ە   ۖ ۗ ۘ ۙ ۚ ۛ ۜ      ۝  ۞ ۟
+   U+06Ex ۠   ۡ   ۢ   ۣ   ۤ   ۥ   ۦ ۧ ۨ ۩ ۪ ۫ ۬     ۭ   ۮ ۯ
+   U+06Fx ۰   ۱   ۲   ۳   ۴   ۵   ۶ ۷ ۸ ۹ ۺ ۻ ۼ     ۽   ۾ ۿ
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Unicode code point U+0673 is deprecated as of Unicode version 6.0
+
+Arabic Supplement[edit]
+
+   Arabic Supplement^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+075x ݐ ݑ ݒ ݓ ݔ ݕ ݖ ݗ ݘ ݙ ݚ ݛ ݜ ݝ ݞ ݟ
+   U+076x ݠ ݡ ݢ ݣ ݤ ݥ ݦ ݧ ݨ ݩ ݪ ݫ ݬ ݭ ݮ ݯ
+   U+077x ݰ ݱ ݲ ݳ ݴ ݵ ݶ ݷ ݸ ݹ ݺ ݻ ݼ ݽ ݾ ݿ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+Arabic Extended-B[edit]
+
+   Arabic Extended-B^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0   1   2 3 4 5 6 7 8 9 A B C D E F
+   U+087x ࡰ   ࡱ   ࡲ ࡳ ࡴ ࡵ ࡶ ࡷ ࡸ ࡹ ࡺ ࡻ ࡼ ࡽ ࡾ ࡿ
+   U+088x ࢀ   ࢁ   ࢂ ࢃ ࢄ ࢅ ࢆ ࢇ ࢈ ࢉ ࢊ ࢋ ࢌ ࢍ ࢎ
+   U+089x  ࢐   ࢑              ࢘ ࢙ ࢚ ࢛ ࢜ ࢝ ࢞ ࢟
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.^ Grey areas indicate non-assigned code points
+
+  Arabic Extended-A[edit]
+
+   Arabic Extended-A^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2   3 4 5 6 7 8 9 A B C D E F
+   U+08Ax ࢠ ࢡ ࢢ   ࢣ ࢤ ࢥ ࢦ ࢧ ࢨ ࢩ ࢪ ࢫ ࢬ ࢭ ࢮ ࢯ
+   U+08Bx ࢰ ࢱ ࢲ   ࢳ ࢴ ࢵ ࢶ ࢷ ࢸ ࢹ ࢺ ࢻ ࢼ ࢽ ࢾ ࢿ
+   U+08Cx ࣀ ࣁ ࣂ   ࣃ ࣄ ࣅ ࣆ ࣇ ࣈ ࣉ ࣊ ࣋ ࣌ ࣍ ࣎ ࣏
+   U+08Dx ࣐ ࣑ ࣒   ࣓ ࣔ ࣕ ࣖ ࣗ ࣘ ࣙ ࣚ ࣛ ࣜ ࣝ ࣞ ࣟ
+   U+08Ex ࣠ ࣡  ࣢  ࣣ ࣤ ࣥ ࣦ ࣧ ࣨ ࣩ ࣪ ࣫ ࣬ ࣭ ࣮ ࣯
+   U+08Fx ࣰ ࣱ ࣲ   ࣳ ࣴ ࣵ ࣶ ࣷ ࣸ ࣹ ࣺ ࣻ ࣼ ࣽ ࣾ ࣿ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Arabic Presentation Forms A[edit]
+
+   They are mostly ligatures which can be created from the previous
+   charts' characters, with the exception of the bracket-like graphemes
+   ﴾ ﴿ and some of them are ligatures of common liturgical phrases.
+
+   Arabic Presentation Forms-A^[1]^[2]^[3]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+FB5x ﭐ ﭑ ﭒ ﭓ ﭔ ﭕ ﭖ ﭗ ﭘ ﭙ ﭚ ﭛ ﭜ ﭝ ﭞ ﭟ
+   U+FB6x ﭠ ﭡ ﭢ ﭣ ﭤ ﭥ ﭦ ﭧ ﭨ ﭩ ﭪ ﭫ ﭬ ﭭ ﭮ ﭯ
+   U+FB7x ﭰ ﭱ ﭲ ﭳ ﭴ ﭵ ﭶ ﭷ ﭸ ﭹ ﭺ ﭻ ﭼ ﭽ ﭾ ﭿ
+   U+FB8x ﮀ ﮁ ﮂ ﮃ ﮄ ﮅ ﮆ ﮇ ﮈ ﮉ ﮊ ﮋ ﮌ ﮍ ﮎ ﮏ
+   U+FB9x ﮐ ﮑ ﮒ ﮓ ﮔ ﮕ ﮖ ﮗ ﮘ ﮙ ﮚ ﮛ ﮜ ﮝ ﮞ ﮟ
+   U+FBAx ﮠ ﮡ ﮢ ﮣ ﮤ ﮥ ﮦ ﮧ ﮨ ﮩ ﮪ ﮫ ﮬ ﮭ ﮮ ﮯ
+   U+FBBx ﮰ ﮱ ﮲ ﮳ ﮴ ﮵ ﮶ ﮷ ﮸ ﮹ ﮺ ﮻ ﮼ ﮽ ﮾ ﮿
+   U+FBCx ﯀ ﯁ ﯂
+   U+FBDx       ﯓ ﯔ ﯕ ﯖ ﯗ ﯘ ﯙ ﯚ ﯛ ﯜ ﯝ ﯞ ﯟ
+   U+FBEx ﯠ ﯡ ﯢ ﯣ ﯤ ﯥ ﯦ ﯧ ﯨ ﯩ ﯪ ﯫ ﯬ ﯭ ﯮ ﯯ
+   U+FBFx ﯰ ﯱ ﯲ ﯳ ﯴ ﯵ ﯶ ﯷ ﯸ ﯹ ﯺ ﯻ ﯼ ﯽ ﯾ ﯿ
+   U+FC0x ﰀ ﰁ ﰂ ﰃ ﰄ ﰅ ﰆ ﰇ ﰈ ﰉ ﰊ ﰋ ﰌ ﰍ ﰎ ﰏ
+   U+FC1x ﰐ ﰑ ﰒ ﰓ ﰔ ﰕ ﰖ ﰗ ﰘ ﰙ ﰚ ﰛ ﰜ ﰝ ﰞ ﰟ
+   U+FC2x ﰠ ﰡ ﰢ ﰣ ﰤ ﰥ ﰦ ﰧ ﰨ ﰩ ﰪ ﰫ ﰬ ﰭ ﰮ ﰯ
+   U+FC3x ﰰ ﰱ ﰲ ﰳ ﰴ ﰵ ﰶ ﰷ ﰸ ﰹ ﰺ ﰻ ﰼ ﰽ ﰾ ﰿ
+   U+FC4x ﱀ ﱁ ﱂ ﱃ ﱄ ﱅ ﱆ ﱇ ﱈ ﱉ ﱊ ﱋ ﱌ ﱍ ﱎ ﱏ
+   U+FC5x ﱐ ﱑ ﱒ ﱓ ﱔ ﱕ ﱖ ﱗ ﱘ ﱙ ﱚ ﱛ ﱜ ﱝ ﱞ ﱟ
+   U+FC6x ﱠ ﱡ ﱢ ﱣ ﱤ ﱥ ﱦ ﱧ ﱨ ﱩ ﱪ ﱫ ﱬ ﱭ ﱮ ﱯ
+   U+FC7x ﱰ ﱱ ﱲ ﱳ ﱴ ﱵ ﱶ ﱷ ﱸ ﱹ ﱺ ﱻ ﱼ ﱽ ﱾ ﱿ
+   U+FC8x ﲀ ﲁ ﲂ ﲃ ﲄ ﲅ ﲆ ﲇ ﲈ ﲉ ﲊ ﲋ ﲌ ﲍ ﲎ ﲏ
+   U+FC9x ﲐ ﲑ ﲒ ﲓ ﲔ ﲕ ﲖ ﲗ ﲘ ﲙ ﲚ ﲛ ﲜ ﲝ ﲞ ﲟ
+   U+FCAx ﲠ ﲡ ﲢ ﲣ ﲤ ﲥ ﲦ ﲧ ﲨ ﲩ ﲪ ﲫ ﲬ ﲭ ﲮ ﲯ
+   U+FCBx ﲰ ﲱ ﲲ ﲳ ﲴ ﲵ ﲶ ﲷ ﲸ ﲹ ﲺ ﲻ ﲼ ﲽ ﲾ ﲿ
+   U+FCCx ﳀ ﳁ ﳂ ﳃ ﳄ ﳅ ﳆ ﳇ ﳈ ﳉ ﳊ ﳋ ﳌ ﳍ ﳎ ﳏ
+   U+FCDx ﳐ ﳑ ﳒ ﳓ ﳔ ﳕ ﳖ ﳗ ﳘ ﳙ ﳚ ﳛ ﳜ ﳝ ﳞ ﳟ
+   U+FCEx ﳠ ﳡ ﳢ ﳣ ﳤ ﳥ ﳦ ﳧ ﳨ ﳩ ﳪ ﳫ ﳬ ﳭ ﳮ ﳯ
+   U+FCFx ﳰ ﳱ ﳲ ﳳ ﳴ ﳵ ﳶ ﳷ ﳸ ﳹ ﳺ ﳻ ﳼ ﳽ ﳾ ﳿ
+   U+FD0x ﴀ ﴁ ﴂ ﴃ ﴄ ﴅ ﴆ ﴇ ﴈ ﴉ ﴊ ﴋ ﴌ ﴍ ﴎ ﴏ
+   U+FD1x ﴐ ﴑ ﴒ ﴓ ﴔ ﴕ ﴖ ﴗ ﴘ ﴙ ﴚ ﴛ ﴜ ﴝ ﴞ ﴟ
+   U+FD2x ﴠ ﴡ ﴢ ﴣ ﴤ ﴥ ﴦ ﴧ ﴨ ﴩ ﴪ ﴫ ﴬ ﴭ ﴮ ﴯ
+   U+FD3x ﴰ ﴱ ﴲ ﴳ ﴴ ﴵ ﴶ ﴷ ﴸ ﴹ ﴺ ﴻ ﴼ ﴽ ﴾ ﴿
+   U+FD4x ﵀ ﵁ ﵂ ﵃ ﵄ ﵅ ﵆ ﵇ ﵈ ﵉ ﵊ ﵋ ﵌ ﵍ ﵎ ﵏
+   U+FD5x ﵐ ﵑ ﵒ ﵓ ﵔ ﵕ ﵖ ﵗ ﵘ ﵙ ﵚ ﵛ ﵜ ﵝ ﵞ ﵟ
+   U+FD6x ﵠ ﵡ ﵢ ﵣ ﵤ ﵥ ﵦ ﵧ ﵨ ﵩ ﵪ ﵫ ﵬ ﵭ ﵮ ﵯ
+   U+FD7x ﵰ ﵱ ﵲ ﵳ ﵴ ﵵ ﵶ ﵷ ﵸ ﵹ ﵺ ﵻ ﵼ ﵽ ﵾ ﵿ
+   U+FD8x ﶀ ﶁ ﶂ ﶃ ﶄ ﶅ ﶆ ﶇ ﶈ ﶉ ﶊ ﶋ ﶌ ﶍ ﶎ ﶏ
+   U+FD9x     ﶒ ﶓ ﶔ ﶕ ﶖ ﶗ ﶘ ﶙ ﶚ ﶛ ﶜ ﶝ ﶞ ﶟ
+   U+FDAx ﶠ ﶡ ﶢ ﶣ ﶤ ﶥ ﶦ ﶧ ﶨ ﶩ ﶪ ﶫ ﶬ ﶭ ﶮ ﶯ
+   U+FDBx ﶰ ﶱ ﶲ ﶳ ﶴ ﶵ ﶶ ﶷ ﶸ ﶹ ﶺ ﶻ ﶼ ﶽ ﶾ ﶿ
+   U+FDCx ﷀ ﷁ ﷂ ﷃ ﷄ ﷅ ﷆ ﷇ               ﷏
+   U+FDDx
+   U+FDEx
+   U+FDFx ﷰ ﷱ ﷲ ﷳ ﷴ ﷵ ﷶ ﷷ ﷸ ﷹ ﷺ ﷻ ﷼ ﷽ ﷾ ﷿
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+   3.^ Black areas indicate noncharacters (code points that are guaranteed
+   never to be assigned as encoded characters in the Unicode Standard)
+
+  Arabic Presentation Forms B[edit]
+
+   These can all be created from the basic chart's characters.
+
+   Arabic Presentation Forms-B^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+     0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+FE7x ﹰ ﹱ ﹲ ﹳ ﹴ ﹶ ﹷ ﹸ ﹹ ﹺ ﹻ ﹼ ﹽ ﹾ ﹿ
+   U+FE8x ﺀ ﺁ ﺂ ﺃ ﺄ ﺅ ﺆ ﺇ ﺈ ﺉ ﺊ ﺋ ﺌ ﺍ ﺎ ﺏ
+   U+FE9x ﺐ ﺑ ﺒ ﺓ ﺔ ﺕ ﺖ ﺗ ﺘ ﺙ ﺚ ﺛ ﺜ ﺝ ﺞ ﺟ
+   U+FEAx ﺠ ﺡ ﺢ ﺣ ﺤ ﺥ ﺦ ﺧ ﺨ ﺩ ﺪ ﺫ ﺬ ﺭ ﺮ ﺯ
+   U+FEBx ﺰ ﺱ ﺲ ﺳ ﺴ ﺵ ﺶ ﺷ ﺸ ﺹ ﺺ ﺻ ﺼ ﺽ ﺾ ﺿ
+   U+FECx ﻀ ﻁ ﻂ ﻃ ﻄ ﻅ ﻆ ﻇ ﻈ ﻉ ﻊ ﻋ ﻌ ﻍ ﻎ ﻏ
+   U+FEDx ﻐ ﻑ ﻒ ﻓ ﻔ ﻕ ﻖ ﻗ ﻘ ﻙ ﻚ ﻛ ﻜ ﻝ ﻞ ﻟ
+   U+FEEx ﻠ ﻡ ﻢ ﻣ ﻤ ﻥ ﻦ ﻧ ﻨ ﻩ ﻪ ﻫ ﻬ ﻭ ﻮ ﻯ
+   U+FEFx ﻰ ﻱ ﻲ ﻳ ﻴ ﻵ ﻶ ﻷ ﻸ ﻹ ﻺ ﻻ ﻼ ZW
+   NBSP
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+
+  Rumi Numeral Symbols[edit]
+
+   Rumi Numeral Symbols^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+10E6x 𐹠 𐹡 𐹢 𐹣 𐹤 𐹥 𐹦 𐹧 𐹨 𐹩 𐹪 𐹫 𐹬 𐹭 𐹮 𐹯
+   U+10E7x 𐹰 𐹱 𐹲 𐹳 𐹴 𐹵 𐹶 𐹷 𐹸 𐹹 𐹺 𐹻 𐹼 𐹽 𐹾
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey area indicates non-assigned code point
+
+  Arabic Extended-C[edit]
+
+   Arabic Extended-C^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+10ECx
+   U+10EDx
+   U+10EEx
+   U+10EFx                           𐻽 𐻾 𐻿
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+
+  Indic Siyaq Numbers[edit]
+
+   Indic Siyaq Numbers^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1EC7x   𞱱 𞱲 𞱳 𞱴 𞱵 𞱶 𞱷 𞱸 𞱹 𞱺 𞱻 𞱼 𞱽 𞱾 𞱿
+   U+1EC8x 𞲀 𞲁 𞲂 𞲃 𞲄 𞲅 𞲆 𞲇 𞲈 𞲉 𞲊 𞲋 𞲌 𞲍 𞲎 𞲏
+   U+1EC9x 𞲐 𞲑 𞲒 𞲓 𞲔 𞲕 𞲖 𞲗 𞲘 𞲙 𞲚 𞲛 𞲜 𞲝 𞲞 𞲟
+   U+1ECAx 𞲠 𞲡 𞲢 𞲣 𞲤 𞲥 𞲦 𞲧 𞲨 𞲩 𞲪 𞲫 𞲬 𞲭 𞲮 𞲯
+   U+1ECBx 𞲰 𞲱 𞲲 𞲳 𞲴
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+
+  Ottoman Siyaq Numbers[edit]
+
+   Ottoman Siyaq Numbers^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1ED0x   𞴁 𞴂 𞴃 𞴄 𞴅 𞴆 𞴇 𞴈 𞴉 𞴊 𞴋 𞴌 𞴍 𞴎 𞴏
+   U+1ED1x 𞴐 𞴑 𞴒 𞴓 𞴔 𞴕 𞴖 𞴗 𞴘 𞴙 𞴚 𞴛 𞴜 𞴝 𞴞 𞴟
+   U+1ED2x 𞴠 𞴡 𞴢 𞴣 𞴤 𞴥 𞴦 𞴧 𞴨 𞴩 𞴪 𞴫 𞴬 𞴭 𞴮 𞴯
+   U+1ED3x 𞴰 𞴱 𞴲 𞴳 𞴴 𞴵 𞴶 𞴷 𞴸 𞴹 𞴺 𞴻 𞴼 𞴽
+   U+1ED4x
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+
+  Arabic Mathematical Alphabetic Symbols[edit]
+
+   Arabic Mathematical Alphabetic Symbols^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+     0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1EE0x 𞸀 𞸁 𞸂 𞸃 𞸅 𞸆 𞸇 𞸈 𞸉 𞸊 𞸋 𞸌 𞸍 𞸎 𞸏
+   U+1EE1x 𞸐 𞸑 𞸒 𞸓 𞸔 𞸕 𞸖 𞸗 𞸘 𞸙 𞸚 𞸛 𞸜 𞸝 𞸞 𞸟
+   U+1EE2x 𞸡 𞸢 𞸤 𞸧 𞸩 𞸪 𞸫 𞸬 𞸭 𞸮 𞸯
+   U+1EE3x 𞸰 𞸱 𞸲 𞸴 𞸵 𞸶 𞸷 𞸹 𞸻
+   U+1EE4x 𞹂 𞹇 𞹉 𞹋 𞹍 𞹎 𞹏
+   U+1EE5x 𞹑 𞹒 𞹔 𞹗 𞹙 𞹛 𞹝 𞹟
+   U+1EE6x 𞹡 𞹢 𞹤 𞹧 𞹨 𞹩 𞹪 𞹬 𞹭 𞹮 𞹯
+   U+1EE7x 𞹰 𞹱 𞹲 𞹴 𞹵 𞹶 𞹷 𞹹 𞹺 𞹻 𞹼 𞹾
+   U+1EE8x 𞺀 𞺁 𞺂 𞺃 𞺄 𞺅 𞺆 𞺇 𞺈 𞺉 𞺋 𞺌 𞺍 𞺎 𞺏
+   U+1EE9x 𞺐 𞺑 𞺒 𞺓 𞺔 𞺕 𞺖 𞺗 𞺘 𞺙 𞺚 𞺛
+   U+1EEAx 𞺡 𞺢 𞺣 𞺥 𞺦 𞺧 𞺨 𞺩 𞺫 𞺬 𞺭 𞺮 𞺯
+   U+1EEBx 𞺰 𞺱 𞺲 𞺳 𞺴 𞺵 𞺶 𞺷 𞺸 𞺹 𞺺 𞺻
+   U+1EECx
+   U+1EEDx
+   U+1EEEx
+   U+1EEFx 𞻰 𞻱
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+
+References[edit]
+
+    1. ^ "What is the origin of the ampersand (&)?"
+    2. ^ "UAX #24: Script data file". Unicode Character Database. The
+       Unicode Consortium.
+    3. ^ "Section 9.2: Arabic, Arabic Presentation Forms-B" (PDF). The
+       Unicode Standard. The Unicode Consortium. September 2022.
+    4. ^ Pandey, Anshuman (2015-11-05). "L2/15-121R2: Proposal to Encode
+       Indic Siyaq Numbers" (PDF).
+    5. ^ "Chapter 22: Symbols". The Unicode Standard, Version 15.0 (PDF).
+       Mountain View, CA: Unicode, Inc. September 2022.
+       ISBN 978-1-936213-32-0.
+    6. ^ "Chapter 22: Symbols". The Unicode Standard, Version 15.0 (PDF).
+       Mountain View, CA: Unicode, Inc. September 2022.
+       ISBN 978-1-936213-32-0.
+    7. ^ Deprecated as of Unicode version 6.0 UCD Change History "The
+       particular combination of an alef with this vowel mark should be
+       written with the sequence <U+0627 ARABIC LETTER ALEF, U+065F ARABIC
+       WAVY HAMZA BELOW>, rather than with the character U+0673 ARABIC
+       LETTER ALEF WITH WAVY HAMZA BELOW, which has been deprecated and
+       which is not canonically equivalent. "Section 9.2: Arabic,
+       Additional Vowel Marks" (PDF). The Unicode Standard. The Unicode
+       Consortium. September 2022.
+
+External links[edit]
+
+     *
+
+   Oibane. "Unicode problems". Arabic on Linux. Archived from the original
+   on 2008-02-03.
+
+     Arabunic. "Arabunic : unicode <-> glyphs, 2 way converter". Java
+   applet that convert glyphs to unicode (and unicode to glyphs). It
+   accounts for ligatures, lam-alif, diacritics, etc.
+
+     Scheherazade or Scheherazade New, an extended Arabic script font
+   designed by SIL International, distributed under the SIL Open Font
+   License (OFL)
+
+     Harmattan, an extended Arabic script font designed by SIL
+   International for West Africa, distributed under the SIL Open Font
+   License (OFL)
+
+     * v
+     * t
+     * e
+
+   Unicode
+
+   Unicode
+
+     * Unicode Consortium
+     * ISO/IEC 10646 (Universal Character Set)
+     * Versions
+
+   Code points
+
+     * Block
+          + List
+     * Universal Character Set
+     * Character charts
+     * Character property
+     * Plane
+     * Private Use Area
+
+   Characters
+
+   Special purpose
+     * BOM
+     * Combining grapheme joiner
+     * Left-to-right mark / Right-to-left mark
+     * Soft hyphen
+     * Variant form
+     * Word joiner
+     * Zero-width joiner
+     * Zero-width non-joiner
+     * Zero-width space
+
+   Lists
+     * Characters
+     * CJK Unified Ideographs
+     * Combining character
+     * Duplicate characters
+     * Numerals
+     * Scripts
+     * Spaces
+     * Symbols
+     * Halfwidth and fullwidth
+     * Alias names and abbreviations
+     * Whitespace characters
+
+   Processing
+
+   Algorithms
+     * Bidirectional text
+     * Collation
+          + ISO/IEC 14651
+     * Equivalence
+     * Variation sequences
+     * International Ideographs Core
+
+   Comparison
+     * BOCU-1
+     * CESU-8
+     * Punycode
+     * SCSU
+     * UTF-1
+     * UTF-7
+     * UTF-8
+     * UTF-16/UCS-2
+     * UTF-32/UCS-4
+     * UTF-EBCDIC
+
+   On pairs of
+   code points
+
+     * Combining character
+     * Compatibility characters
+     * Duplicate characters
+     * Equivalence
+     * Homoglyph
+     * Precomposed character
+          + list
+     * Z-variant
+     * Variation sequences
+     * Regional indicator symbol
+     * Emoji skin color
+
+   Usage
+
+     * Domain names (IDN)
+     * Email
+     * Fonts
+     * HTML
+          + entity references
+          + numeric references
+     * Input
+     * International Ideographs Core
+
+   Related standards
+
+     * Common Locale Data Repository (CLDR)
+     * GB 18030
+     * ISO/IEC 8859
+     * ISO 15924
+
+   Related topics
+
+     * Anomalies
+     * ConScript Unicode Registry
+     * Ideographic Research Group
+     * International Components for Unicode
+     * People involved with Unicode
+     * Han unification
+
+                     Scripts and symbols in Unicode
+   Common and
+   inherited scripts
+     * Combining marks
+     * Diacritics
+     * Punctuation marks
+     * Spaces
+     * Numbers
+
+   Modern scripts
+     * Adlam
+     * Arabic
+     * Armenian
+     * Balinese
+     * Bamum
+     * Batak
+     * Bengali
+     * Bopomofo
+     * Braille
+     * Buhid
+     * Burmese
+     * Canadian Aboriginal
+     * Chakma
+     * Cham
+     * Cherokee
+     * CJK Unified Ideographs (Han)
+     * Cyrillic
+     * Deseret
+     * Devanagari
+     * Geʽez
+     * Georgian
+     * Greek
+     * Gujarati
+     * Gunjala Gondi
+     * Gurmukhi
+     * Hangul
+     * Hanifi Rohingya
+     * Hanja
+     * Hanunuoo
+     * Hebrew
+     * Hiragana
+     * Javanese
+     * Kanji
+     * Kannada
+     * Katakana
+     * Kayah Li
+     * Khmer
+     * Lao
+     * Latin
+     * Lepcha
+     * Limbu
+     * Lisu (Fraser)
+     * Lontara
+     * Malayalam
+     * Masaram Gondi
+     * Mende Kikakui
+     * Medefaidrin
+     * Miao (Pollard)
+     * Mongolian
+     * Mru
+     * N'Ko
+     * Nag Mundari
+     * New Tai Lue
+     * Nüshu
+     * Nyiakeng Puachue Hmong
+     * Odia
+     * Ol Chiki
+     * Osage
+     * Osmanya
+     * Pahawh Hmong
+     * Pau Cin Hau
+     * Pracalit (Newa)
+     * Ranjana
+     * Rejang
+     * Samaritan
+     * Saurashtra
+     * Shavian
+     * Sinhala
+     * Sorang Sompeng
+     * Sundanese
+     * Syriac
+     * Tagbanwa
+     * Tai Le
+     * Tai Tham
+     * Tai Viet
+     * Tamil
+     * Tangsa
+     * Telugu
+     * Thaana
+     * Thai
+     * Tibetan
+     * Tifinagh
+     * Tirhuta
+     * Toto
+     * Vai
+     * Wancho
+     * Warang Citi
+     * Yi
+
+   Ancient and
+   historic scripts
+     * Ahom
+     * Anatolian hieroglyphs
+     * Ancient North Arabian
+     * Avestan
+     * Bassa Vah
+     * Bhaiksuki
+     * Brāhmī
+     * Carian
+     * Caucasian Albanian
+     * Coptic
+     * Cuneiform
+     * Cypriot
+     * Cypro-Minoan
+     * Dives Akuru
+     * Dogra
+     * Egyptian hieroglyphs
+     * Elbasan
+     * Elymaic
+     * Glagolitic
+     * Gothic
+     * Grantha
+     * Hatran
+     * Imperial Aramaic
+     * Inscriptional Pahlavi
+     * Inscriptional Parthian
+     * Kaithi
+     * Kawi
+     * Kharosthi
+     * Khitan small script
+     * Khojki
+     * Khudawadi
+     * Khwarezmian (Chorasmian)
+     * Linear A
+     * Linear B
+     * Lycian
+     * Lydian
+     * Mahajani
+     * Makasar
+     * Mandaic
+     * Manichaean
+     * Marchen
+     * Meetei Mayek
+     * Meroitic
+     * Modi
+     * Multani
+     * Nabataean
+     * Nandinagari
+     * Ogham
+     * Old Hungarian
+     * Old Italic
+     * Old Permic
+     * Old Persian cuneiform
+     * Old Sogdian
+     * Old Turkic
+     * Old Uyghur
+     * Palmyrene
+     * ʼPhags-pa
+     * Phoenician
+     * Psalter Pahlavi
+     * Runic
+     * Sharada
+     * Siddham
+     * Sogdian
+     * South Arabian
+     * Soyombo
+     * Sylheti Nagri
+     * Tagalog (Baybayin)
+     * Takri
+     * Tangut
+     * Ugaritic
+     * Vithkuqi
+     * Yezidi
+     * Zanabazar Square
+
+                     Notational scripts
+     * Duployan
+     * SignWriting
+
+   Symbols, emojis
+     * Cultural, political, and religious symbols
+     * Currency
+     * Control Pictures
+     * Mathematical operators and symbols
+          + List by subject
+     * Phonetic symbols (including IPA)
+     * Emoji
+
+     *  Category: Unicode
+     *  Category: Unicode blocks
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Arabic_script_in_Unicode&ol
+   did=1111418745"
+
+   Categories:
+     * Unicode blocks
+     * Arabic-language computing
+
+   Hidden categories:
+     * Articles with short description
+     * Short description with empty Wikidata description
+     * Articles containing Arabic-language text
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+Languages
+
+     * العربية
+     * Deutsch
+     * ไทย
+
+   Edit links
+
+     * This page was last edited on 20 September 2022, at 22:20 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

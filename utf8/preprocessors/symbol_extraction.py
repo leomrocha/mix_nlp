@@ -3,7 +3,7 @@ Unicode symbol extraction from
 """
 import os
 
-PATH = '/home/leo/projects/Datasets/text/wiki-unicode/selected_sources_small'
+PATH = 'selected_sources'
 # characters to exclude from
 # \t \n \r are already in the reserved space so we take them out of the selected charset
 EXCLUDE = "\t\n\r" \

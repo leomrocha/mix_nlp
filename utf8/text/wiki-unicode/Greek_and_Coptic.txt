@@ -1,0 +1,432 @@
+   #alternate Edit this page Wikipedia (en)
+
+Greek and Coptic
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   For a list of all Greek characters encoded in Unicode, see Greek script
+   in Unicode.
+   See also: Coptic (Unicode block) and Coptic Epact Numbers (Unicode
+   block)
+   Unicode character block
+   Greek and Coptic
+   Range U+0370..U+03FF
+   (144 code points)
+   Plane BMP
+   Scripts Greek (117 char.)
+   Coptic (14 char.)
+   Common (4 char.)
+   Major alphabets Greek
+   Assigned 135 code points
+   Unused 9 reserved code points
+   Source standards ISO 8859-7
+   Unicode version history
+
+   1.0.0
+   (1991) 112 (+112)
+   1.0.1
+   (1992) 103 (-9)
+   1.1
+   (1993) 105 (+2)
+   3.0
+   (1999) 110 (+5)
+   3.1
+   (2001) 112 (+2)
+   3.2
+   (2002) 115 (+3)
+   4.0
+   (2003) 120 (+5)
+   4.1
+   (2005) 124 (+4)
+   5.0
+   (2006) 127 (+3)
+   5.1
+   (2008) 134 (+7)
+   7.0
+   (2014) 135 (+1)
+   Chart
+   Code chart
+   Note: ^[1]^[2]^[3]
+
+   Greek and Coptic is the Unicode block for representing modern
+   (monotonic) Greek. It was originally used for writing Coptic,^[1] using
+   the similar Greek letters, in addition to the uniquely Coptic
+   additions. Beginning with version 4.1 of the Unicode Standard, a
+   separate Coptic block has been included in Unicode, allowing for mixed
+   Greek/Coptic text that is stylistically contrastive, as is convention
+   in scholarly works. Writing polytonic Greek requires the use of
+   combining characters or the precomposed vowel + tone characters in the
+   Greek Extended character block.
+
+   Its block name in Unicode 1.0 was simply Greek, although Coptic letters
+   were already included.^[4]
+
+   [ ]
+
+Contents
+
+     * 1 Block
+     * 2 History
+     * 3 See also
+     * 4 References
+
+Block[edit]
+
+   Greek and Coptic^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+037x Ͱ ͱ Ͳ ͳ ʹ ͵ Ͷ ͷ     ͺ ͻ ͼ ͽ ; Ϳ
+   U+038x         ΄ ΅ Ά · Έ Ή Ί   Ό   Ύ Ώ
+   U+039x ΐ Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο
+   U+03Ax Π Ρ   Σ Τ Υ Φ Χ Ψ Ω Ϊ Ϋ ά έ ή ί
+   U+03Bx ΰ α β γ δ ε ζ η θ ι κ λ μ ν ξ ο
+   U+03Cx π ρ ς σ τ υ φ χ ψ ω ϊ ϋ ό ύ ώ Ϗ
+   U+03Dx ϐ ϑ ϒ ϓ ϔ ϕ ϖ ϗ Ϙ ϙ Ϛ ϛ Ϝ ϝ Ϟ ϟ
+   U+03Ex Ϡ ϡ Ϣ ϣ Ϥ ϥ Ϧ ϧ Ϩ ϩ Ϫ ϫ Ϭ ϭ Ϯ ϯ
+   U+03Fx ϰ ϱ ϲ ϳ ϴ ϵ ϶ Ϸ ϸ Ϲ Ϻ ϻ ϼ Ͻ Ͼ Ͽ
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+History[edit]
+
+   In Unicode 1.0.1, a number of changes were made to this block in order
+   to make Unicode 1.0.1 a proper subset of ISO 10646.^[1]^[2]^[3]
+     * The small stigma, digamma, koppa and sampi were withdrawn for
+       further study. These characters were added back in for Unicode
+       3.0.0.
+     * The non-spacing dasia pneumata, psili pneumata and tonos were
+       merged with non-spacing reversed comma above, comma above and
+       vertical line above in the Combining Diacritical Marks block. The
+       last was replaced by the spacing tonos, while in Unicode 5.1.0 the
+       former two were replaced by the small heta and the capital archaic
+       sampi.
+     * The non-spacing iota below and diaeresis tonos were renamed and
+       moved to the Combining Diacritical Marks block. The latter was
+       replaced by the spacing diaeresis tonos, while the former was
+       replaced by the capital heta in Unicode 5.1.0.
+     * The Greek question mark, the upper and lower numeral signs and the
+       aforementioned spacing tonos and diaeresis tonos, as well as the
+       spacing iota below were moved to new positions within the block.
+       They were replaced by the kai, or Greek &, (in Unicode 3.0.0), the
+       capital and small archaic koppa (3.2.0), the yot (1.1.0), an
+       alternative capital theta and the lunate epsilon (both 3.1.0)
+       respectively.
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Greek and Coptic block:
+
+   Version Final code points^[a] Count UTC ID L2 ID WG2 ID Document
+   1.0.0 U+0374..0375, 037A, 037E, 0384..0386, 0388..038A, 038C,
+   038E..03A1, 03A3..03CE, 03D0..03D6, 03DA, 03DC, 03DE, 03E0, 03E2..03F0
+   101 (to be determined)
+   L2/06-386
+   Davis, Mark (2006-11-09), Properties not preserving canonical
+   equivalence
+   L2/07-015
+
+   Moore, Lisa (2007-02-08), "UCD Canonical Check (B.14.9) [U+0374]", UTC
+   #110 Minutes
+   L2/07-071
+   Davis, Mark (2007-02-08), UCD Canonical Check
+   U+03F1 1 UTC/1991-048B
+   Whistler, Ken (1991-03-27), "Alternate Rho", Draft Minutes from the UTC
+   meeting #46 day 2, 3/27 at Apple
+   U+03F2 1 UTC/1991-048B
+   Whistler, Ken (1991-03-27), "Lunate Sigma", Draft Minutes from the UTC
+   meeting #46 day 2, 3/27 at Apple
+   1.1 U+0387, 03F3 2 (to be determined)
+   L2/06-386
+   Davis, Mark (2006-11-09), Properties not preserving canonical
+   equivalence
+   L2/07-015
+   Moore, Lisa (2007-02-08), "UCD Canonical Check (B.14.9) [U+0387]", UTC
+   #110 Minutes
+   L2/07-071
+   Davis, Mark (2007-02-08), UCD Canonical Check
+   3.0 U+03D7, 03DB, 03DD, 03DF, 03E1 5 L2/98-210 N1743
+   Everson, Michael (1998-05-25), Additional Greek characters for the UCS
+   L2/98-281R (pdf, html)
+   Aliprand, Joan (1998-07-31), "Greek characters (IV.C.2)", Unconfirmed
+   Minutes - UTC #77 & NCITS Subgroup L2 # 174 JOINT MEETING, Redmond, WA
+   -- July 29-31, 1998
+   L2/98-292R (pdf, html, Figure 1)
+   "2.2", Comments on proposals to add characters from ISO standards
+   developed by ISO/TC 46/SC 4, 1998-08-19
+   L2/98-292 N1840
+   "2.2", Comments on proposals to add characters from ISO standards
+   developed by ISO/TC 46/SC 4, 1998-08-25
+   L2/98-293 N1885
+   "2.3", Comments on proposals to add various characters to ISO/IEC
+   10646, 1998-08-25
+   L2/98-301 N1847
+   Everson, Michael (1998-09-12), Responses to NCITS/L2 and Unicode
+   Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc)
+   Whistler, Ken; et al. (1998-09-22), Additional Characters for the UCS
+   L2/98-329 N1920
+   Combined PDAM registration and consideration ballot on WD for ISO/IEC
+   10646-1/Amd. 30, AMENDMENT 30: Additional Latin and other characters,
+   1998-10-28
+   L2/99-010 N1903 (pdf, html, doc)
+   Umamaheswaran, V. S. (1998-12-30), "8.1.5.1", Minutes of WG 2 meeting
+   35, London, U.K.; 1998-09-21--25
+   3.1 U+03F4..03F5 2 L2/00-119^[b] N2191R
+   Whistler, Ken; Freytag, Asmus (2000-04-19), Encoding Additional
+   Mathematical Symbols in Unicode
+   L2/00-234 N2203 (rtf, txt)
+   Umamaheswaran, V. S. (2000-07-21), "8.18", Minutes from the SC2/WG2
+   meeting in Beijing, 2000-03-21 -- 24
+   L2/00-115R2
+   Moore, Lisa (2000-08-08), "Motion 83-M11", Minutes Of UTC Meeting #83
+   3.2 U+03D8..03D9, 03F6 3 L2/99-018 N1938
+   Everson, Michael (1998-12-12), On GREEK LETTER KOPPA
+   L2/99-077.1 N1975
+   Irish Comments on SC 2 N 3210, 1999-01-20
+   L2/99-054R
+   Aliprand, Joan (1999-06-21), "Greek Letter Koppa", Approved Minutes
+   from the UTC/L2 meeting in Palo Alto, February 3-5, 1999
+   L2/00-119^[b] N2191R
+   Whistler, Ken; Freytag, Asmus (2000-04-19), Encoding Additional
+   Mathematical Symbols in Unicode
+   L2/00-234 N2203 (rtf, txt)
+   Umamaheswaran, V. S. (2000-07-21), "8.18", Minutes from the SC2/WG2
+   meeting in Beijing, 2000-03-21 -- 24
+   L2/00-115R2
+   Moore, Lisa (2000-08-08), "Motion 83-M11", Minutes Of UTC Meeting #83
+   L2/01-050 N2253
+   Umamaheswaran, V. S. (2001-01-21), "RESOLUTION M39.24", Minutes of the
+   SC2/WG2 meeting in Athens, September 2000
+   4.0 U+03F7..03F8 2 L2/01-007
+   Bunz, Carl-Martin (2000-12-21), "Bactrian", Iranianist Meeting Report:
+   Symposium on Encoding Iranian Scripts in Unicode
+   L2/02-009
+   Bunz, Carl-Martin (2001-11-23), "Bactrian", 2nd Iranian Meeting Report
+   L2/02-056 N2411
+   Everson, Michael (2002-01-30), Proposal to add two Greek letters for
+   Bactrian to the UCS
+   L2/02-166R2
+   Moore, Lisa (2002-08-09), "Scripts and New Characters - Bactrian", UTC
+   #91 Minutes, "The UTC accepts two Greek characters for use in Bactrian"
+   U+03F9 1 L2/02-314R^[c] N2512
+   Pantelia, Maria (2002-08-21), Proposal to add the Greek Capital Lunate
+   Sigma Symbol to the UCS
+   U+03FA..03FB 2 L2/02-313R2^[c] N2522
+   Pantelia, Maria (2002-11-07), Proposal to encode the Archaic Greek
+   Letter San and Greek Small Letter San in the UCS
+   L2/04-034
+   March, Jeremy; Kirk, Peter; Rourke, Patrick; Anderson, Deborah
+   (2004-01-23), Request to Change Greek Collation Order for SAN
+   4.1 U+03FC 1 L2/03-157
+   Pantelia, Maria (2003-05-19), Additional Beta Code Characters not in
+   Unicode (WIP)
+   L2/03-188R N2612-5
+   Pantelia, Maria (2003-06-11), Proposal to encode the Greek Rho with
+   Stroke Symbol in the UCS
+   U+03FD..03FF 3 L2/02-031
+   Anderson, Deborah (2002-01-21), TLG Miscellanea Proposal
+   L2/02-033
+   Anderson, Deborah (2002-01-21), TLG Unicode Proposal (draft)
+   L2/02-053
+   Anderson, Deborah (2002-02-04), Description of TLG Documents
+   L2/02-273
+   Pantelia, Maria (2002-07-31), TLG Unicode Proposal
+   L2/02-287
+   Pantelia, Maria (2002-08-09), Proposal Summary Form accompanying TLG
+   Unicode Proposal (L2/02-273)
+   L2/02-312R
+   Pantelia, Maria (2002-11-07), Proposal to encode additional Greek
+   editorial and punctuation characters in the UCS
+   L2/03-324 N2642
+   Pantelia, Maria (2003-10-06), Proposal to encode additional Greek
+   editorial and punctuation characters in the UCS
+   5.0 U+037B..037D 3 L2/05-076
+   Davis, Mark (2005-02-10), Stability of Case Folding
+   N2942
+   Freytag, Asmus; Whistler, Ken (2005-08-12), Proposal to add nine
+   lowercase characters
+   L2/05-108R
+   Moore, Lisa (2005-08-26), "Stability of Case Folding (B.14.2)", UTC
+   #103 Minutes
+   N2953 (pdf, doc)
+   Umamaheswaran, V. S. (2006-02-16), "M47.5c, M47.5d, M47.5e",
+   Unconfirmed minutes of WG 2 meeting 47, Sophia Antipolis, France;
+   2005-09-12/15
+   5.1 U+0370..0373, 0376..0377 6 L2/04-388
+   Nicholas, Nick (2004-11-10), Proposal to add Greek Letter Lowercase
+   Heta and Greek Letter Capital Heta to the UCS
+   L2/04-389
+   Nicholas, Nick (2004-11-10), Epigraphical Greek Letters: Request for
+   preliminary opinion
+   L2/05-002
+   Nicholas, Nick (2005-01-01), Proposal to add Greek Letter Lowercase
+   Heta and Greek Letter Capital Heta (Updated fonts 2005-04-28)
+   L2/05-003R N2946
+   Nicholas, Nick (2005-01-01), Proposal to add Greek epigraphical letters
+   L2/05-054
+   Anderson, Deborah (2005-01-31), Feedback on Proposals for Tack Hetas
+   and Greek Epigraphical Letters (L2/05-002, L2/05-003)
+   L2/05-098
+   Nicholas, Nick (2005-04-03), Proposal to add Greek epigraphical
+   characters to the UCS
+   L2/05-108R
+   Moore, Lisa (2005-08-26), "Greek Epigraphical Letters (C.10)", UTC #103
+   Minutes
+   N2953 (pdf, doc)
+   Umamaheswaran, V. S. (2006-02-16), "7.4.3", Unconfirmed minutes of WG 2
+   meeting 47, Sophia Antipolis, France; 2005-09-12/15
+   N3153 (pdf, doc)
+   Umamaheswaran, V. S. (2007-02-16), "M49.1c [U+0373]", Unconfirmed
+   minutes of WG 2 meeting 49 AIST, Akihabara, Tokyo, Japan; 2006-09-25/29
+   U+03CF 1 L2/06-266 N3122
+   Everson, Michael (2006-08-06), Proposal to add Latin letters and a
+   Greek symbol to the UCS
+   L2/06-231
+   Moore, Lisa (2006-08-17), "C.16", UTC #108 Minutes
+   N3153 (pdf, doc)
+   Umamaheswaran, V. S. (2007-02-16), "M49.3", Unconfirmed minutes of WG 2
+   meeting 49 AIST, Akihabara, Tokyo, Japan; 2006-09-25/29
+   7.0 U+037F 1 L2/10-474 N3997
+   Bobeck, Michael (2010-12-12), Proposal to encode GREEK CAPITAL LETTER
+   YOT
+   L2/11-016
+   Moore, Lisa (2011-02-15), "C.9", UTC #126 / L2 #223 Minutes
+   N4103
+   "11.2.8 Greek Capital Letter YOT", Unconfirmed minutes of WG 2 meeting
+   58, 2012-01-03
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+    2. ^ ^a ^b Refer to the history section of the Miscellaneous
+       Mathematical Symbols-B block for additional math-related documents
+    3. ^ ^a ^b See also L2/02-031, L2/02-053, L2/02-273, and L2/02-287
+
+See also[edit]
+
+     * Phonetic symbols in Unicode
+
+References[edit]
+
+    1. ^ ^a ^b ^c "Unicode 1.0.1 Addendum" (PDF). The Unicode Standard.
+       1992-11-03. Retrieved 2016-07-09.
+    2. ^ ^a ^b "Unicode character database". The Unicode Standard.
+       Retrieved 2016-07-09.
+    3. ^ ^a ^b "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+    4. ^ "3.8: Block-by-Block Charts" (PDF). The Unicode Standard. version
+       1.0. Unicode Consortium.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Greek_and_Coptic&oldid=1108
+   394557"
+
+   Categories:
+     * Coptic language
+     * Greek language
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * Русский
+     * Scots
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 4 September 2022, at 04:41 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

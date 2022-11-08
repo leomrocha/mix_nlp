@@ -1,0 +1,1635 @@
+   #alternate Edit this page Wikipedia (en)
+
+Phonetic symbols in Unicode
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   Representation of phonetic symbols in the Unicode Standard
+   This article needs additional citations for verification. Please help
+   improve this article by adding citations to reliable sources. Unsourced
+   material may be challenged and removed.
+   Find sources: "Phonetic symbols in Unicode" – news · newspapers ·
+   books · scholar · JSTOR (January 2016) (Learn how and when to remove
+   this template message)
+   This article contains phonetic symbols. Without proper rendering
+   support, you may see question marks, boxes, or other symbols instead of
+   phonetic symbols.
+
+   Unicode supports several phonetic scripts and notations through the
+   existing writing systems and the addition of extra blocks with phonetic
+   characters. These phonetic extras are derived from an existing script,
+   usually Latin, Greek or Cyrillic. Apart from International Phonetic
+   Alphabet (IPA), extensions to the IPA and obsolete and nonstandard IPA
+   symbols, these blocks also contain characters from the Uralic Phonetic
+   Alphabet and the Americanist Phonetic Alphabet.
+   [ ]
+
+Contents
+
+     * 1 Phonetic scripts
+     * 2 From IPA to Unicode
+          + 2.1 Consonants
+          + 2.2 Vowels
+          + 2.3 Diacritics
+     * 3 Unicode blocks
+     * 4 Unicode blocks with many phonetic symbols
+          + 4.1 IPA Extensions (U+0250–02AF)
+          + 4.2 Spacing Modifier Letters (U+02B0–02FF)
+          + 4.3 Phonetic Extensions (U+1D00–1D7F)
+          + 4.4 Phonetic Extensions Supplement (U+1D80–1DBF)
+          + 4.5 Modifier Tone Letters (U+A700–A71F)
+          + 4.6 Superscripts and Subscripts (U+2070–209F)
+     * 5 Font support for IPA
+     * 6 Input by selection from a screen
+     * 7 See also
+     * 8 References
+     * 9 External links
+
+Phonetic scripts[edit]
+
+   The International Phonetic Alphabet (IPA) makes use of letters from
+   other writing systems as most phonetic scripts do. IPA notably uses
+   Latin, Greek and Cyrillic characters. Combining diacritics also adds
+   meaning to the phonetic text. Finally, these phonetic alphabets make
+   use of modifier letters, that are specially constructed for the
+   phonetic meaning. A "modifier letter" is strictly intended not as an
+   independent grapheme but as a modification of the preceding
+   character^[1] resulting in a distinct grapheme, notably in the context
+   of the International Phonetic Alphabet. For example, ʰ should not occur
+   on its own but modifies the preceding or following symbol. Thus, tʰ is
+   a single IPA symbol, distinct from t. In practice, however, several of
+   these "modifier letters" are also used as full graphemes, e.g. ʿ as
+   transliterating Semitic ayin or Hawaiian ʻokina, or ˚ transliterating
+   Abkhaz ә.
+
+From IPA to Unicode[edit]
+
+   Main article: International Phonetic Alphabet
+   See also: superscript IPA
+
+Consonants[edit]
+
+   The following tables indicates the Unicode code point sequences for
+   phonemes as used in the International Phonetic Alphabet. A bold code
+   point indicates that the Unicode chart provides an application note
+   such as "voiced retroflex lateral" for U+026D
+   ɭ LATIN SMALL LETTER L WITH RETROFLEX HOOK. An entry in bold italics
+   indicates the character name itself refers to a phoneme such as U+0298
+   ʘ LATIN LETTER BILABIAL CLICK
+
+     Basic Latin/Greek
+     Latin extended
+     IPA extension
+   Bilabial Labiodental Dental Alveolar Postalveolar Retroflex Labialized
+   palatal Postalveolar-velar
+   Plosive p
+     __________________________________________________________________
+
+   U+0070 b
+     __________________________________________________________________
+
+   U+0062 p̪
+     __________________________________________________________________
+
+   U+0070 U+032A b̪
+     __________________________________________________________________
+
+   U+0062 U+032A t̪
+     __________________________________________________________________
+
+   U+0074 U+032A d̪
+     __________________________________________________________________
+
+   U+0064 U+032A t
+     __________________________________________________________________
+
+   U+0074 d
+     __________________________________________________________________
+
+   U+0064 ʈ
+     __________________________________________________________________
+
+   U+0288 ɖ
+     __________________________________________________________________
+
+   U+0256
+   Implosive ɓ̥
+     __________________________________________________________________
+
+   U+0253 U+0325 ɓ
+     __________________________________________________________________
+
+   U+0253 ɗ̪
+     __________________________________________________________________
+
+   U+0257 U+032A ɗ
+     __________________________________________________________________
+
+   U+0257 ᶑ
+     __________________________________________________________________
+
+   U+1D91
+   Ejective pʼ
+     __________________________________________________________________
+
+   U+0070 U+02BC t̪ʼ
+     __________________________________________________________________
+
+   U+0074 U+032A U+02BC tʼ
+     __________________________________________________________________
+
+   U+0074 U+02BC ʈʼ
+     __________________________________________________________________
+
+   U+0288 U+02BC
+   Nasal m̥
+     __________________________________________________________________
+
+   U+006D U+0325 m
+     __________________________________________________________________
+
+   U+006D ɱ̊
+     __________________________________________________________________
+
+   U+0271 U+030A ɱ
+     __________________________________________________________________
+
+   U+0271 n̪̊
+     __________________________________________________________________
+
+   U+006E U+032A U+030A n̪
+     __________________________________________________________________
+
+   U+006E U+032A n̥
+     __________________________________________________________________
+
+   U+006E U+0325 n
+     __________________________________________________________________
+
+   U+006E ɳ̊
+     __________________________________________________________________
+
+   U+0273 U+030A ɳ
+     __________________________________________________________________
+
+   U+0273
+   Trill ʙ
+     __________________________________________________________________
+
+   U+0299 r̥
+     __________________________________________________________________
+
+   U+0072 U+0325 r
+     __________________________________________________________________
+
+   U+0072 *
+   Tap or Flap ⱱ̟
+     __________________________________________________________________
+
+   U+2C71 U+031F ⱱ
+     __________________________________________________________________
+
+   U+2C71 ɾ
+     __________________________________________________________________
+
+   U+027E ɽ
+     __________________________________________________________________
+
+   U+027D
+   Lateral flap ɺ
+     __________________________________________________________________
+
+   U+027A 𝼈
+     __________________________________________________________________
+
+   U+1DF08
+   Fricative ɸ
+     __________________________________________________________________
+
+   U+0278 β
+     __________________________________________________________________
+
+   U+03B2 f
+     __________________________________________________________________
+
+   U+0066 v
+     __________________________________________________________________
+
+   U+0076 θ
+     __________________________________________________________________
+
+   U+03B8 ð
+     __________________________________________________________________
+
+   U+00F0 s
+     __________________________________________________________________
+
+   U+0073 z
+     __________________________________________________________________
+
+   U+007A ʃ
+     __________________________________________________________________
+
+   U+0283 ʒ
+     __________________________________________________________________
+
+   U+0292 ʂ
+     __________________________________________________________________
+
+   U+0282 ʐ
+     __________________________________________________________________
+
+   U+0290 ɧ
+     __________________________________________________________________
+
+   U+0267
+   Lateral fricative ɬ
+     __________________________________________________________________
+
+   U+026C ɮ
+     __________________________________________________________________
+
+   U+026E ꞎ
+     __________________________________________________________________
+
+   U+A78E
+   Ejective fricative sʼ
+     __________________________________________________________________
+
+   U+0073 U+02BC ʃʼ
+     __________________________________________________________________
+
+   U+0283 U+02BC
+   Ejective lateral fricative ɬʼ
+     __________________________________________________________________
+
+   U+026C U+02BC
+   Percussive ʬ
+     __________________________________________________________________
+
+   U+02AC ʭ
+     __________________________________________________________________
+
+   U+02AD
+   Approximant β̞̊
+     __________________________________________________________________
+
+   U+03B2 U+031E U+030A β̞
+     __________________________________________________________________
+
+   U+03B2 U+031E ʋ̥
+     __________________________________________________________________
+
+   U+028B U+0325 ʋ
+     __________________________________________________________________
+
+   U+028B ð̞
+     __________________________________________________________________
+
+   U+00F0 U+031E ɹ̥
+     __________________________________________________________________
+
+   U+0279 U+0325 ɹ
+     __________________________________________________________________
+
+   U+0279 ɻ̊
+     __________________________________________________________________
+
+   U+027B U+030A ɻ
+     __________________________________________________________________
+
+   U+027B ɥ̊
+     __________________________________________________________________
+
+   U+0265 U+030A ɥ
+     __________________________________________________________________
+
+   U+0265
+   Lateral approximant l̥
+     __________________________________________________________________
+
+   U+006C U+0325 l
+     __________________________________________________________________
+
+   U+006C ɭ
+     __________________________________________________________________
+
+   U+026D
+   Click consonant ʘ
+     __________________________________________________________________
+
+   U+0298 ǀ
+     __________________________________________________________________
+
+   U+01C0 ǃ
+     __________________________________________________________________
+
+   U+01C3 ǃ / ǂ
+     __________________________________________________________________
+
+   U+01C3 / U+01C2 𝼊
+     __________________________________________________________________
+
+   U+1DF0A
+   Lateral click * ǁ
+     __________________________________________________________________
+
+   U+01C1
+   Alveolo-palatal Palatal Labial-velar Velar Uvular Pharyngeal Epiglottal
+   Glottal
+   Plosive ȶ
+     __________________________________________________________________
+
+   U+0236 ȡ
+     __________________________________________________________________
+
+   U+0221 c
+     __________________________________________________________________
+
+   U+0063 ɟ
+     __________________________________________________________________
+
+   U+025F k͡p
+     __________________________________________________________________
+
+   U+006B U+0361 U+0070 ɡ͡b
+     __________________________________________________________________
+
+   U+0261 U+0361 U+0062 k
+     __________________________________________________________________
+
+   U+006B ɡ
+     __________________________________________________________________
+
+   U+0261 q
+     __________________________________________________________________
+
+   U+0071 ɢ
+     __________________________________________________________________
+
+   U+0262 ʡ
+     __________________________________________________________________
+
+   U+02A1 ʔ
+     __________________________________________________________________
+
+   U+0294
+   Implosive ʄ
+     __________________________________________________________________
+
+   U+0284 ɠ
+     __________________________________________________________________
+
+   U+0260 ʛ
+     __________________________________________________________________
+
+   U+029B
+   Ejective cʼ
+     __________________________________________________________________
+
+   U+0063 U+02BC kʼ
+     __________________________________________________________________
+
+   U+006B U+02BC qʼ
+     __________________________________________________________________
+
+   U+0071 U+02BC
+   Nasal ȵ
+     __________________________________________________________________
+
+   U+0235 ɲ
+     __________________________________________________________________
+
+   U+0272 ŋ͡m
+     __________________________________________________________________
+
+   U+014B U+0361 U+006D ŋ
+     __________________________________________________________________
+
+   U+014B ɴ
+     __________________________________________________________________
+
+   U+0274
+   Trill ʀ
+     __________________________________________________________________
+
+   U+0280 *
+   Tap or Flap *
+   Lateral flap * *
+   Fricative ɕ
+     __________________________________________________________________
+
+   U+0255 ʑ
+     __________________________________________________________________
+
+   U+0291 ç
+     __________________________________________________________________
+
+   U+00E7 ʝ
+     __________________________________________________________________
+
+   U+029D x
+     __________________________________________________________________
+
+   U+0078 ɣ
+     __________________________________________________________________
+
+   U+0263 χ
+     __________________________________________________________________
+
+   U+03C7 ʁ
+     __________________________________________________________________
+
+   U+0281 ħ
+     __________________________________________________________________
+
+   U+0127 ʕ
+     __________________________________________________________________
+
+   U+0295 ʜ
+     __________________________________________________________________
+
+   U+029C ʢ
+     __________________________________________________________________
+
+   U+02A2 h
+     __________________________________________________________________
+
+   U+0068 ɦ
+     __________________________________________________________________
+
+   U+0266
+   Approximant j
+     __________________________________________________________________
+
+   U+006A ʍ
+     __________________________________________________________________
+
+   U+028D w
+     __________________________________________________________________
+
+   U+0077 ɰ
+     __________________________________________________________________
+
+   U+0270
+   Lateral approximant ȴ
+     __________________________________________________________________
+
+   U+0234 ʎ
+     __________________________________________________________________
+
+   U+028E ʟ
+     __________________________________________________________________
+
+   U+029F
+
+Vowels[edit]
+
+   IPA: Vowels
+              Front Central Back
+   Close
+   i
+   •
+   y
+   ɨ
+   •
+   ʉ
+   ɯ
+   •
+   u
+   Near-close
+   ɪ
+   •
+   ʏ
+   •
+   ʊ
+   Close-mid
+   e
+   •
+   ø
+   ɘ
+   •
+   ɵ
+   ɤ
+   •
+   o
+   Mid
+   e̞
+   •
+   ø̞
+   ə
+   ɤ̞
+   •
+   o̞
+   Open-mid
+   ɛ
+   •
+   œ
+   ɜ
+   •
+   ɞ
+   ʌ
+   •
+   ɔ
+   Near-open
+   æ
+   •
+   ɐ
+   Open
+   a
+   •
+   ɶ
+   ä
+   •
+   ɑ
+   •
+   ɒ
+     __________________________________________________________________
+
+     * IPA help
+     * Loudspeaker.svg  audio
+     * full chart
+     * template
+
+   Vowels beside dots are: unrounded • rounded
+
+   The following figures depict the phonetic vowels and their Unicode /
+   UCS code points, arranged to represent the phonetic vowel trapezium.
+   Vowels appearing in pairs in the figure to the right indicate rounded
+   and unrounded variations respectively. Again, characters with Unicode
+   names referring to phonemes are indicated by bold text. Those with
+   explicit application notes are indicated by bold italic text. Those
+   from borrowed unchanged from another script (Latin, Greek or Cyrillic)
+   are indicated by italics. Before and after a bullet are the unrounded •
+   rounded vowels.
+
+   CAPTION: Unicode code points for phonetic vowels
+
+   Front Central Back
+   Close i • y
+     __________________________________________________________________
+
+   U+0069
+   •
+   U+0079 ɨ • ʉ
+     __________________________________________________________________
+
+   U+0268
+   •
+   U+0289 ɯ • u
+     __________________________________________________________________
+
+   U+026F
+   •
+   U+0075
+   Near-close ɪ • ʏ
+     __________________________________________________________________
+
+   U+026A
+   •
+   U+028F ɪ̈ • ʊ̈
+     __________________________________________________________________
+
+   U+026A U+0308
+   •
+   U+028A U+0308 • ʊ
+     __________________________________________________________________
+
+
+   •
+   U+028A
+   Close-mid e • ø
+     __________________________________________________________________
+
+   U+0065
+   •
+   U+00F8 ɘ • ɵ
+     __________________________________________________________________
+
+   U+0258
+   •
+   U+0275 ɤ • o
+     __________________________________________________________________
+
+   U+0264
+   •
+   U+006F
+   Mid e̞ • ø̞
+     __________________________________________________________________
+
+   U+0065 U+031E
+   •
+   U+00F8 U+031E ə
+     __________________________________________________________________
+
+
+   U+0259
+     ɤ̞ • o̞
+     __________________________________________________________________
+
+   U+0264 U+031E
+   •
+   U+006F U+031E
+   Open-mid ɛ • œ
+     __________________________________________________________________
+
+   U+025B
+   •
+   U+0153 ɜ • ɞ
+     __________________________________________________________________
+
+   U+025C
+   •
+   U+025E ʌ • ɔ
+     __________________________________________________________________
+
+   U+028C
+   •
+   U+0254
+   Near-open æ •
+     __________________________________________________________________
+
+   U+00E6
+   •
+     ɐ
+     __________________________________________________________________
+
+
+   U+0250
+
+   Open a • ɶ
+     __________________________________________________________________
+
+   U+0061
+   •
+   U+0276 ä •
+     __________________________________________________________________
+
+   U+0061 U+0308
+   •
+     ɑ • ɒ
+     __________________________________________________________________
+
+   U+0251
+   •
+   U+0252
+
+  Diacritics[edit]
+
+   Diacritics may be encoded as either modifier (e.g. ˳) or combining
+   (e.g. ◌̥) characters.
+
+   Voiceless Breathy Voiced Dental Syllabic
+   ˳ • ◌̥
+     __________________________________________________________________
+
+   U+02F3 • U+0325 ◌̤
+     __________________________________________________________________
+
+   U+0324 ◌͏̪
+     __________________________________________________________________
+
+   U+032A ˌ • ◌̩
+     __________________________________________________________________
+
+   U+02CC • U+0329
+   Voiced Creaky Voiced Apical Non-syllabic
+   ˬ • ◌̬
+     __________________________________________________________________
+
+   U+02EC • U+032C ˷ • ◌̰
+     __________________________________________________________________
+
+   U+02F7 • U+0330 ˽ • ◌̺
+     __________________________________________________________________
+
+   U+02FD • U+033A ◌͏̯
+     __________________________________________________________________
+
+   U+032F
+   Aspirated Linguolabial Laminal More Rounded
+   ʰ
+     __________________________________________________________________
+
+   U+02B0 ◌͏̼
+     __________________________________________________________________
+
+   U+033C ◌͏̻
+     __________________________________________________________________
+
+   U+033B ˒ • ◌̹
+     __________________________________________________________________
+
+   U+02D2 • U+0339
+   Labialized Nasalized Palatalized Less Rounded
+   ʷ
+     __________________________________________________________________
+
+   U+02B7 ◌̃
+     __________________________________________________________________
+
+   U+0303 ʲ
+     __________________________________________________________________
+
+   U+02B2 ˓ • ◌̜
+     __________________________________________________________________
+
+   U+02D3 • U+031C
+   Advanced Nasal release Centralized Velarized
+   ˖ • ◌̟
+     __________________________________________________________________
+
+   U+02D6 • U+031F ⁿ
+     __________________________________________________________________
+
+   U+207F ¨ • ◌̈
+     __________________________________________________________________
+
+   U+00A8^[1] • U+0308 ˠ
+     __________________________________________________________________
+
+   U+02E0
+   Retracted Lateral release Mid-Centralized Pharyngealized
+   ˍ • ◌̠
+     __________________________________________________________________
+
+   U+02CD • U+0320 ˡ
+     __________________________________________________________________
+
+   U+02E1 ˟ • ◌̽
+     __________________________________________________________________
+
+   U+02DF • U+033D ˤ
+     __________________________________________________________________
+
+   U+02E4
+   Advanced Tongue Root No audible release Raised Velarized or
+   Pharyngealized
+   ꭪ • ◌̘
+     __________________________________________________________________
+
+   U+AB6A • U+0318 ˺ • ◌̚
+     __________________________________________________________________
+
+   U+02FA • U+031A ˔ • ◌̝
+     __________________________________________________________________
+
+   U+02D4 • U+031D ◌̴
+     __________________________________________________________________
+
+   U+0334
+   Retracted Tongue Root Rhoticity Lowered Lengthened
+   ꭫ • ◌̙
+     __________________________________________________________________
+
+   U+AB6B • U+0319 ˞
+     __________________________________________________________________
+
+   U+02DE ˕ • ◌̞
+     __________________________________________________________________
+
+   U+02D5 • U+031E ː
+     __________________________________________________________________
+
+   U+02D0
+   Notes
+
+          1.^ The codepoint refers to diaeresis, which takes up space but
+          is not a Spacing Modifier Letter.
+
+Unicode blocks[edit]
+
+     * Basic Latin (0020–007E), IPA example: Open front unrounded vowel
+       (0061)
+     * Latin-1 Supplement (00A0–00FF), IPA example: Near-open front
+       unrounded vowel (00E6)
+     * Latin Extended-A (0100–017F), IPA example: Voiceless pharyngeal
+       fricative (0127)
+     * Latin Extended-B (0180–024F), IPA example: Tenuis dental click
+       (01C0 0287)
+     * IPA Extensions (0250–02AF), IPA example: Near-open central vowel
+       (0250)
+     * Spacing Modifier Letters (02B0–02FF), IPA example: Palatal ejective
+       (0063 02BC)
+     * Combining Diacritical Marks (0300–036F), IPA example: Near-close
+       central unrounded vowel (026A 0308)
+     * Greek and Coptic (0370–03FF), IPA example: Voiced bilabial
+       fricative (03B2)
+     * Combining Diacritical Marks Supplement (1DC0–1DFF), IPA example:
+       Rising-falling contour tone (1DC8)
+     * General Punctuation (2000–206F), IPA example: Linking (absence of a
+       break) (203F)
+     * Superscripts and Subscripts (2070–209F), IPA example: Nasal release
+       (207F)
+     * Arrows (2190–21FF), IPA example: Global rise (2197)
+     * Latin Extended-C (2C60–2C7F), IPA example: Labiodental flap (2C71)
+     * Modifier Tone Letters (A700–A71F), IPA example: Upstep (A71B)
+     * Phonetic Extensions (1D00–1D7F)
+     * Phonetic Extensions Supplement (1D80–1DBF)
+     * Latin Extended-D (A720–A7FF)
+     * Latin Extended-E (AB30–AB6F)
+     * Latin Extended-F (10780–107BF)
+     * Latin Extended-G (1DF00–1DFFF)
+
+Unicode blocks with many phonetic symbols[edit]
+
+   Six Unicode blocks contain many phonetic symbols:
+
+  IPA Extensions (U+0250–02AF)[edit]
+
+   Not to be confused with Extensions to the IPA.
+
+   Main article: IPA Extensions (Unicode block)
+
+   IPA Extensions^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+025x ɐ ɑ ɒ ɓ ɔ ɕ ɖ ɗ ɘ ə ɚ ɛ ɜ ɝ ɞ ɟ
+   U+026x ɠ ɡ ɢ ɣ ɤ ɥ ɦ ɧ ɨ ɩ ɪ ɫ ɬ ɭ ɮ ɯ
+   U+027x ɰ ɱ ɲ ɳ ɴ ɵ ɶ ɷ ɸ ɹ ɺ ɻ ɼ ɽ ɾ ɿ
+   U+028x ʀ ʁ ʂ ʃ ʄ ʅ ʆ ʇ ʈ ʉ ʊ ʋ ʌ ʍ ʎ ʏ
+   U+029x ʐ ʑ ʒ ʓ ʔ ʕ ʖ ʗ ʘ ʙ ʚ ʛ ʜ ʝ ʞ ʟ
+   U+02Ax ʠ ʡ ʢ ʣ ʤ ʥ ʦ ʧ ʨ ʩ ʪ ʫ ʬ ʭ ʮ ʯ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Spacing Modifier Letters (U+02B0–02FF)[edit]
+
+   The characters in the "Spacing Modifier Letters" block are intended as
+   forming a unity with the preceding letter (which they "modify"). E.g.
+   the character U+02B0
+   ʰ MODIFIER LETTER SMALL H isn't intended simply as a superscript h
+   (^h), but as the mark of aspiration placed after the letter being
+   aspirated, as in pʰ "aspirated voiceless bilabial plosive". The block
+   contains:
+     * Latin superscript modifier letters: (U+02B0–U+02B8): ʰ aspiration;
+       ʱ breathy voice, murmured; ʲ palatalization; ʳ, ʴ, ʵ, ʶ r-coloring
+       or r-offglides; ʷ labialization; ʸ palatalization, Americanist
+       usage for U+02B2
+     * Miscellaneous phonetic modifiers: (U+02B9–U+02D7): ʹ ʺ ʻ ʼ ʽ ʾ ʿ ˀ
+       ˁ ˂ ˃ ˄ ˅ ˆ ˇ ˈ ˉ ˊ ˋ ˌ ˍ ˎ ˏ ː ˑ ˒ ˓ ˔ ˕ ˖ ˗
+     * Spacing clones of diacritics: (U+02D8–U+02DD): ˘ breve; ˙ dot
+       above; ˚ ring above; ˛ ogonek; ˜ small tilde; ˝ double acute accent
+     * Additions based on 1989 IPA: (U+02DE–U+02E4): ˞ ˟ ˠ ˡ ˢ ˣ ˤ
+     * Tone letters: (U+02E5–U+02E9): ˥ ˦ ˧ ˨ ˩
+     * Extended Bopomofo tone marks: U+02EA ˪ MODIFIER LETTER YIN
+       DEPARTING TONE MARK; U+02EB ˫ MODIFIER LETTER YANG DEPARTING TONE
+       MARK
+     * IPA modifiers: U+02EC ˬ MODIFIER LETTER VOICING, unaspirated
+     * Other modifier letters: U+02EE ˮ MODIFIER LETTER DOUBLE APOSTROPHE
+       for Nenets
+     * Uralic Phonetic Alphabet (UPA) modifiers: (U+02EF–U+02FF): ˯ ˰ ˱ ˲
+       ˳ ˴ ˵ ˶ ˷ ˸ ˹ ˺ ˻ ˼ ˽ ˾ ˿
+
+   Spacing Modifier Letters^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+02Bx ʰ ʱ ʲ ʳ ʴ ʵ ʶ ʷ ʸ ʹ ʺ ʻ ʼ ʽ ʾ ʿ
+   U+02Cx ˀ ˁ ˂ ˃ ˄ ˅ ˆ ˇ ˈ ˉ ˊ ˋ ˌ ˍ ˎ ˏ
+   U+02Dx ː ˑ ˒ ˓ ˔ ˕ ˖ ˗ ˘ ˙ ˚ ˛ ˜ ˝ ˞ ˟
+   U+02Ex ˠ ˡ ˢ ˣ ˤ ˥ ˦ ˧ ˨ ˩ ˪ ˫ ˬ ˭ ˮ ˯
+   U+02Fx ˰ ˱ ˲ ˳ ˴ ˵ ˶ ˷ ˸ ˹ ˺ ˻ ˼ ˽ ˾ ˿
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Phonetic Extensions (U+1D00–1D7F)[edit]
+
+   This block, together with Phonetic Extensions Supplement below,
+   contains:
+     * Small capitals "ɢ ɪ ɴ ɶ ʀ ʏ ʙ ʜ ʟ"
+     * Turned small letters "ɐ ɥ ɯ ɹ ɺ ɻ ʇ ʌ ʍ ʎ ʞ ʮ ʯ"
+     * Extra small capitals "ʁ ʛ ᴀ ᴁ ᴃ ᴄ ᴅ ᴆ ᴇ ᴊ ᴋ ᴌ ᴍ ᴎ ᴏ ᴐ ᴘ ᴙ ᴚ ᴛ ᴜ ᴠ ᴡ
+       ᴢ ᴣ ᴦ ᴧ ᴨ ᴩ ᴪ"
+     * Letters with palatal hooks "ƫ ᶀ ᶁ ᶂ ᶃ ᶄ ᶅ ᶆ ᶇ ᶈ ᶉ ᶊ ᶋ ᶌ ᶍ ᶎ ᶪ ᶵ"
+     * Letters with retroflex hooks "ᶏ ᶐ ᶒ ᶓ ᶔ ᶕ ᶖ ᶗ ᶘ ᶙ ᶚ ᶩ ᶯ ᶼ"
+
+   Phonetic Extensions^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1D0x ᴀ ᴁ ᴂ ᴃ ᴄ ᴅ ᴆ ᴇ ᴈ ᴉ ᴊ ᴋ ᴌ ᴍ ᴎ ᴏ
+   U+1D1x ᴐ ᴑ ᴒ ᴓ ᴔ ᴕ ᴖ ᴗ ᴘ ᴙ ᴚ ᴛ ᴜ ᴝ ᴞ ᴟ
+   U+1D2x ᴠ ᴡ ᴢ ᴣ ᴤ ᴥ ᴦ ᴧ ᴨ ᴩ ᴪ ᴫ ᴬ ᴭ ᴮ ᴯ
+   U+1D3x ᴰ ᴱ ᴲ ᴳ ᴴ ᴵ ᴶ ᴷ ᴸ ᴹ ᴺ ᴻ ᴼ ᴽ ᴾ ᴿ
+   U+1D4x ᵀ ᵁ ᵂ ᵃ ᵄ ᵅ ᵆ ᵇ ᵈ ᵉ ᵊ ᵋ ᵌ ᵍ ᵎ ᵏ
+   U+1D5x ᵐ ᵑ ᵒ ᵓ ᵔ ᵕ ᵖ ᵗ ᵘ ᵙ ᵚ ᵛ ᵜ ᵝ ᵞ ᵟ
+   U+1D6x ᵠ ᵡ ᵢ ᵣ ᵤ ᵥ ᵦ ᵧ ᵨ ᵩ ᵪ ᵫ ᵬ ᵭ ᵮ ᵯ
+   U+1D7x ᵰ ᵱ ᵲ ᵳ ᵴ ᵵ ᵶ ᵷ ᵸ ᵹ ᵺ ᵻ ᵼ ᵽ ᵾ ᵿ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Phonetic Extensions Supplement (U+1D80–1DBF)[edit]
+
+   Phonetic Extensions Supplement^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1D8x ᶀ ᶁ ᶂ ᶃ ᶄ ᶅ ᶆ ᶇ ᶈ ᶉ ᶊ ᶋ ᶌ ᶍ ᶎ ᶏ
+   U+1D9x ᶐ ᶑ ᶒ ᶓ ᶔ ᶕ ᶖ ᶗ ᶘ ᶙ ᶚ ᶛ ᶜ ᶝ ᶞ ᶟ
+   U+1DAx ᶠ ᶡ ᶢ ᶣ ᶤ ᶥ ᶦ ᶧ ᶨ ᶩ ᶪ ᶫ ᶬ ᶭ ᶮ ᶯ
+   U+1DBx ᶰ ᶱ ᶲ ᶳ ᶴ ᶵ ᶶ ᶷ ᶸ ᶹ ᶺ ᶻ ᶼ ᶽ ᶾ ᶿ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Modifier Tone Letters (U+A700–A71F)[edit]
+
+   Modifier Tone Letters^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+A70x ꜀ ꜁ ꜂ ꜃ ꜄ ꜅ ꜆ ꜇ ꜈ ꜉ ꜊ ꜋ ꜌ ꜍ ꜎ ꜏
+   U+A71x ꜐ ꜑ ꜒ ꜓ ꜔ ꜕ ꜖ ꜗ ꜘ ꜙ ꜚ ꜛ ꜜ ꜝ ꜞ ꜟ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+
+  Superscripts and Subscripts (U+2070–209F)[edit]
+
+   Superscripts and Subscripts^[1]^[2]^[3]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+207x ⁰ ⁱ     ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁺ ⁻ ⁼ ⁽ ⁾ ⁿ
+   U+208x ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₊ ₋ ₌ ₍ ₎
+   U+209x ₐ ₑ ₒ ₓ ₔ ₕ ₖ ₗ ₘ ₙ ₚ ₛ ₜ
+   Notes
+
+          1.
+
+   ^ As of Unicode version 15.0
+   2.
+
+   ^ Grey areas indicate non-assigned code points
+   3.^ Refer to the Latin-1 Supplement Unicode block for characters ¹
+   (U+00B9), ² (U+00B2) and ³ (U+00B3)
+
+Font support for IPA[edit]
+
+   Main article: International Phonetic Alphabet § Computer support
+
+Input by selection from a screen[edit]
+
+   Further information: Unicode input § Selection from a screen
+
+   Applet for character selection
+
+   Many systems provide a way to select Unicode characters visually.
+   ISO/IEC 14755 refers to this as a screen-selection entry method.
+
+   Microsoft Windows has provided a Unicode version of the Character Map
+   program (find it by hitting
+   ⊞ Win+R then type charmap then hit ↵ Enter) since version NT 4.0 –
+   appearing in the consumer edition since XP. This is limited to
+   characters in the Basic Multilingual Plane (BMP). Characters are
+   searchable by Unicode character name, and the table can be limited to a
+   particular code block. More advanced third-party tools of the same type
+   are also available (a notable freeware example is BabelMap).
+
+   macOS provides a "character palette" with much the same functionality,
+   along with searching by related characters, glyph tables in a font,
+   etc. It can be enabled in the input menu in the menu bar under System
+   Preferences → International → Input Menu (or System Preferences →
+   Language and Text → Input Sources) or can be viewed under Edit → Emoji
+   & Symbols in many programs.
+
+   Equivalent tools – such as gucharmap (GNOME) or kcharselect (KDE) –
+   exist on most Linux desktop environments.
+
+See also[edit]
+
+     * Unicode symbols
+     * Universal Character Set characters
+     * Latin script in Unicode
+     * IPA
+
+References[edit]
+
+    1. ^ "Spacing modifier letters". Everything2.com. 2002-08-29.
+       Retrieved 2016-01-23.
+
+External links[edit]
+
+     * Links to PDFs of Unicode codes for several phonetic symbol sets
+
+     * v
+     * t
+     * e
+
+   Unicode
+
+   Unicode
+
+     * Unicode Consortium
+     * ISO/IEC 10646 (Universal Character Set)
+     * Versions
+
+   Code points
+
+     * Block
+          + List
+     * Universal Character Set
+     * Character charts
+     * Character property
+     * Plane
+     * Private Use Area
+
+   Characters
+
+   Special purpose
+     * BOM
+     * Combining grapheme joiner
+     * Left-to-right mark / Right-to-left mark
+     * Soft hyphen
+     * Variant form
+     * Word joiner
+     * Zero-width joiner
+     * Zero-width non-joiner
+     * Zero-width space
+
+   Lists
+     * Characters
+     * CJK Unified Ideographs
+     * Combining character
+     * Duplicate characters
+     * Numerals
+     * Scripts
+     * Spaces
+     * Symbols
+     * Halfwidth and fullwidth
+     * Alias names and abbreviations
+     * Whitespace characters
+
+   Processing
+
+   Algorithms
+     * Bidirectional text
+     * Collation
+          + ISO/IEC 14651
+     * Equivalence
+     * Variation sequences
+     * International Ideographs Core
+
+   Comparison
+     * BOCU-1
+     * CESU-8
+     * Punycode
+     * SCSU
+     * UTF-1
+     * UTF-7
+     * UTF-8
+     * UTF-16/UCS-2
+     * UTF-32/UCS-4
+     * UTF-EBCDIC
+
+   On pairs of
+   code points
+
+     * Combining character
+     * Compatibility characters
+     * Duplicate characters
+     * Equivalence
+     * Homoglyph
+     * Precomposed character
+          + list
+     * Z-variant
+     * Variation sequences
+     * Regional indicator symbol
+     * Emoji skin color
+
+   Usage
+
+     * Domain names (IDN)
+     * Email
+     * Fonts
+     * HTML
+          + entity references
+          + numeric references
+     * Input
+     * International Ideographs Core
+
+   Related standards
+
+     * Common Locale Data Repository (CLDR)
+     * GB 18030
+     * ISO/IEC 8859
+     * ISO 15924
+
+   Related topics
+
+     * Anomalies
+     * ConScript Unicode Registry
+     * Ideographic Research Group
+     * International Components for Unicode
+     * People involved with Unicode
+     * Han unification
+
+                     Scripts and symbols in Unicode
+   Common and
+   inherited scripts
+     * Combining marks
+     * Diacritics
+     * Punctuation marks
+     * Spaces
+     * Numbers
+
+   Modern scripts
+     * Adlam
+     * Arabic
+     * Armenian
+     * Balinese
+     * Bamum
+     * Batak
+     * Bengali
+     * Bopomofo
+     * Braille
+     * Buhid
+     * Burmese
+     * Canadian Aboriginal
+     * Chakma
+     * Cham
+     * Cherokee
+     * CJK Unified Ideographs (Han)
+     * Cyrillic
+     * Deseret
+     * Devanagari
+     * Geʽez
+     * Georgian
+     * Greek
+     * Gujarati
+     * Gunjala Gondi
+     * Gurmukhi
+     * Hangul
+     * Hanifi Rohingya
+     * Hanja
+     * Hanunuoo
+     * Hebrew
+     * Hiragana
+     * Javanese
+     * Kanji
+     * Kannada
+     * Katakana
+     * Kayah Li
+     * Khmer
+     * Lao
+     * Latin
+     * Lepcha
+     * Limbu
+     * Lisu (Fraser)
+     * Lontara
+     * Malayalam
+     * Masaram Gondi
+     * Mende Kikakui
+     * Medefaidrin
+     * Miao (Pollard)
+     * Mongolian
+     * Mru
+     * N'Ko
+     * Nag Mundari
+     * New Tai Lue
+     * Nüshu
+     * Nyiakeng Puachue Hmong
+     * Odia
+     * Ol Chiki
+     * Osage
+     * Osmanya
+     * Pahawh Hmong
+     * Pau Cin Hau
+     * Pracalit (Newa)
+     * Ranjana
+     * Rejang
+     * Samaritan
+     * Saurashtra
+     * Shavian
+     * Sinhala
+     * Sorang Sompeng
+     * Sundanese
+     * Syriac
+     * Tagbanwa
+     * Tai Le
+     * Tai Tham
+     * Tai Viet
+     * Tamil
+     * Tangsa
+     * Telugu
+     * Thaana
+     * Thai
+     * Tibetan
+     * Tifinagh
+     * Tirhuta
+     * Toto
+     * Vai
+     * Wancho
+     * Warang Citi
+     * Yi
+
+   Ancient and
+   historic scripts
+     * Ahom
+     * Anatolian hieroglyphs
+     * Ancient North Arabian
+     * Avestan
+     * Bassa Vah
+     * Bhaiksuki
+     * Brāhmī
+     * Carian
+     * Caucasian Albanian
+     * Coptic
+     * Cuneiform
+     * Cypriot
+     * Cypro-Minoan
+     * Dives Akuru
+     * Dogra
+     * Egyptian hieroglyphs
+     * Elbasan
+     * Elymaic
+     * Glagolitic
+     * Gothic
+     * Grantha
+     * Hatran
+     * Imperial Aramaic
+     * Inscriptional Pahlavi
+     * Inscriptional Parthian
+     * Kaithi
+     * Kawi
+     * Kharosthi
+     * Khitan small script
+     * Khojki
+     * Khudawadi
+     * Khwarezmian (Chorasmian)
+     * Linear A
+     * Linear B
+     * Lycian
+     * Lydian
+     * Mahajani
+     * Makasar
+     * Mandaic
+     * Manichaean
+     * Marchen
+     * Meetei Mayek
+     * Meroitic
+     * Modi
+     * Multani
+     * Nabataean
+     * Nandinagari
+     * Ogham
+     * Old Hungarian
+     * Old Italic
+     * Old Permic
+     * Old Persian cuneiform
+     * Old Sogdian
+     * Old Turkic
+     * Old Uyghur
+     * Palmyrene
+     * ʼPhags-pa
+     * Phoenician
+     * Psalter Pahlavi
+     * Runic
+     * Sharada
+     * Siddham
+     * Sogdian
+     * South Arabian
+     * Soyombo
+     * Sylheti Nagri
+     * Tagalog (Baybayin)
+     * Takri
+     * Tangut
+     * Ugaritic
+     * Vithkuqi
+     * Yezidi
+     * Zanabazar Square
+
+                     Notational scripts
+     * Duployan
+     * SignWriting
+
+   Symbols, emojis
+     * Cultural, political, and religious symbols
+     * Currency
+     * Control Pictures
+     * Mathematical operators and symbols
+          + List by subject
+     * Phonetic symbols (including IPA)
+     * Emoji
+
+     *  Category: Unicode
+     *  Category: Unicode blocks
+
+     * v
+     * t
+     * e
+
+   International Phonetic Alphabet (chart)
+
+   IPA topics
+   IPA
+     * International Phonetic Association
+     * History of the alphabet
+     * Extensions for disordered speech (extIPA)
+     * Voice Quality Symbols (VoQS)
+     * Journal of the IPA (JIPA)
+
+   Special topics
+     * Cursive forms
+     * Case variants
+     * Obsolete and nonstandard symbols
+     * Naming conventions
+     * Sinological extensions
+     * World Orthography
+     * IPA chart for English dialects
+
+   Encodings
+     * ASCII encodings
+          + SAMPA
+          + X-SAMPA
+          + Kirshenbaum
+     * TIPA
+     * Phonetic symbols in Unicode
+     * IPA number
+     * IPA Braille
+
+   Consonants
+   Pulmonic consonants
+   Place → Labial Coronal Dorsal Laryngeal
+   Manner ↓ Bilabial Labiodental Linguolabial Dental Alveolar Postalveolar
+   Retroflex Palatal Velar Uvular Pharyngeal/epiglottal Glottal
+   Nasal m̥ m ɱ n̼ n̥ n ɳ̊ ɳ ɲ̊ ɲ ŋ̊ ŋ ɴ
+   Plosive p b p̪ b̪ t̼ d̼ t d ʈ ɖ c ɟ k ɡ q ɢ ʡ ʔ
+   Sibilant affricate ts dz t̠ʃ d̠ʒ tʂ dʐ tɕ dʑ
+   Non-sibilant affricate pɸ bβ p̪f b̪v t̪θ d̪ð tɹ̝̊ dɹ̝ t̠ɹ̠̊˔ d̠ɹ̠˔ cç
+   ɟʝ kx ɡɣ qχ ɢʁ ʡʜ ʡʢ ʔh
+   Sibilant fricative s z ʃ ʒ ʂ ʐ ɕ ʑ
+   Non-sibilant fricative ɸ β f v θ̼ ð̼ θ ð θ̠ ð̠ ɹ̠̊˔ ɹ̠˔ ɻ˔ ç ʝ x ɣ χ ʁ
+   ħ ʕ h ɦ
+   Approximant ʋ ɹ ɻ j ɰ ʔ̞
+   Tap/flap ⱱ̟ ⱱ ɾ̼ ɾ̥ ɾ ɽ̊ ɽ ɡ̆ ɢ̆ ʡ̆
+   Trill ʙ̥ ʙ r̥ r ɽ̊r̥ ɽr ʀ̥ ʀ ʜ ʢ
+   Lateral affricate tɬ dɮ tɭ̊˔ dɭ˔ cʎ̝̊ ɟʎ̝ kʟ̝̊ ɡʟ̝
+   Lateral fricative ɬ ɮ ꞎ ɭ˔ 𝼆 ʎ̝ 𝼄 ʟ̝
+   Lateral approximant l ɭ ʎ ʟ ʟ̠
+   Lateral tap/flap ɺ̥ ɺ 𝼈̥ 𝼈 ʎ̆ ʟ̆
+     * IPA help
+     * Loudspeaker.svg  audio
+     * full chart
+     * template
+
+   Symbols to the right in a cell are voiced, to the left are voiceless.
+   Shaded areas denote articulations judged impossible.
+
+   Non-pulmonic consonants
+   BL LD D A PA RF P V U EG
+   Ejective Stop pʼ tʼ ʈʼ cʼ kʼ qʼ ʡʼ
+   Affricate t̪θʼ tsʼ t̠ʃʼ tʂʼ kxʼ qχʼ
+   Fricative ɸʼ fʼ θʼ sʼ ʃʼ ʂʼ ɕʼ xʼ χʼ
+   Lateral affricate tɬʼ c𝼆ʼ k𝼄ʼ
+   Lateral fricative ɬʼ
+   Click
+   (top: velar;
+   bottom: uvular) Tenuis kʘ
+   qʘ kǀ
+   qǀ kǃ
+   qǃ k𝼊
+   q𝼊 kǂ
+   qǂ
+   Voiced ɡʘ
+   ɢʘ ɡǀ
+   ɢǀ ɡǃ
+   ɢǃ ɡ𝼊
+   ɢ𝼊 ɡǂ
+   ɢǂ
+   Nasal ŋʘ
+   ɴʘ ŋǀ
+   ɴǀ ŋǃ
+   ɴǃ ŋ𝼊
+   ɴ𝼊 ŋǂ
+   ɴǂ ʞ
+
+   Tenuis lateral kǁ
+   qǁ
+   Voiced lateral ɡǁ
+   ɢǁ
+   Nasal lateral ŋǁ
+   ɴǁ
+   Implosive Voiced ɓ ɗ ᶑ ʄ ɠ ʛ
+   Voiceless ɓ̥ ɗ̥ ᶑ̊ ʄ̊ ɠ̊ ʛ̥
+     * IPA help
+     * Loudspeaker.svg  audio
+     * full chart
+     * template
+
+   Co-articulated consonants
+
+   Nasal
+   n͡m
+   Labial–alveolar
+   ŋ͡m
+   Labial–velar
+   Plosive
+   t͡p
+   d͡b
+   Labial–alveolar
+   k͡p
+   ɡ͡b
+   Labial–velar
+   q͡ʡ
+   Uvular–epiglottal
+   Fricative/approximant
+   ɥ̊
+   ɥ
+   Labial–palatal
+   ʍ
+   w
+   Labial–velar
+   ɧ
+   Sj-sound (variable)
+   Lateral approximant
+   ɫ
+   Velarized alveolar
+     * IPA help
+     * full chart
+     * template
+
+   Other
+     * Nasal labial–velar approximant [w̃]
+     * Nasal palatal approximant [j̃]
+     * Voiceless bidental fricative [h̪͆]
+     * Voiceless bilabially post-trilled dental stop [t̪ʙ̥]
+     * Voiceless nasal glottal approximant [h̃]
+
+   Vowels
+              Front Central Back
+   Close
+   i
+   •
+   y
+   ɨ
+   •
+   ʉ
+   ɯ
+   •
+   u
+   Near-close
+   ɪ
+   •
+   ʏ
+   •
+   ʊ
+   Close-mid
+   e
+   •
+   ø
+   ɘ
+   •
+   ɵ
+   ɤ
+   •
+   o
+   Mid
+   e̞
+   •
+   ø̞
+   ə
+   ɤ̞
+   •
+   o̞
+   Open-mid
+   ɛ
+   •
+   œ
+   ɜ
+   •
+   ɞ
+   ʌ
+   •
+   ɔ
+   Near-open
+   æ
+   •
+   ɐ
+   Open
+   a
+   •
+   ɶ
+   ä
+   •
+   ɑ
+   •
+   ɒ
+     * IPA help
+     * Loudspeaker.svg  audio
+     * full chart
+     * template
+
+   Vowels beside dots are: unrounded • rounded
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Phonetic_symbols_in_Unicode
+   &oldid=1108684948"
+
+   Categories:
+     * Phonetics
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description matches Wikidata
+     * Articles needing additional references from January 2016
+     * All articles needing additional references
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+Languages
+
+     * Italiano
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 5 September 2022, at 19:10 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

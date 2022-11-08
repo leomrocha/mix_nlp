@@ -1,0 +1,372 @@
+   #alternate Edit this page Wikipedia (en)
+
+Cyrillic (Unicode block)
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   For an overview of Cyrillic coverage across multiple Unicode blocks,
+   see Cyrillic script in Unicode.
+   Cyrillic
+   Range U+0400..U+04FF
+   (256 code points)
+   Plane BMP
+   Scripts Cyrillic (254 characters)
+   Inherited (2 characters)
+   Major alphabets Russian
+   Ukrainian
+   Belarusian
+   Bulgarian
+   Serbian
+   Macedonian
+   Abkhaz
+   Assigned 256 code points
+   Unused 0 reserved code points
+   Source standards ISO 8859-5
+   Unicode version history
+   1.0.0 192 (+192)
+   1.0.1 188 (-4)
+   1.1 226 (+38)
+   3.0 238 (+12)
+   3.2 246 (+8)
+   4.1 248 (+2)
+   5.0 255 (+7)
+   5.1 256 (+1)
+   Note: Four characters (two upper and lower case letter pairs) were
+   removed from the Cyrillic block in version 1.0.1 during the process of
+   unifying with ISO 10646.^[1]^[2]^[3]
+
+   Cyrillic is a Unicode block containing the characters used to write the
+   most widely used languages with a Cyrillic orthography. The core of the
+   block is based on the ISO 8859-5 standard, with additions for minority
+   languages and historic orthographies.
+   [ ]
+
+Contents
+
+     * 1 Block
+     * 2 History
+     * 3 See also
+     * 4 References
+
+Block[edit]
+
+   Cyrillic^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3  4  5  6  7  8  9  A B C D E F
+   U+040x Ѐ Ё Ђ Ѓ  Є  Ѕ  І  Ї  Ј  Љ  Њ Ћ Ќ Ѝ Ў Џ
+   U+041x А Б В Г  Д  Е  Ж  З  И  Й  К Л М Н О П
+   U+042x Р С Т У  Ф  Х  Ц  Ч  Ш  Щ  Ъ Ы Ь Э Ю Я
+   U+043x а б в г  д  е  ж  з  и  й  к л м н о п
+   U+044x р с т у  ф  х  ц  ч  ш  щ  ъ ы ь э ю я
+   U+045x ѐ ё ђ ѓ  є  ѕ  і  ї  ј  љ  њ ћ ќ ѝ ў џ
+   U+046x Ѡ ѡ Ѣ ѣ  Ѥ  ѥ  Ѧ  ѧ  Ѩ  ѩ  Ѫ ѫ Ѭ ѭ Ѯ ѯ
+   U+047x Ѱ ѱ Ѳ ѳ  Ѵ  ѵ  Ѷ  ѷ  Ѹ  ѹ  Ѻ ѻ Ѽ ѽ Ѿ ѿ
+   U+048x Ҁ ҁ ҂  ҃  ҄  ҅  ҆  ҇  ҈  ҉ Ҋ ҋ Ҍ ҍ Ҏ ҏ
+   U+049x Ґ ґ Ғ ғ  Ҕ  ҕ  Җ  җ  Ҙ  ҙ  Қ қ Ҝ ҝ Ҟ ҟ
+   U+04Ax Ҡ ҡ Ң ң  Ҥ  ҥ  Ҧ  ҧ  Ҩ  ҩ  Ҫ ҫ Ҭ ҭ Ү ү
+   U+04Bx Ұ ұ Ҳ ҳ  Ҵ  ҵ  Ҷ  ҷ  Ҹ  ҹ  Һ һ Ҽ ҽ Ҿ ҿ
+   U+04Cx Ӏ Ӂ ӂ Ӄ  ӄ  Ӆ  ӆ  Ӈ  ӈ  Ӊ  ӊ Ӌ ӌ Ӎ ӎ ӏ
+   U+04Dx Ӑ ӑ Ӓ ӓ  Ӕ  ӕ  Ӗ  ӗ  Ә  ә  Ӛ ӛ Ӝ ӝ Ӟ ӟ
+   U+04Ex Ӡ ӡ Ӣ ӣ  Ӥ  ӥ  Ӧ  ӧ  Ө  ө  Ӫ ӫ Ӭ ӭ Ӯ ӯ
+   U+04Fx Ӱ ӱ Ӳ ӳ  Ӵ  ӵ  Ӷ  ӷ  Ӹ  ӹ  Ӻ ӻ Ӽ ӽ Ӿ ӿ
+   Notes
+
+          1.^ As of Unicode version 12.0
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Cyrillic block:
+   Version Final code points^[a] Count UTC ID L2 ID WG2 ID Document
+   1.0.0 U+0401..040C, 040E..044F, 0451..045C, 045E..0486, 0490..04C4,
+   04C7..04C8, 04CB..04CC 188 (to be determined)
+   L2/00-164 Hudson, John (2000-05-01), Rendering Serbian italic forms
+   with OpenType
+   L2/00-176 Everson, Michael (2000-06-01), Some Türkmen alphabets
+   L2/00-219 Everson, Michael (2000-07-09), The case of the Cyrillic
+   letter PALOCHKA
+
+   L2/05-287 Kryukov, Alexey (2005-10-02), U+047C/U+047D CYRILLIC OMEGA
+   WITH TITLO
+   L2/05-279 Moore, Lisa (2005-11-10), "CYRILLIC OMEGA WITH TITLO", UTC
+   #105 Minutes
+   L2/06-011 Cleminson, Ralph (2006-01-10), Cyrillic Omega with Titlo
+   L2/06-033 McGowan, Rick (2006-01-30), PRI #83: Changing Glyph for
+   U+047C/U+047D Cyrillic Omega with Titlo
+   L2/06-192 N3118 Anderson, Deborah (2006-05-08), Request to Change
+   Glyphs for U+0485 and U+0486
+   L2/06-108 Moore, Lisa (2006-05-25), "Consensus 107-C39", UTC #107
+   Minutes, "Change the glyphs for U+0485 COMBINING CYRILLIC DASIA
+   PNEUMATA and U+0486 COMBINING CYRILLIC PSILI PNEUMATA"
+   L2/06-292 Anderson, Deborah (2006-08-07), Re: Public Review Issue #83:
+   Glyph change for Cyrillic Omega with Titlo
+   L2/06-231 Moore, Lisa (2006-08-17), "B.11.2", UTC #108 Minutes
+   N3153 (pdf, doc) Umamaheswaran, V. S. (2007-02-16), "M49.1f",
+   Unconfirmed minutes of WG 2 meeting 49 AIST, Akihabara, Tokyo, Japan;
+   2006-09-25/29, "Correct the glyphs for 0485 COMBINING CYRILLIC DASIA
+   PNEUMATA and 0486 COMBINING CYRILLIC PSILI PNEUMATA based on document
+   N3118."
+   L2/06-329 Cleminson, Ralph (2006-10-11), Histoire d'O (omega with
+   titlo)
+   L2/06-357 N3184 Everson, Michael; Birnbaum, David; Cleminson, Ralph;
+   Derzhanski, Ivan; Dorosh, Vladislav; Kryukov, Alexey; Paliga, Sorin
+   (2006-10-30), On CYRILLIC LETTER OMEGA WITH TITLO and on CYRILLIC
+   LETTER UK
+   L2/06-389 Birnbaum, David (2006-11-13), Diacritics for Early Cyrillic
+   L2/06-324R2 Moore, Lisa (2006-11-29), "C.11.2", UTC #109 Minutes
+   L2/07-268 N3253 (pdf, doc) Umamaheswaran, V. S. (2007-07-26), "M50.8
+   (Cyrillic glyph corrections)", Unconfirmed minutes of WG 2 meeting 50,
+   Frankfurt-am-Main, Germany; 2007-04-24/27
+   L2/08-144 N3435R Everson, Michael; Priest, Lorna (2008-04-11), Proposal
+   to encode two Cyrillic characters for Abkhaz
+   L2/08-318 N3453 (pdf, doc) Umamaheswaran, V. S. (2008-08-13), "M52.1",
+   Unconfirmed minutes of WG 2 meeting 52, "Change the glyphs for 04A8,
+   04A9, 04BE and 04BF (Abkhasian letters) to those shown in document
+   N3435 to reflect modern Abkhaz orthography preference."
+   L2/08-161R2 Moore, Lisa (2008-11-05), "Action item 115-A76", UTC #115
+   Minutes, "Create a glyph erratum for the 4 changed Abkhaz glyphs..."
+   L2/15-014 Andreev, Aleksandr; Shardt, Yuri; Simmons, Nikita
+   (2015-01-26), Proposal to Change Annotations on Some Cyrillic
+   Characters
+   L2/15-182 Whistler, Ken (2015-07-20), Suggested Responses to
+   Suggestions re Cyrillic in L2/15-014
+   L2/15-187 Moore, Lisa (2015-08-11), "Action item 144-A29", UTC #144
+   Minutes, "Add the Script_Extension value of "Glagolitic" to U+0484 for
+   Unicode 9.0."
+   1.1 U+04D0..04EB, 04EE..04F5, 04F8..04F9 38 (to be determined)
+   3.0 U+0400, 040D, 0450, 045D 4 N418 Yugoslav Position for SC2/ DP 10646
+   N1323 Kardalev, Ratislav; Jerman-Blazic, Borka; Everson, Michael
+   (1996-01-16), Proposal and Summary for addition of Cyrillic characters
+   N1407 Kardalev, Ratislav (1996-05-15), Reconsideration of the ISO/IEC
+   JTC1/SC2/WG2 N 1323 document
+   N1353 Umamaheswaran, V. S.; Ksar, Mike (1996-06-25), "8.3.1", Draft
+   minutes of WG2 Copenhagen Meeting # 30
+   N1453 Ksar, Mike; Umamaheswaran, V. S. (1996-12-06), "8.4", WG 2
+   Minutes - Quebec Meeting 31
+   UTC/1996-xxx Greenfield, Steve (1996-12-13), "Motion #70-7", Action
+   Items & Resolutions Generated at UTC #70
+   L2/98-004R N1681 Text of ISO 10646 - AMD 18 for PDAM registration and
+   FPDAM ballot, 1997-12-22
+   L2/98-318 N1894 Revised text of 10646-1/FPDAM 18, AMENDMENT 18: Symbols
+   and Others, 1998-10-22
+   U+0488..0489 2 L2/98-211 N1744 Everson, Michael (1998-05-25),
+   Additional Cyrillic characters for the UCS
+   L2/98-301 N1847 Everson, Michael (1998-09-12), Responses to NCITS/L2
+   and Unicode Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc) Whistler, Ken; et al. (1998-09-22),
+   Additional Characters for the UCS
+   L2/98-329 N1920 Combined PDAM registration and consideration ballot on
+   WD for ISO/IEC 10646-1/Amd. 30, AMENDMENT 30: Additional Latin and
+   other characters, 1998-10-28
+   L2/99-010 N1903 (pdf, html, doc) Umamaheswaran, V. S. (1998-12-30),
+   "8.1.5.1", Minutes of WG 2 meeting 35, London, U.K.; 1998-09-21--25
+   L2/01-050 N2253 Umamaheswaran, V. S. (2001-01-21), "7.15 Komi
+   Cyrillic", Minutes of the SC2/WG2 meeting in Athens, September 2000
+   U+048C..048D 2 L2/99-077.1 N1975 Irish Comments on SC 2 N 3210,
+   1999-01-20
+   L2/99-232 N2003 Umamaheswaran, V. S. (1999-08-03), "6.1.4", Minutes of
+   WG 2 meeting 36, Fukuoka, Japan, 1999-03-09--15
+   U+048E..048F, 04EC..04ED 4 L2/97-146 N1590 Trosterud, Trond
+   (1997-06-09), Proposal to add 10 Cyrillic Sámi characters to ISO/IEC
+   10646
+   L2/97-288 N1603 Umamaheswaran, V. S. (1997-10-24), "8.24.7",
+   Unconfirmed Meeting Minutes, WG 2 Meeting # 33, Heraklion, Crete,
+   Greece, 20 June - 4 July 1997
+   L2/98-211 N1744 Everson, Michael (1998-05-25), Additional Cyrillic
+   characters for the UCS
+   L2/98-281R (pdf, html) Aliprand, Joan (1998-07-31), "Cyrillic
+   characters (IV.C.4)", Unconfirmed Minutes - UTC #77 & NCITS Subgroup L2
+   # 174 JOINT MEETING, Redmond, WA -- July 29-31, 1998
+   L2/98-292R (pdf, html, Figure 1) "2.3", Comments on proposals to add
+   characters from ISO standards developed by ISO/TC 46/SC 4, 1998-08-19
+   L2/98-292 N1840 "2.3", Comments on proposals to add characters from ISO
+   standards developed by ISO/TC 46/SC 4, 1998-08-25
+   L2/98-301 N1847 Everson, Michael (1998-09-12), Responses to NCITS/L2
+   and Unicode Consortium comments on numerous proposals
+   L2/98-372 N1884R2 (pdf, doc) Whistler, Ken; et al. (1998-09-22),
+   Additional Characters for the UCS
+   L2/98-329 N1920 Combined PDAM registration and consideration ballot on
+   WD for ISO/IEC 10646-1/Amd. 30, AMENDMENT 30: Additional Latin and
+   other characters, 1998-10-28
+   L2/99-010 N1903 (pdf, html, doc) Umamaheswaran, V. S. (1998-12-30),
+   "8.1.5.1", Minutes of WG 2 meeting 35, London, U.K.; 1998-09-21--25
+   L2/01-050 N2253 Umamaheswaran, V. S. (2001-01-21), "7.15 Komi
+   Cyrillic", Minutes of the SC2/WG2 meeting in Athens, September 2000
+   3.2 U+048A..048B, 04C5..04C6, 04C9..04CA, 04CD..04CE 8 L2/98-258 N1813
+   Trosterud, Trond (1997-06-09), Proposal to add 10 Cyrillic Sámi
+   characters to ISO/IEC 10646
+   L2/98-276 Kuruch, Rimma; et al. (1998-07-20), Norwegian comments on
+   Cyrillic Sámi
+   L2/98-329 N1920 Combined PDAM registration and consideration ballot on
+   WD for ISO/IEC 10646-1/Amd. 30, AMENDMENT 30: Additional Latin and
+   other characters, 1998-10-28
+   L2/99-010 N1903 (pdf, html, doc) Umamaheswaran, V. S. (1998-12-30),
+   "8.2.4", Minutes of WG 2 meeting 35, London, U.K.; 1998-09-21--25
+   L2/99-255 N2069 Summary of Voting on SC 2 N 3309, ISO 10646-1/FPDAM 30
+   - Additional Latin and other characters, 1999-08-19
+   L2/00-082 N2173 Everson, Michael; et al. (2000-03-03), Proposal to add
+   8 Cyrillic Sámi characters to ISO/IEC 10646
+   L2/00-234 N2203 (rtf, txt) Umamaheswaran, V. S. (2000-07-21), "8.4",
+   Minutes from the SC2/WG2 meeting in Beijing, 2000-03-21 -- 24
+   L2/00-115R2 Moore, Lisa (2000-08-08), "Motion 83-M2", Minutes Of UTC
+   Meeting #83
+   4.1 U+04F6..04F7 2 L2/02-452 N2560 Brase, Jim; Constable, Peter
+   (2002-12-06), Proposal for Encoding Additional Cyrillic Characters for
+   Siberian Yupik
+   5.0 U+04CF 1 L2/05-076 Davis, Mark (2005-02-10), Stability of Case
+   Folding
+   N2942 Freytag, Asmus; Whistler, Ken (2005-08-12), Proposal to add nine
+   lowercase characters
+   L2/05-108R Moore, Lisa (2005-08-26), "Stability of Case Folding
+   (B.14.2)", UTC #103 Minutes
+   N2953 (pdf, doc) Umamaheswaran, V. S. (2006-02-16), "M47.5f",
+   Unconfirmed minutes of WG 2 meeting 47, Sophia Antipolis, France;
+   2005-09-12/15
+   U+04FA..04FF 6 L2/05-080R2 N2933 Priest, Lorna (2005-08-02), Proposal
+   to Encode Additional Cyrillic Characters (rev 2005/08/18)
+   L2/05-215 Anderson, Deborah (2005-08-03), Feedback on Cyrillic letters
+   EL WITH HOOK and HA WITH HOOK (L2/05-080)
+   L2/05-230 Priest, Lorna (2005-08-11), Nameslist annotations for new
+   Cyrillic letters
+   L2/05-180 Moore, Lisa (2005-08-17), "Cyrillic (C.18)", UTC #104 Minutes
+   N2953 (pdf, doc) Umamaheswaran, V. S. (2006-02-16), "7.2.4",
+   Unconfirmed minutes of WG 2 meeting 47, Sophia Antipolis, France;
+   2005-09-12/15
+   5.1 U+0487 1 L2/06-042 Cleminson, Ralph (2006-01-26), Proposal for
+   additional Cyrillic characters
+   L2/06-181 Anderson, Deborah (2006-05-08), Responses to the UTC
+   regarding L2/06-042, Proposal for Additional Cyrillic Characters
+   L2/06-359 Cleminson, Ralph (2006-10-31), Proposal for additional
+   Cyrillic characters
+   L2/07-003 N3194 Everson, Michael; Birnbaum, David; Cleminson, Ralph;
+   Derzhanski, Ivan; Dorosh, Vladislav; Kryukov, Alexey; Paliga, Sorin;
+   Ruppel, Klaas (2007-01-12), Proposal to encode additional Cyrillic
+   characters in the BMP of the UCS
+   L2/07-055 Cleminson, Ralph (2007-01-19), Comments on Additional
+   Cyrillic Characters (L2/07-003 = WG2 N3194)
+   L2/07-015 Moore, Lisa (2007-02-08), "Cyrillic (C.13)", UTC #110 Minutes
+   L2/07-268 N3253 (pdf, doc) Umamaheswaran, V. S. (2007-07-26), "M50.11",
+   Unconfirmed minutes of WG 2 meeting 50, Frankfurt-am-Main, Germany;
+   2007-04-24/27
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+See also[edit]
+
+     * Cyrillic script in Unicode
+
+References[edit]
+
+    1. ^ "Unicode 1.0.1 Addendum" (PDF). The Unicode Standard. 1992-11-03.
+       Retrieved 2016-07-09.
+    2. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    3. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Cyrillic_(Unicode_block)&ol
+   did=918330457"
+
+   Categories:
+     * Unicode blocks
+     * Cyrillic script
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ]
+
+Variants
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ]
+
+More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Featured content
+     * Current events
+     * Random article
+     * Donate to Wikipedia
+     * Wikipedia store
+
+Interaction
+
+     * Help
+     * About Wikipedia
+     * Community portal
+     * Recent changes
+     * Contact page
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Wikidata item
+     * Cite this page
+
+Print/export
+
+     * Create a book
+     * Download as PDF
+     * Printable version
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 28 September 2019, at 04:10 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License; additional terms may apply. By using this site, you agree
+       to the Terms of Use and Privacy Policy. Wikipedia® is a registered
+       trademark of the Wikimedia Foundation, Inc., a non-profit
+       organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Developers
+     * Statistics
+     * Cookie statement
+     * Mobile view
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

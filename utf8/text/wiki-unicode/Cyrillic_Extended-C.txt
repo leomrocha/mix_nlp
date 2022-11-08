@@ -1,0 +1,190 @@
+   #alternate Edit this page Wikipedia (en)
+
+Cyrillic Extended-C
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   For a list of all Cyrillic characters encoded in Unicode, see Cyrillic
+   script in Unicode.
+   Unicode character block
+   Cyrillic Extended-C
+   Range U+1C80..U+1C8F
+   (16 code points)
+   Plane BMP
+   Scripts Cyrillic
+   Major alphabets Old Cyrillic
+   Assigned 9 code points
+   Unused 7 reserved code points
+   Unicode version history
+   9.0
+   (2016)
+
+   9 (+9)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Cyrillic Extended-C is a Unicode block containing Cyrillic characters
+   for facsimile reprinting Old Believer service books. They are graphic
+   variants of standard Cyrillic rather than distinct letters.
+
+   Cyrillic Extended-C^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1C8x ᲀ ᲁ ᲂ ᲃ ᲄ ᲅ ᲆ ᲇ ᲈ
+   Notes
+
+          1.^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Cyrillic Extended-C block:
+
+   Version Final code points^[a] Count   L2 ID   WG2 ID Document
+   9.0     U+1C80..1C88          9     L2/00-128
+   Bunz, Carl-Martin (2000-03-01), Scripts from the Past in Future
+   Versions of Unicode
+                                       L2/13-153
+
+   Andreev, Aleksandr; Shardt, Yuri; Simmons, Nikita (2013-07-20),
+   Proposal to Use Standardized Variation Sequences to Encode Church
+   Slavonic Glyph Variants in Unicode
+   L2/13-164
+   Cleminson, Ralph; Birnbaum, David (2013-07-25), Feedback from Experts
+   on Cyrillic proposals
+   L2/14-196 N4607^[b]
+   Andreev, Aleksandr; Shardt, Yuri; Simmons, Nikita (2014-08-06),
+   Proposal to Encode Additional Cyrillic Characters used in Early Church
+   Slavonic Printed Books
+   N4645
+   Kravetsky, Aleksandr G. (2014-09-27), Letter in support of "Proposal to
+   Encode Additional Cyrillic Characters used in Early Church Slavonic
+   Printed Books"
+   L2/14-177
+   Moore, Lisa (2014-10-17), "Proposal to encode additional Cyrillic
+   characters (C.7.1.1)", UTC #140 Minutes
+   L2/16-052 N4603 (pdf, doc)
+   Umamaheswaran, V. S. (2015-09-01), "M63.08", Unconfirmed minutes of WG
+   2 meeting 63
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+    2. ^ WG2 document differs from the L2 document
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Cyrillic_Extended-C&oldid=1
+   074069202"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 26 February 2022, at 07:14 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

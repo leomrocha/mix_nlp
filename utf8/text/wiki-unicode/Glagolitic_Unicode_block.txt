@@ -1,0 +1,213 @@
+   #alternate Edit this page Wikipedia (en)
+
+Glagolitic (Unicode block)
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   See also: Glagolitic Supplement (Unicode block)
+   Unicode character block
+   Glagolitic
+   Range U+2C00..U+2C5F
+   (96 code points)
+   Plane BMP
+   Scripts Glagolitic
+   Major alphabets Old Slavonic
+   Assigned 96 code points
+   Unused 0 reserved code points
+   Unicode version history
+   4.1
+   (2005)
+
+   94 (+94)
+   14.0
+   (2021) 96 (+2)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Glagolitic is a Unicode block containing the characters invented by
+   Saint Cyril for translating scripture into Slavonic. Glagolitic script
+   is the precursor of Cyrillic.
+
+Block[edit]
+
+   Glagolitic^[1]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+2C0x Ⰰ Ⰱ Ⰲ Ⰳ Ⰴ Ⰵ Ⰶ Ⰷ Ⰸ Ⰹ Ⰺ Ⰻ Ⰼ Ⰽ Ⰾ Ⰿ
+   U+2C1x Ⱀ Ⱁ Ⱂ Ⱃ Ⱄ Ⱅ Ⱆ Ⱇ Ⱈ Ⱉ Ⱊ Ⱋ Ⱌ Ⱍ Ⱎ Ⱏ
+   U+2C2x Ⱐ Ⱑ Ⱒ Ⱓ Ⱔ Ⱕ Ⱖ Ⱗ Ⱘ Ⱙ Ⱚ Ⱛ Ⱜ Ⱝ Ⱞ Ⱟ
+   U+2C3x ⰰ ⰱ ⰲ ⰳ ⰴ ⰵ ⰶ ⰷ ⰸ ⰹ ⰺ ⰻ ⰼ ⰽ ⰾ ⰿ
+   U+2C4x ⱀ ⱁ ⱂ ⱃ ⱄ ⱅ ⱆ ⱇ ⱈ ⱉ ⱊ ⱋ ⱌ ⱍ ⱎ ⱏ
+   U+2C5x ⱐ ⱑ ⱒ ⱓ ⱔ ⱕ ⱖ ⱗ ⱘ ⱙ ⱚ ⱛ ⱜ ⱝ ⱞ ⱟ
+   Notes
+
+          1.^ As of Unicode version 15.0
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Glagolitic block:
+
+   Version  Final code points^[a]   Count   L2 ID   WG2 ID Document
+   4.1     U+2C00..2C2E, 2C30..2C5E 94    L2/98-190
+   Glagolitic coded character set for bibliographic information
+   interchange, 1996-12-15
+                                          L2/98-023 N1659
+
+   Everson, Michael (1997-12-08), Proposal to encode Glagolitic in ISO/IEC
+   10646
+   L2/98-070
+   Aliprand, Joan; Winkler, Arnold, "3.A.2. item d. Glagolitic", Minutes
+   of the joint UTC and L2 meeting from the meeting in Cupertino, February
+   25-27, 1998
+   L2/98-286 N1703
+   Umamaheswaran, V. S.; Ksar, Mike (1998-07-02), "8.9.3", Unconfirmed
+   Meeting Minutes, WG 2 Meeting #34, Redmond, WA, USA; 1998-03-16--20
+   L2/99-012 N1931
+   Everson, Michael (1998-11-24), Revised proposal for encoding the
+   Glagolitic script in the UCS
+   L2/99-054R
+   Aliprand, Joan (1999-06-21), "Glagolitic Script", Approved Minutes from
+   the UTC/L2 meeting in Palo Alto, February 3-5, 1999
+   L2/02-190
+   Wissink, Cathy (2002-04-22), Glagolitic Character Set
+   L2/02-448 N2555
+   Everson, Michael; Cleminson, Ralph (2002-12-04), Revised proposal for
+   encoding the Glagolitic script in the UCS
+   L2/03-282R N2610R
+   Everson, Michael; Cleminson, Ralph (2003-09-04), Final proposal for
+   encoding the Glagolitic script in the UCS
+   L2/04-052
+   Cleminson, Ralph (2004-01-16), Letter from Ralph Cleminson about
+   Glagolitic encoding
+   L2/04-051
+   Anderson, Deborah (2004-01-29), Comments on 2619R Final Glagolitic
+   proposal
+   14.0 U+2C2F, 2C5F 2 L2/19-288R
+   Vukojević, Zoran (2019-09-09), Proposal to add a character used in
+   printed Glagolitic works
+   L2/19-343
+   Anderson, Deborah; Whistler, Ken; Pournader, Roozbeh; Moore, Lisa;
+   Liang, Hai (2019-10-06), "1. Glagolitic", Recommendations to UTC #161
+   October 2019 on Script Proposals
+   L2/19-323
+   Moore, Lisa (2019-10-01), "C.13", UTC #161 Minutes
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Glagolitic_(Unicode_block)&
+   oldid=1074058092"
+
+   Categories:
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 26 February 2022, at 05:28 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

@@ -6,7 +6,6 @@ This repository currently contains two main parts
 1. Gutenberg Project data Exploration
 2. NLP Encodings research
 
-
 ## Gutenberg Project
 
 This project is currently in the latest stages writing a report that will be similar to the one already available on [conllu v2.6 analysis](https://leomrocha.github.io/2020-06-22-ud_conllu_v2.6_analysis/)
@@ -50,10 +49,12 @@ I've already done some tests on this, but basically needs redoing and more work
 
 #### Language Translation
 
-Encode and decode in different languages, see how this encoding can make encoding more universal
+Create a Multi-Language Model, Encode and decode in different languages, see how this encoding can make encoding more universal and see how this behaves.
+
+I'd like to use a memory system that might either gate different elements depending on input and output languages (meta-learning?)
 
 
 ## (Far) Future
 
-The idea behind all this is to set the basis for another NLP work wich I call NeuralDB where many of these encodings are saved in a DB (I've started looking at RocksDB as a backend)
+The idea behind all this is to set the basis for another NLP work wich I call NeuralDB where many of these encodings are saved in a DB (I've started looking at RocksDB as a backend).
 

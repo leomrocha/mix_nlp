@@ -1,0 +1,253 @@
+   #alternate Edit this page Wikipedia (en)
+
+Coptic (Unicode block)
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   See also: Greek and Coptic (Unicode block) and Coptic Epact Numbers
+   (Unicode block)
+   Unicode character block
+   Coptic
+   Range U+2C80..U+2CFF
+   (128 code points)
+   Plane BMP
+   Scripts Coptic
+   Major alphabets Coptic
+   Assigned 123 code points
+   Unused 5 reserved code points
+   Unicode version history
+   4.1
+   (2005)
+
+   114 (+114)
+   5.2
+   (2009) 121 (+7)
+   6.1
+   (2012) 123 (+2)
+   Chart
+   Code chart
+   Note: ^[1]^[2]
+
+   Coptic is a Unicode block used with the Greek and Coptic block to write
+   the Coptic language. Prior to version 4.1 of the Unicode Standard,
+   Greek and Coptic was used exclusively to write Coptic text, but Greek
+   and Coptic letter forms are contrastive in many scholarly works,
+   necessitating their disunification. Any specifically Coptic letters in
+   the Greek and Coptic block are not reproduced in the Coptic Unicode
+   block.
+
+Block[edit]
+
+   Coptic^[1]^[2]
+   Official Unicode Consortium code chart (PDF)
+          0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+2C8x Ⲁ ⲁ Ⲃ ⲃ Ⲅ ⲅ Ⲇ ⲇ Ⲉ ⲉ Ⲋ ⲋ Ⲍ ⲍ Ⲏ ⲏ
+   U+2C9x Ⲑ ⲑ Ⲓ ⲓ Ⲕ ⲕ Ⲗ ⲗ Ⲙ ⲙ Ⲛ ⲛ Ⲝ ⲝ Ⲟ ⲟ
+   U+2CAx Ⲡ ⲡ Ⲣ ⲣ Ⲥ ⲥ Ⲧ ⲧ Ⲩ ⲩ Ⲫ ⲫ Ⲭ ⲭ Ⲯ ⲯ
+   U+2CBx Ⲱ ⲱ Ⲳ ⲳ Ⲵ ⲵ Ⲷ ⲷ Ⲹ ⲹ Ⲻ ⲻ Ⲽ ⲽ Ⲿ ⲿ
+   U+2CCx Ⳁ ⳁ Ⳃ ⳃ Ⳅ ⳅ Ⳇ ⳇ Ⳉ ⳉ Ⳋ ⳋ Ⳍ ⳍ Ⳏ ⳏ
+   U+2CDx Ⳑ ⳑ Ⳓ ⳓ Ⳕ ⳕ Ⳗ ⳗ Ⳙ ⳙ Ⳛ ⳛ Ⳝ ⳝ Ⳟ ⳟ
+   U+2CEx Ⳡ ⳡ Ⳣ ⳣ ⳤ ⳥ ⳦ ⳧ ⳨ ⳩ ⳪ Ⳬ ⳬ Ⳮ ⳮ ⳯
+   U+2CFx ⳰ ⳱ Ⳳ ⳳ           ⳹ ⳺ ⳻ ⳼ ⳽ ⳾ ⳿
+   Notes
+
+          1. ^ As of Unicode version 15.0
+          2.
+
+   ^ Grey areas indicate non-assigned code points
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Coptic block:
+
+   Version  Final code points^[a]   Count         L2 ID         WG2 ID Document
+   4.1     U+2C80..2CEA, 2CF9..2CFF 114   L2/98-022 (html, pdf) N1658
+   Everson, Michael (1997-12-08), Proposal to encode Coptic in ISO/IEC
+   10646
+                                          L2/98-039
+
+   Aliprand, Joan; Winkler, Arnold (1998-02-24), "3.A.4.a. Disunificaiton
+   of Coptic", Preliminary Minutes - UTC #74 & L2 #171, Mountain View, CA
+   - December 5, 1997
+   L2/98-070
+   Aliprand, Joan; Winkler, Arnold, "3.A.2. item b. Coptic", Minutes of
+   the joint UTC and L2 meeting from the meeting in Cupertino, February
+   25-27, 1998
+   L2/98-286 N1703
+   Umamaheswaran, V. S.; Ksar, Mike (1998-07-02), "8.9.2", Unconfirmed
+   Meeting Minutes, WG 2 Meeting #34, Redmond, WA, USA; 1998-03-16--20
+   L2/00-128
+   Bunz, Carl-Martin (2000-03-01), Scripts from the Past in Future
+   Versions of Unicode
+   L2/00-411
+   Emmel, Stephen (2000-10-05), Coptic -- resolutions from the meeting in
+   Leiden, September 2, 2000
+   L2/02-051
+   McGowan, Rick (2002-02-03), Coptic Disunification
+   L2/02-205 N2444
+   Everson, Michael; Mansour, Kamal (2002-05-08), Coptic supplementation
+   in the BMP
+   L2/02-166R2
+   Moore, Lisa (2002-08-09), "Consensus 91-C12", UTC #91 Minutes
+   L2/03-208
+   Constable, Peter (2003-06-13), Proposal to Encode Coptic Letter Eie for
+   use in Textual Apparatus
+   L2/03-283 N2611
+   Everson, Michael (2003-08-24), Proposal to add the Coptic alphabet to
+   the BMP of the UCS
+   L2/03-327 N2636
+   Everson, Michael (2003-10-01), Revised proposal to add the Coptic
+   alphabet to the BMP of the UCS
+   L2/04-053
+   Emmel, Stephen (2004-01-26), Changes to ISO/IEC JTC1/SC2/WG2 N2636 and
+   N2676 recommended by the International Association for Coptic Studies
+   L2/04-068
+   Mansour, Kamal (2004-02-02), Coptic Comments
+   L2/04-130 N2744
+   Everson, Michael; Emmel, Stephen (2004-04-20), Revision of the Coptic
+   block under ballot for the BMP of the UCS
+   N2824
+   Updated charts for Coptic N2744, 2004-06-22
+   5.2 U+2CEB..2CF1 7 L2/07-085R N3222R
+   Everson, Michael; Emmel, Stephen; Marjanen, Antti; Dunderberg, Ismo;
+   Baines, John; Pedro, Susana; Emiliano, António (2007-03-15), Proposal
+   to add additional characters for Coptic and Latin in the UCS
+   L2/07-118R2
+   Moore, Lisa (2007-05-23), "111-C17", UTC #111 Minutes
+   L2/07-268 N3253 (pdf, doc)
+   Umamaheswaran, V. S. (2007-07-26), "M50.30", Unconfirmed minutes of WG
+   2 meeting 50, Frankfurt-am-Main, Germany; 2007-04-24/27
+   6.1 U+2CF2..2CF3 2 L2/10-290 N3873R
+   Everson, Michael; Emmel, Stephen; Richter, Siegfried G.; Pedro, Susana;
+   Emiliano, António (2010-08-05), Proposal to add additional characters
+   for Greek, Latin, and Coptic
+   L2/10-221
+   Moore, Lisa (2010-08-23), "C.25", UTC #124 / L2 #221 Minutes
+   L2/10-348 N3912
+   Everson, Michael; Emmel, Stephen; Richter, Siegfried G.; Pedro, Susana;
+   Emiliano, António (2010-09-21), Revised proposal to add additional
+   characters for Greek, Latin, and Coptic to the UCS
+   N3903 (pdf, doc)
+   "M57.02e", Unconfirmed minutes of WG2 meeting 57, 2011-03-31
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Coptic_(Unicode_block)&oldi
+   d=1074058653"
+
+   Categories:
+     * Coptic language
+     * Unicode blocks
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * Башҡортса
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * Русский
+     * 中文
+
+   Edit links
+
+     * This page was last edited on 26 February 2022, at 05:34 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki

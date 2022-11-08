@@ -1,0 +1,518 @@
+   #alternate Edit this page Wikipedia (en)
+
+Emoticons (Unicode block)
+
+   From Wikipedia, the free encyclopedia
+   Jump to navigation Jump to search
+   Unicode character block
+   Emoticons
+   Range U+1F600..U+1F64F
+   (80 code points)
+   Plane SMP
+   Scripts Common
+   Symbol sets Emoji
+   Emoticons
+   Assigned 80 code points
+   Unused 0 reserved code points
+   Unicode version history
+   6.0
+   (2010)
+
+   63 (+63)
+   6.1
+   (2012) 76 (+13)
+   7.0
+   (2014) 78 (+2)
+   8.0
+   (2015) 80 (+2)
+   Note: ^[1]^[2]
+
+   This article contains Unicode emoticons or emojis. Without proper
+   rendering support, you may see question marks, boxes, or other symbols
+   instead of the intended characters.
+
+   Emoticons is a Unicode block containing emoticons or emoji.^[3]^[4]^[5]
+   Most of them are intended as representations of faces, although some of
+   them include hand gestures or non-human characters (a horned "imp",
+   monkeys, cartoon cats).
+
+   The block was first proposed in 2008, and first implemented in Unicode
+   version 6.0 (2010). The reason for its adoption was largely for
+   compatibility with a de facto standard that had been established by the
+   early 2000s by Japanese telephone carriers, encoded in unused ranges
+   with lead bytes 0xF5 to 0xF9 of the Shift JIS standard.^[6] KDDI has
+   gone much further than this, and has introduced hundreds more in the
+   space with lead bytes 0xF3 and 0xF4.^[7]
+
+   [ ]
+
+Contents
+
+     * 1 Descriptions
+     * 2 Chart
+     * 3 Variant forms
+     * 4 Emoji modifiers
+     * 5 History
+     * 6 See also
+     * 7 References
+
+Descriptions[edit]
+
+   1F600 😀 grinning face
+   1F601 😁 grinning face with smiling eyes
+   1F602 😂 face with tears of joy
+   1F603 😃 smiling face with open mouth (c.f. ☺)
+   1F604 😄 smiling face with open mouth and smiling eyes
+   1F605 😅 smiling face with open mouth and cold sweat
+   1F606 😆 smiling face with open mouth and tightly-closed eyes
+   1F607 😇 smiling face with halo
+   1F608 😈 smiling face with horns (c.f. 👿 "imp")
+   1F609 😉 winking face
+   1F60A 😊 smiling face with smiling eyes
+   1F60B 😋 face savouring delicious food
+   1F60C 😌 relieved face
+   1F60D 😍 smiling face with heart-shaped eyes
+   1F60E 😎 smiling face with sunglasses
+   1F60F 😏 smirking face
+   1F610 😐 neutral face (also used for "west wind" 西 in some Mahjong
+   annotation)
+   1F611 😑 expressionless face
+   1F612 😒 unamused face
+   1F613 😓 face with cold sweat
+   1F614 😔 pensive face
+   1F615 😕 confused face
+   1F616 😖 confounded face
+   1F617 😗 kissing face
+   1F618 😘 face throwing a kiss
+   1F619 😙 kissing face with smiling eyes
+   1F61A 😚 kissing face with closed eyes
+   1F61B 😛 face with stuck-out tongue
+   1F61C 😜 face with stuck-out tongue and winking eye
+   1F61D 😝 face with stuck-out tongue and tightly-closed eyes
+   1F61E 😞 disappointed face
+   1F61F 😟 worried face
+   1F620 😠 angry face
+   1F621 😡 pouting face
+   1F622 😢 crying face
+   1F623 😣 persevering face
+   1F624 😤 Unicode: face with look of triumph, Apple: huffing with anger
+   face
+   1F625 😥 disappointed but relieved face
+   1F626 😦 frowning face with open mouth
+   1F627 😧 anguished face
+   1F628 😨 fearful face
+   1F629 😩 weary face
+   1F62A 😪 sleepy face
+   1F62B 😫 tired face
+   1F62C 😬 grimacing face
+   1F62D 😭 loudly crying face
+   1F62E 😮 face with open mouth
+   1F62F 😯 hushed face
+   1F630 😰 face with open mouth and cold sweat
+   1F631 😱 face screaming in fear
+   1F632 😲 astonished face
+   1F633 😳 flushed face
+   1F634 😴 sleeping face
+   1F635 😵 dizzy face
+   1F636 😶 face without mouth (c.f. ⚇ "white circle with two dots")
+   1F637 😷 face with medical mask
+   1F638 😸 grinning cat face with smiling eyes
+   1F639 😹 cat face with tears of joy
+   1F63A 😺 smiling cat face with open mouth
+   1F63B 😻 smiling cat face with heart-shape eyes
+   1F63C 😼 cat face with wry smile
+   1F63D 😽 kissing cat face with closed eyes
+   1F63E 😾 pouting cat face
+   1F63F 😿 crying cat face
+   1F640 🙀 weary cat face
+   1F641 🙁 slightly frowning face
+   1F642 🙂 slightly smiling face
+   1F643 🙃 upside-down face
+   1F644 🙄 face with rolling eyes
+   1F645 🙅 face with "no good" gesture, with lower arms crossed, derived
+   from the japanese gesture for "no". Intended as gender-neutral but
+   represented as a woman on most platforms.
+   1F646 🙆 face with "ok" gesture, described as a person with arms raised
+   above the head forming a "circle", interpreted as "OK sign" (derived
+   from the japanese gesture for "OK"). Intended as gender-neutral but
+   represented as a woman on most platforms.
+   1F647 🙇 person bowing (dogeza), depicted as a man on most platforms.
+   1F648 🙈 see-no-evil monkey
+   1F649 🙉 hear-no-evil monkey
+   1F64A 🙊 speak-no-evil monkey
+   1F64B 🙋 happy person raising one hand, a person raising one hand as if
+   to answer a question, intended as gender-neutral but represented as a
+   woman on most platforms.
+   1F64C 🙌 person raising both hands in celebration, on many platforms
+   depicted as just the raised hands (Apple name: "Hands Raised in
+   Celebration").
+   1F64D 🙍 person frowning
+   1F64E 🙎 person with pouting face
+   1F64F 🙏 person with folded hands (to indicate variously sorrow, regret,
+   pleading, praying, bowing, thanking). In most platforms depicted as
+   just the hand, pressed together but not folded (Apple name: "Hands
+   Pressed Together").
+
+Chart[edit]
+
+   Emoticons^[1]
+   Official Unicode Consortium code chart (PDF)
+           0 1 2 3 4 5 6 7 8 9 A B C D E F
+   U+1F60x 😀 😁 😂 😃 😄 😅 😆 😇 😈 😉 😊 😋 😌 😍 😎 😏
+   U+1F61x 😐 😑 😒 😓 😔 😕 😖 😗 😘 😙 😚 😛 😜 😝 😞 😟
+   U+1F62x 😠 😡 😢 😣 😤 😥 😦 😧 😨 😩 😪 😫 😬 😭 😮 😯
+   U+1F63x 😰 😱 😲 😳 😴 😵 😶 😷 😸 😹 😺 😻 😼 😽 😾 😿
+   U+1F64x 🙀 🙁 🙂 🙃 🙄 🙅 🙆 🙇 🙈 🙉 🙊 🙋 🙌 🙍 🙎 🙏
+   Notes
+
+          1.^ As of Unicode version 15.0
+
+Variant forms[edit]
+
+   Each emoticon has two variants:
+     * U+FE0E (VARIATION SELECTOR-15) selects text presentation (e.g. 😊︎
+       😐︎ ☹︎),
+     * U+FE0F (VARIATION SELECTOR-16) selects emoji-style (e.g. 😊️ 😐️ ☹️).
+
+   If there is no variation selector appended, the default is the
+   emoji-style. Example:
+
+                    Unicode code points                   Result
+   U+1F610 (NEUTRAL FACE)                                 😐
+   U+1F610 (NEUTRAL FACE), U+FE0E (VARIATION SELECTOR-15) 😐︎
+   U+1F610 (NEUTRAL FACE), U+FE0F (VARIATION SELECTOR-16) 😐️
+
+Emoji modifiers[edit]
+
+   Main article: Emoji modifiers
+
+   The Miscellaneous Symbols and Pictographs block has 54 emoji that
+   represent people or body parts. A set of "Emoji modifiers" are defined
+   for emojis that represent people or body parts. These are modifier
+   characters intended to define the skin colour to be used for the emoji.
+   The draft document suggesting the introduction of this system for the
+   representation of "human diversity" was submitted in 2015 by Mark Davis
+   of Google and Peter Edberg of Apple Inc.^[8] Five symbol modifier
+   characters were added with Unicode 8.0 to provide a range of skin tones
+   for human emoji. These modifiers are called EMOJI MODIFIER FITZPATRICK
+   TYPE-1-2, -3, -4, -5, and -6 (U+1F3FB–U+1F3FF): 🏻 🏼 🏽 🏾 🏿. They are
+   based on the Fitzpatrick scale for classifying human skin color.
+
+   CAPTION: Human emoji
+
+   U+       1F645 1F646 1F647 1F64B 1F64C 1F64D 1F64E 1F64F
+   emoji    🙅     🙆     🙇     🙋     🙌     🙍     🙎     🙏
+   FITZ-1-2 🙅🏻    🙆🏻    🙇🏻    🙋🏻    🙌🏻    🙍🏻    🙎🏻    🙏🏻
+   FITZ-3   🙅🏼    🙆🏼    🙇🏼    🙋🏼    🙌🏼    🙍🏼    🙎🏼    🙏🏼
+   FITZ-4   🙅🏽    🙆🏽    🙇🏽    🙋🏽    🙌🏽    🙍🏽    🙎🏽    🙏🏽
+   FITZ-5   🙅🏾    🙆🏾    🙇🏾    🙋🏾    🙌🏾    🙍🏾    🙎🏾    🙏🏾
+   FITZ-6   🙅🏿    🙆🏿    🙇🏿    🙋🏿    🙌🏿    🙍🏿    🙎🏿    🙏🏿
+
+   Additional human emoji can be found in other Unicode blocks: Dingbats,
+   Miscellaneous Symbols, Miscellaneous Symbols and Pictographs,
+   Supplemental Symbols and Pictographs, Symbols and Pictographs
+   Extended-A and Transport and Map Symbols.
+
+History[edit]
+
+   The following Unicode-related documents record the purpose and process
+   of defining specific characters in the Emoticons block:
+
+   Version Final code points^[a] Count L2 ID WG2 ID Document
+   6.0 U+1F601..1F610, 1F612..1F614, 1F616, 1F618, 1F61A, 1F61C..1F61E,
+   1F620..1F625, 1F628..1F62B, 1F62D, 1F630..1F633, 1F635..1F640,
+   1F645..1F64F^[b] 63 L2/09-007
+   Lommel, Arle (2008-12-26), Comparison of Emoticons from Major Vendors
+   L2/09-025R2 N3582^[c]
+
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2009-03-05), Proposal for Encoding Emoji Symbols
+   L2/09-026R N3583
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2009-02-06), Emoji Symbols Proposed for New Encoding
+   L2/09-027R2 N3681
+   Scherer, Markus (2009-09-17), Emoji Symbols: Background Data
+   L2/09-114 N3607
+   Towards an encoding of symbol characters used as emoji, 2009-04-06
+   L2/09-304
+   Anderson, Deborah (2009-08-15), US Position on PDAM 8
+   L2/09-370 N3711
+   Ogata, Katsuhiro; et al. (2009-10-22), A Proposal to Revise a Part of
+   Emoticons in PDAM 8
+   L2/09-371 N3713
+   Pentzlin, Karl (2009-10-22), Comment on "A proposal to Revise a Part of
+   Emoticons in PDAM 8" (Katsuhiro Ogata et al., N3711)
+   L2/09-412 N3722
+   Suignard, Michel (2009-10-26), Disposition of comments on SC2 N 4078
+   (PDAM text for Amendment 8 to ISO/IEC 10646:2003)
+   N3703 (pdf, doc)
+   Umamaheswaran, V. S. (2010-04-13), "M55.9j", Unconfirmed minutes of WG
+   2 meeting no. 55, Tokyo 2009-10-26/30
+   L2/09-335R
+   Moore, Lisa (2009-11-10), "Consensus 121-C8", UTC #121 / L2 #218
+   Minutes
+   L2/10-036 N3769
+   Pentzlin, Karl (2010-01-26), Proposal to encode an emoticon Neutral
+   Face
+   L2/10-061R
+   Scherer, Markus; et al. (2010-02-04), "2, 4", Emoji: Review of FPDAM8
+   L2/10-066 N3790-ANSI
+   Anderson, Deborah (2010-02-05), ANSI (U.S.) NB Comments on FPDAM 8
+   L2/10-015R
+   Moore, Lisa (2010-02-09), "D.1.3", UTC #122 / L2 #219 Minutes
+   N3778
+   Ogata, Katsuhiro; Kamichi, Koichi; Moro, Shigeki; Kawabata, Taichi;
+   Naoi, Yasushi (2010-03-03), Updated Proposal to Change Some Glyphs and
+   Names of Emoticons
+   L2/10-089 N3777
+   KDDI Input on Emoji, 2010-03-08
+   L2/10-102 N3790
+   Summary of Voting on SC 2 N 4123, ISO/IEC 10646: 2003/FPDAM 8,
+   2010-03-27
+   L2/10-115 N3806
+   Ogata, Katsuhiro; Kamichi, Koichi; Moro, Shigeki; Kawabata, Taichi;
+   Naoi, Yasushi (2010-04-06), Rationale for Proposal of N3778
+   L2/10-135 N3826
+   Everson, Michael (2010-04-22), Emoticons for FDIS 8
+   L2/10-137 N3828
+   Suignard, Michel (2010-04-22), Disposition of comments on SC2 N 4123
+   (FPDAM text for Amendment 8 to ISO/IEC 10646:2003)
+   L2/10-132
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2010-04-27), Emoji Symbols: Background Data
+   L2/10-138 N3829
+   Constable, Peter; et al. (2010-04-27), Emoji Ad-Hoc Meeting Report
+   L2/10-108
+   Moore, Lisa (2010-05-19), "Consensus 123-C3", UTC #123 / L2 #220
+   Minutes
+   N3803 (pdf, doc)
+   "M56.01", Unconfirmed minutes of WG 2 meeting no. 56, 2010-09-24
+   L2/15-015R2
+   Davis, Mark; et al. (2015-01-21), Recommended Unicode Glyph / Nameslist
+   changes
+   L2/15-071R
+   Davis, Mark; Burge, Jeremy (2015-02-03), More Unicode Emoji Glyph
+   changes
+   L2/15-141 (pdf, html)
+   Davis, Mark; Edberg, Peter (2015-03-31), Emoji Glyph and Annotation
+   Recommendations
+   L2/15-107
+   Moore, Lisa (2015-05-12), "Consensus 143-C20", UTC #143 Minutes,
+   "Update chart glyphs and annotations based on L2/15-151 for Unicode
+   8.0."
+   L2/15-199
+   Proposed annotation additions for Unicode 9.0, 2015-07-31
+   L2/16-281
+   Burge, Jeremy; Hunt, Paul (2016-10-17), Emoji Glyph Updates
+   L2/16-361
+   Pournader, Roozbeh; Felt, Doug (2016-11-07), Add text and emoji
+   standardized variation sequences for 96 symbols
+   6.1 U+1F600, 1F611, 1F615, 1F617, 1F619, 1F61B, 1F61F, 1F626..1F627,
+   1F62C, 1F62E..1F62F, 1F634^[b] 13 L2/09-007
+   Lommel, Arle (2008-12-26), Comparison of Emoticons from Major Vendors
+   L2/09-025R2 N3582^[c]
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2009-03-05), Proposal for Encoding Emoji Symbols
+   L2/09-026R N3583
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2009-02-06), Emoji Symbols Proposed for New Encoding
+   L2/09-027R2 N3681
+   Scherer, Markus (2009-09-17), Emoji Symbols: Background Data
+   L2/10-102 N3790
+   Summary of Voting on SC 2 N 4123, ISO/IEC 10646: 2003/FPDAM 8,
+   2010-03-27
+   L2/10-132
+   Scherer, Markus; Davis, Mark; Momoi, Kat; Tong, Darick; Kida, Yasuo;
+   Edberg, Peter (2010-04-27), Emoji Symbols: Background Data
+   L2/10-138 N3829
+   Constable, Peter; et al. (2010-04-27), "7", Emoji Ad-Hoc Meeting Report
+   N3803 (pdf, doc)
+   "M56.01", Unconfirmed minutes of WG 2 meeting no. 56, 2010-09-24
+   L2/15-015R2
+   Davis, Mark; et al. (2015-01-21), Recommended Unicode Glyph / Nameslist
+   changes
+   L2/15-071R
+   Davis, Mark; Burge, Jeremy (2015-02-03), More Unicode Emoji Glyph
+   changes
+   L2/15-141 (pdf, html)
+   Davis, Mark; Edberg, Peter (2015-03-31), Emoji Glyph and Annotation
+   Recommendations
+   L2/15-107
+   Moore, Lisa (2015-05-12), "Consensus 143-C20", UTC #143 Minutes,
+   "Update chart glyphs and annotations based on L2/15-151 for Unicode
+   8.0."
+   7.0 U+1F641..1F642 2 L2/10-429
+   Pentzlin, Karl (2010-10-22), Proposal to encode three additional
+   emoticons
+   L2/11-037 N3982
+   Proposal to encode three additional emoticons, 2011-01-03
+   L2/11-253
+   Whistler, Ken (2011-06-16), "I", WG2 consent docket
+   N4103
+   "11.6 Three additional emoticons", Unconfirmed minutes of WG 2 meeting
+   58, 2012-01-03
+   8.0 U+1F643..1F644 2 L2/14-174R
+   Davis, Mark; Edberg, Peter (2014-08-27), Emoji Additions
+   L2/14-172R
+   Davis, Mark; Edberg, Peter (2014-08-29), Proposed enhancements for
+   emoji characters: background
+   L2/14-275
+   Edberg, Peter; et al. (2014-10-23), Emoji ad-hoc committee
+   recommendations to UTC #141
+   L2/14-284R2
+   Edberg, Peter; Davis, Mark (2014-10-28), Emoji-System Compatibility
+   Additions
+   L2/15-025 N4654
+   Anderson, Deborah (2014-10-30), Future Additions to ISO/IEC 10646
+   L2/15-030
+   Davis, Mark (2015-01-29), Emojipedia top requests
+
+    1. ^ Proposed code points and characters names may differ from final
+       code points and names
+    2. ^ ^a ^b Refer to the history section of the Miscellaneous Symbols
+       and Pictographs block for additional emoji-related documents
+    3. ^ ^a ^b Japanese translation of N3582 is available as N3621
+
+See also[edit]
+
+     * Some basic smiley faces (☹, ☺, ☻) are in Miscellaneous Symbols
+       block
+     * Additional smiley faces (e.g. 🤐, 🤑, etc) are in Supplemental
+       Symbols and Pictographs block
+     * Some heads and figures (e.g. 👦; 🛀; etc) are in Miscellaneous
+       Symbols and Pictographs and Transport and Map Symbols blocks
+     * Some body parts (e.g. ✌️; ⛹; etc) are in the Dingbat and
+       Miscellaneous Symbols blocks
+
+References[edit]
+
+    1. ^ "Unicode character database". The Unicode Standard. Retrieved
+       2016-07-09.
+    2. ^ "Enumerated Versions of The Unicode Standard". The Unicode
+       Standard. Retrieved 2016-07-09.
+    3. ^ "UTR #51: Unicode Emoji". Unicode Consortium. 2020-02-11.
+    4. ^ "UCD: Emoji Data for UTR #51". Unicode Consortium. 2021-08-26.
+    5. ^ "UTS #51 Emoji Variation Sequences". The Unicode Consortium.
+    6. ^ "Original Emoji from DoCoMo". FileFormat.info.
+    7. ^ "Original Emoji from KDDI". FileFormat.info.
+    8. ^ "The default representation of these modifier characters when
+       used alone is as a color swatch. Whenever one of these characters
+       immediately follows certain characters (such as WOMAN), then a font
+       should show the sequence as a single glyph corresponding to the
+       image for the person(s) or body part with the specified skin tone"
+       Draft Unicode Technical Report #51 "UNICODE EMOJI" Version 1.0
+       (draft 10) eds. Mark Davis (Google Inc.), Peter Edberg (Apple
+       Inc.), 2015-05-08.
+
+   Retrieved from
+   "https://en.wikipedia.org/w/index.php?title=Emoticons_(Unicode_block)&o
+   ldid=1117327676"
+
+   Categories:
+     * Unicode blocks
+     * Emoticons
+     * Emoji
+
+   Hidden categories:
+     * Articles with short description
+     * Short description is different from Wikidata
+
+Navigation menu
+
+Personal tools
+
+     * Not logged in
+     * Talk
+     * Contributions
+     * Create account
+     * Log in
+
+Namespaces
+
+     * Article
+     * Talk
+
+   [ ] English
+
+Views
+
+     * Read
+     * Edit
+     * View history
+
+   [ ] More
+
+Search
+
+   ____________________ Search Go
+
+Navigation
+
+     * Main page
+     * Contents
+     * Current events
+     * Random article
+     * About Wikipedia
+     * Contact us
+     * Donate
+
+Contribute
+
+     * Help
+     * Learn to edit
+     * Community portal
+     * Recent changes
+     * Upload file
+
+Tools
+
+     * What links here
+     * Related changes
+     * Upload file
+     * Special pages
+     * Permanent link
+     * Page information
+     * Cite this page
+     * Wikidata item
+
+Print/export
+
+     * Download as PDF
+     * Printable version
+
+In other projects
+
+     * Wikimedia Commons
+     * Wiktionary
+
+Languages
+
+     * বাংলা
+     * Deutsch
+     * Français
+     * Bahasa Indonesia
+     * Italiano
+     * 日本語
+     * Русский
+     * Українська
+
+   Edit links
+
+     * This page was last edited on 21 October 2022, at 03:34 (UTC).
+     * Text is available under the Creative Commons Attribution-ShareAlike
+       License 3.0; additional terms may apply. By using this site, you
+       agree to the Terms of Use and Privacy Policy. Wikipedia® is a
+       registered trademark of the Wikimedia Foundation, Inc., a
+       non-profit organization.
+
+     * Privacy policy
+     * About Wikipedia
+     * Disclaimers
+     * Contact Wikipedia
+     * Mobile view
+     * Developers
+     * Statistics
+     * Cookie statement
+
+     * Wikimedia Foundation
+     * Powered by MediaWiki
